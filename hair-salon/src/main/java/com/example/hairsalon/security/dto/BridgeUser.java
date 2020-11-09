@@ -1,4 +1,4 @@
-package com.example.hairsalon.service;
+package com.example.hairsalon.security.dto;
 
 import com.example.hairsalon.model.User;
 import org.springframework.security.core.GrantedAuthority;

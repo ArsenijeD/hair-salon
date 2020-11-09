@@ -1,6 +1,7 @@
-package com.example.hairsalon.service;
+package com.example.hairsalon.security.service;
 
 import com.example.hairsalon.repository.UserRepository;
+import com.example.hairsalon.security.dto.BridgeUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
