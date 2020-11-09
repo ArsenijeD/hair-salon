@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@Entity(name = "TYPE_OF_SERVICE")
+@Entity(name = "TYPES_OF_SERVICE")
 @Table(uniqueConstraints= {
         @UniqueConstraint(columnNames = {"NAME", "TYPE"})
 })

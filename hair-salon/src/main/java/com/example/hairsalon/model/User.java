@@ -1,14 +1,20 @@
 package com.example.hairsalon.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@Entity(name = "USER")
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity(name = "USERS")
 public class User {
 
 	@Id
@@ -31,18 +37,18 @@ public class User {
 	@Column(name = "DATE_OF_BIRTH", nullable = false)
 	private Date dateOfBirth;
     
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "id")})
-    private List<Authority> authorities;
+    private List<Authority> userAuthorities;
 
 	@OneToMany
 	@JoinTable(
 			name = "USER_SCHEDULED_RESERVATION",
 			joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "RESERVATION_ID", referencedColumnName = "id")})
+			inverseJoinColumns = {@JoinColumn(name = "ROLE", referencedColumnName = "id")})
 	@ToString.Exclude
 	private List<Reservation> scheduledReservations;
 
@@ -62,4 +68,15 @@ public class User {
 	@ToString.Exclude
 	private List<Reservation> servedReservations;
 
+	//TODO Find lombok way to create this copy-constructor
+	public User(User user) {
+		this.id = user.getId();
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.dateOfBirth = user.getDateOfBirth();
+		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
+		this.scheduledReservations = new ArrayList<>(user.getScheduledReservations());
+		this.approvedReservations = new ArrayList<>(user.getApprovedReservations());
+		this.servedReservations = new ArrayList<>(user.getServedReservations());
+	}
 }

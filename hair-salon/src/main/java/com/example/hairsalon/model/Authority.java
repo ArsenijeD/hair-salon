@@ -1,14 +1,14 @@
 package com.example.hairsalon.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
-@Entity(name = "AUTHORITY")
-
+@Entity(name = "AUTHORITIES")
 public class Authority {
 
     @Id
@@ -19,9 +19,5 @@ public class Authority {
     @Column(name = "NAME", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role name;
-
-    @ManyToMany(mappedBy="authorities")
-    @ToString.Exclude
-    private List<User> users;
 
 }
