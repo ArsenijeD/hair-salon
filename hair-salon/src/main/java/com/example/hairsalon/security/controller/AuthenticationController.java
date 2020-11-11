@@ -36,4 +36,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
+
+    //TODO Consider implementing logout either by creating in-memory blacklist or by checking client IP and user-agent in the request header
 }
