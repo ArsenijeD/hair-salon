@@ -1,9 +1,8 @@
 package com.example.hairsalon.configuration;
 
-import com.example.hairsalon.model.Authority;
-import com.example.hairsalon.model.Role;
-import com.example.hairsalon.model.User;
+import com.example.hairsalon.model.*;
 import com.example.hairsalon.repository.AuthorityRepository;
+import com.example.hairsalon.repository.TOSRepository;
 import com.example.hairsalon.repository.UserRepository;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +19,14 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final AuthorityRepository authorityRepository;
 
+    private final TOSRepository tosRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, TOSRepository tosRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.tosRepository = tosRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -45,6 +47,12 @@ public class DataInitializer implements SmartInitializingSingleton {
         customer.setId(3L);
         customer.setName(Role.CUSTOMER);
 
+        TypeOfService skinning = new TypeOfService();
+        skinning.setId(1L);
+        skinning.setName("Skinning");
+        skinning.setPrice(350.0);
+        skinning.setType(Type.MEDIUM);
+
         authorities.add(admin);
         authorities.add(employee);
         authorities.add(customer);
@@ -61,5 +69,7 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.userRepository.save(akiAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanCustomer);
+
+        this.tosRepository.save(skinning);
     }
 }

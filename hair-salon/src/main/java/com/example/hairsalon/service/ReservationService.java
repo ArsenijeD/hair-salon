@@ -1,6 +1,7 @@
 package com.example.hairsalon.service;
 
-public interface ReservationService {
+import com.example.hairsalon.model.Reservation;
 
-    String createReservation();
+public interface ReservationService {
+    Reservation createReservation(Reservation reservation);
 }
