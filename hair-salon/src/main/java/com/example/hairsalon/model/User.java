@@ -79,4 +79,6 @@ public class User {
 		this.approvedReservations = new ArrayList<>(user.getApprovedReservations());
 		this.servedReservations = new ArrayList<>(user.getServedReservations());
 	}
+
+	//TODO Consider making combination of firstName and lastName unique in order to avoid confusion for customers with the same firstname and lastname
 }
