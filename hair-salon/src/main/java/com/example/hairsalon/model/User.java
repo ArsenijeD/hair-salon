@@ -36,6 +36,9 @@ public class User {
 
 	@Column(name = "DATE_OF_BIRTH", nullable = false)
 	private Date dateOfBirth;
+
+	@Column(name = "PHONE_NUMBER", nullable = false)
+	private String phoneNumber;
     
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -74,6 +77,7 @@ public class User {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.dateOfBirth = user.getDateOfBirth();
+		this.setPhoneNumber(user.getPhoneNumber());
 		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
 		this.scheduledReservations = new ArrayList<>(user.getScheduledReservations());
 		this.approvedReservations = new ArrayList<>(user.getApprovedReservations());

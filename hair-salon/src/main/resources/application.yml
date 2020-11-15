@@ -8,3 +8,8 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+  rabbitmq:
+    host: 172.17.0.3
+    port: 5672
+    username: guest
+    password: guest

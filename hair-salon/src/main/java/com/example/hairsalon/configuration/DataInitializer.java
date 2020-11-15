@@ -60,11 +60,11 @@ public class DataInitializer implements SmartInitializingSingleton {
         List<Authority> savedAuthorities = this.authorityRepository.saveAll(authorities);
 
         User akiAdmin = new User(1L, "Arsenije", "Degenek", "aki", passwordEncoder.encode("aki"), new Date(),
-                authorities.subList(0, 1), null, null, null);
+                "00381691995215", authorities.subList(0, 1), null, null, null);
         User veskoEmployee = new User(2L, "Veselin", "Martinovic", "vesko", passwordEncoder.encode("vesko"), new Date(),
-                authorities.subList(1, 2), null, null, null);
+                "00381691995215", authorities.subList(1, 2), null, null, null);
         User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), new Date(),
-                authorities.subList(2, 3), null, null, null);
+                "00381691995215", authorities.subList(2, 3), null, null, null);
 
         this.userRepository.save(akiAdmin);
         this.userRepository.save(veskoEmployee);

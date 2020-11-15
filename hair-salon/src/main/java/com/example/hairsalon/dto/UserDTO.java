@@ -17,5 +17,7 @@ public class UserDTO {
 
     private Date dateOfBirth;
 
+    private String phoneNumber;
+
     //TODO Add DTO-fields validation (javax.validation.constraints)
 }
