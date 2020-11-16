@@ -1,5 +1,6 @@
 package com.example.hairsalon.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,10 +36,14 @@ public class User {
 	private String password;
 
 	@Column(name = "DATE_OF_BIRTH", nullable = false)
-	private Date dateOfBirth;
+	private LocalDateTime dateOfBirth;
 
 	@Column(name = "PHONE_NUMBER", nullable = false)
 	private String phoneNumber;
+
+	@Column(name = "GENDER", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Gender gender;
     
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -77,6 +82,7 @@ public class User {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.dateOfBirth = user.getDateOfBirth();
+		this.gender = user.getGender();
 		this.setPhoneNumber(user.getPhoneNumber());
 		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
 		this.scheduledReservations = new ArrayList<>(user.getScheduledReservations());

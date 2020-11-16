@@ -19,5 +19,7 @@ public class UserDTO {
 
     private String phoneNumber;
 
+    private String gender;
+
     //TODO Add DTO-fields validation (javax.validation.constraints)
 }
