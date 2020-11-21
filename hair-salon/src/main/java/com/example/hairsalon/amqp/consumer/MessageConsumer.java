@@ -11,7 +11,8 @@ public class MessageConsumer {
     @RabbitListener(queues = { RabbitMQConfiguration.CONFIRMATION_MESSAGES_QUEUE,
                                RabbitMQConfiguration.REMINDER_MESSAGES_QUEUE,
                                RabbitMQConfiguration.CANCELLATION_MESSAGES_QUEUE,
-                               RabbitMQConfiguration.HOLIDAYS_QUEUE })
+                               RabbitMQConfiguration.HOLIDAYS_QUEUE,
+                               RabbitMQConfiguration.GRATITUDE_QUEUE})
     public void dequeue(QueueMessageDTO queueMessageDTO) {
         QueueMessageDTO received = queueMessageDTO;
     }

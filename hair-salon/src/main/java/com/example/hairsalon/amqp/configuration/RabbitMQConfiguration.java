@@ -23,6 +23,8 @@ public class RabbitMQConfiguration {
 
     public static final String HOLIDAYS_QUEUE = "holidays_queue";
 
+    public static final String GRATITUDE_QUEUE = "gratitude_queue";
+
     public static final String CONFIRMATION_ROUTING_KEY = "confirmation";
 
     public static final String REMINDER_ROUTING_KEY = "reminder";
@@ -30,6 +32,8 @@ public class RabbitMQConfiguration {
     public static final String CANCELLATION_ROUTING_KEY = "cancellation";
 
     public static final String HOLIDAYS_ROUTING_KEY = "holidays";
+
+    public static final String GRATITUDE_ROUTING_KEY = "gratitude";
 
     @Bean
     public DirectExchange directExchange() {
@@ -57,6 +61,11 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
+    public Queue gratitudeQueue() {
+        return new Queue(GRATITUDE_QUEUE);
+    }
+
+    @Bean
     public Binding confirmationBinding(Queue confirmationQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(confirmationQueue).to(directExchange).with(CONFIRMATION_ROUTING_KEY);
     }
@@ -73,6 +82,11 @@ public class RabbitMQConfiguration {
     @Bean
     public Binding holidaysBinding(Queue holidaysQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(holidaysQueue).to(directExchange).with(HOLIDAYS_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding gratitudeBindingBinding(Queue gratitudeQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(gratitudeQueue).to(directExchange).with(GRATITUDE_ROUTING_KEY);
     }
 
     @Bean
