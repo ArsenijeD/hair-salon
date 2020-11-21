@@ -7,9 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QueueMessageDTO {
+public class NTHMessageResponseDTO {
 
-    private SmsDTO sms;
+    private int status;
 
-    private QueueMessageStatusDTO status;
+    private String statusText;
+
+    private int messagesCount;
+
+    private String messageId;
 }

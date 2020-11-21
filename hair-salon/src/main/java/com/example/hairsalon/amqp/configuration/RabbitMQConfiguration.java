@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfiguration {
 
-    //TODO Move all the constants to application.yml
+    //TODO Move all the project constants to application.yml
 
     public static final String EXCHANGE_NAME = "reservations_direct_exchange";
 

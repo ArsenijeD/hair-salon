@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 public class HairSalonApplication {
@@ -16,6 +17,11 @@ public class HairSalonApplication {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+
+	@Bean
+	public WebClient.Builder weClientBuilder() {
+		return WebClient.builder();
 	}
 
 	//TODO Consider making conversion adapter; benefit: third-party-lib independent(both from controllers and from here)
