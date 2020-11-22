@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.MonthDay;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +19,7 @@ public class Holiday {
     private Long id;
 
     @Column(name="DATE", nullable = false)
-    private LocalDateTime date;
+    private MonthDay date;
 
     @Column(name = "name", nullable = false)
     @Enumerated(EnumType.STRING)

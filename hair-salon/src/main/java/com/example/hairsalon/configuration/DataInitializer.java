@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +60,10 @@ public class DataInitializer implements SmartInitializingSingleton {
         skinning.setPrice(350.0);
         skinning.setType(Type.MEDIUM);
 
-        Holiday newYear = new Holiday(1L, LocalDateTime.of(2020, Month.JANUARY, 1, 12, 0, 0), HolidayName.NEW_YEAR, Gender.BOTH);
-        Holiday christmas = new Holiday(2L, LocalDateTime.of(2020, Month.JANUARY, 7, 12, 0, 0), HolidayName.CHRISTMAS, Gender.BOTH);
-        Holiday internationalWomensDay = new Holiday(3L, LocalDateTime.of(2020, Month.MARCH, 8, 12, 0, 0), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE);
-        Holiday easter = new Holiday(4L, LocalDateTime.of(2020, Month.APRIL, 15, 12, 0, 0), HolidayName.EASTER, Gender.BOTH);
+        Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 22), HolidayName.NEW_YEAR, Gender.BOTH);
+        Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH);
+        Holiday internationalWomensDay = new Holiday(3L, MonthDay.of(Month.MARCH, 8), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE);
+        Holiday easter = new Holiday(4L, MonthDay.of(Month.APRIL, 15), HolidayName.EASTER, Gender.BOTH);
 
         authorities.add(admin);
         authorities.add(employee);
@@ -70,16 +71,20 @@ public class DataInitializer implements SmartInitializingSingleton {
 
         List<Authority> savedAuthorities = this.authorityRepository.saveAll(authorities);
 
-        User akiAdmin = new User(1L, "Arsenije", "Degenek", "aki", passwordEncoder.encode("aki"), LocalDateTime.now(),
+        User rootAdmin = new User(1L, "Admin", "Adminovic", "admin", passwordEncoder.encode("admin"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(0, 1), null, null, null);
+//        User akiAdmin = new User(2L, "Arsenije", "Degenek", "aki", passwordEncoder.encode("aki"), LocalDateTime.now(),
+//                "00381691995215", Gender.MALE, authorities.subList(0, 1), null, null, null);
         User veskoEmployee = new User(2L, "Veselin", "Martinovic", "vesko", passwordEncoder.encode("vesko"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(1, 2), null, null, null);
         User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(2, 3), null, null, null);
 
-        this.userRepository.save(akiAdmin);
+//        this.userRepository.save(akiAdmin);
+        this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanCustomer);
+
 
         this.tosRepository.save(skinning);
 
