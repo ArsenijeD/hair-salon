@@ -16,12 +16,13 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String AUTHENTICATION_EXCEPTIONS_MESSAGE = "Invalid username or password";
+    private static final String AUTHENTICATION_EXCEPTIONS_MESSAGE = "Invalid username or password.";
 
-    private static final String INTEGRITY_VIOLATION_EXCEPTION_MESSAGE = "Cannot duplicate entity";
+    private static final String INTEGRITY_VIOLATION_EXCEPTION_MESSAGE = "Cannot duplicate entity.";
 
-    private static final String AMQP_EXCEPTION_MESSAGE = "Unable to push message to the queue";
+    private static final String AMQP_EXCEPTION_MESSAGE = "Unable to push message to the queue.";
 
+    private static final String SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE = "Unable to find SMS content.";
 
 
     @ExceptionHandler({ BadCredentialsException.class, UsernameNotFoundException.class })
@@ -31,6 +32,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EntityNotFoundException.class })
     public ResponseEntity<String> handleEntityNotFoundException(Exception exception) {
+        if (exception instanceof SmsContentNotFoundException)
+            return ResponseEntity.status(424).body(SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE);
         return ResponseEntity.notFound().build();
     }
 
@@ -44,5 +47,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         //424- Dependency Failed (System unable to send message to the queue)
         return ResponseEntity.status(424).body(AMQP_EXCEPTION_MESSAGE);
     }
-
 }

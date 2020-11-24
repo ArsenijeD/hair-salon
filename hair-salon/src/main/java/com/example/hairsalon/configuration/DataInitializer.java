@@ -1,10 +1,7 @@
 package com.example.hairsalon.configuration;
 
 import com.example.hairsalon.model.*;
-import com.example.hairsalon.repository.AuthorityRepository;
-import com.example.hairsalon.repository.HolidayRepository;
-import com.example.hairsalon.repository.TOSRepository;
-import com.example.hairsalon.repository.UserRepository;
+import com.example.hairsalon.repository.*;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,14 +23,16 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final HolidayRepository holidayRepository;
 
+    private final SmsContentRepository smsContentRepository;
+
     private final PasswordEncoder passwordEncoder;
 
-
-    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, TOSRepository tosRepository, HolidayRepository holidayRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, TOSRepository tosRepository, HolidayRepository holidayRepository, SmsContentRepository smsContentRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.tosRepository = tosRepository;
         this.holidayRepository = holidayRepository;
+        this.smsContentRepository = smsContentRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -80,11 +79,15 @@ public class DataInitializer implements SmartInitializingSingleton {
         User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(2, 3), null, null, null);
 
-//        this.userRepository.save(akiAdmin);
+        SmsContent createdReservationContent = new SmsContent(1L, "Poštovani, upravo ste zakazali Vaš termin za {0}, {1} u {2}. Vaš frizer je {3}.", SmsType.CONFIRMATION);
+        SmsContent reminderReservationContent = new SmsContent(2L, "Poštovani, podsećamo Vas da je Vaš termin danas u {0}. Hvala.", SmsType.REMINDER);
+        SmsContent gratitudeReservationContent = new SmsContent(3L, "Hvala što ste koristili naše usluge. Čekamo Vas ponovo. Vaš frizer.", SmsType.GRATITUDE);
+        SmsContent canceledReservationContent = new SmsContent(4L, "Vaša rezervacija je otkazana. Vaš frizer.", SmsType.CANCELLATION);
+        SmsContent holidayContent = new SmsContent(5L, "Poštovani, čestitamo Vam {0}.", SmsType.HOLIDAYS);
+
         this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanCustomer);
-
 
         this.tosRepository.save(skinning);
 
@@ -92,6 +95,14 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.holidayRepository.save(christmas);
         this.holidayRepository.save(internationalWomensDay);
         this.holidayRepository.save(easter);
+
+        this.smsContentRepository.save(createdReservationContent);
+        this.smsContentRepository.save(reminderReservationContent);
+        this.smsContentRepository.save(gratitudeReservationContent);
+        this.smsContentRepository.save(canceledReservationContent);
+        this.smsContentRepository.save(holidayContent);
+
+
 
     }
 }
