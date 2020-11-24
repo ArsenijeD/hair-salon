@@ -59,10 +59,10 @@ public class DataInitializer implements SmartInitializingSingleton {
         skinning.setPrice(350.0);
         skinning.setType(Type.MEDIUM);
 
-        Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 22), HolidayName.NEW_YEAR, Gender.BOTH);
-        Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH);
-        Holiday internationalWomensDay = new Holiday(3L, MonthDay.of(Month.MARCH, 8), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE);
-        Holiday easter = new Holiday(4L, MonthDay.of(Month.APRIL, 15), HolidayName.EASTER, Gender.BOTH);
+        Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 24), HolidayName.NEW_YEAR, Gender.BOTH, "Novu godinu");
+        Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH, "Božić");
+        Holiday internationalWomensDay = new Holiday(3L, MonthDay.of(Month.MARCH, 8), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE, "Osmi mart");
+        Holiday easter = new Holiday(4L, MonthDay.of(Month.APRIL, 15), HolidayName.EASTER, Gender.BOTH, "Uskrs");
 
         authorities.add(admin);
         authorities.add(employee);
@@ -101,8 +101,5 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.smsContentRepository.save(gratitudeReservationContent);
         this.smsContentRepository.save(canceledReservationContent);
         this.smsContentRepository.save(holidayContent);
-
-
-
     }
 }

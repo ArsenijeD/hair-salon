@@ -29,7 +29,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     private static final String HOURS_MINUTES_DATE_FORMAT = "HH:mm";
 
-
     private final ReservationRespository reservationRespository;
 
     private final SmsContentRepository smsContentRepository;

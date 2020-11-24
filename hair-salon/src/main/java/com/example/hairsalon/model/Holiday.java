@@ -21,12 +21,15 @@ public class Holiday {
     @Column(name="DATE", nullable = false)
     private MonthDay date;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "NAME", nullable = false)
     @Enumerated(EnumType.STRING)
     private HolidayName name;
 
     @Column(name = "CELEBRATING_GENDER", nullable = false)
     @Enumerated(EnumType.STRING)
     private Gender celebratingGender;
+
+    @Column(name = "NAME_FOR_SMS", length = 20, nullable = false)
+    private String nameForSms;
 
 }
