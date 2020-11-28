@@ -45,6 +45,8 @@ public class ReservationServiceImpl implements ReservationService {
     @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public Reservation createReservation(Reservation reservation) {
+        //TODO Consider configuring date persistence format instead of manually set seconds to zero
+        reservation.setDate(reservation.getDate().withSecond(0).withNano(0));
         Reservation savedReservation = reservationRespository.save(reservation);
         SmsContent smsContent = smsContentRepository.findByType(SmsType.CONFIRMATION).orElseThrow(SmsContentNotFoundException::new);
         String dayOfWeek = savedReservation.getDate().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag(SERBIAN_LANGUAGE_TAG));
@@ -52,7 +54,7 @@ public class ReservationServiceImpl implements ReservationService {
         String hoursMinutes = savedReservation.getDate().format(DateTimeFormatter.ofPattern(HOURS_MINUTES_DATE_FORMAT));
         String employeeName = savedReservation.getWorker().getFirstName();
         SmsDTO smsDTO = new SmsDTO(reservation.getCustomer().getPhoneNumber(), MessageFormat.format(smsContent.getContent(), dayOfWeek, dayMonth, hoursMinutes, employeeName));
-        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+//        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
         return savedReservation;
     }
 

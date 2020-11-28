@@ -47,16 +47,18 @@ public class HolidaySchedulerServiceImpl implements HolidaySchedulerService {
         List<Holiday> todayHolidays = holidayRepository.findByDate(MonthDay.now()).orElse(null);
         if (todayHolidays !=  null) {
             authenticationFacadeImpl.authenticateAdmin();
-            SmsContent smsContent = smsContentRepository.findByType(SmsType.HOLIDAYS).orElseThrow(SmsContentNotFoundException::new);
-            List<User> customers = userRepository.findAllByUserAuthorities_Name(Role.CUSTOMER).orElse(null);
-            todayHolidays.forEach(holiday -> {
-                customers.forEach(customer -> {
-                    if (holiday.getCelebratingGender() == Gender.BOTH || holiday.getCelebratingGender() == customer.getGender()) {
-                        SmsDTO smsDTO = new SmsDTO(customer.getPhoneNumber(), MessageFormat.format(smsContent.getContent(), holiday.getNameForSms()));
-                        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
-                    }
+            SmsContent smsContent = smsContentRepository.findByType(SmsType.HOLIDAYS).orElse(null);
+            if (smsContent != null) {
+                List<User> customers = userRepository.findAllByUserAuthorities_Name(Role.CUSTOMER).orElse(null);
+                todayHolidays.forEach(holiday -> {
+                    customers.forEach(customer -> {
+                        if (holiday.getCelebratingGender() == Gender.BOTH || holiday.getCelebratingGender() == customer.getGender()) {
+                            SmsDTO smsDTO = new SmsDTO(customer.getPhoneNumber(), MessageFormat.format(smsContent.getContent(), holiday.getNameForSms()));
+                            messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
+                        }
+                    });
                 });
-            });
+            }
         }
     }
     //TODO Consider optimization for not fetching all the customers if not needed

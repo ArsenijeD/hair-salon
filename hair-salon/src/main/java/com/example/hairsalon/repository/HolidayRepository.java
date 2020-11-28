@@ -8,6 +8,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HolidayRepository extends JpaRepository<Holiday, Long> {
-
     Optional<List<Holiday>> findByDate(MonthDay date);
 }
