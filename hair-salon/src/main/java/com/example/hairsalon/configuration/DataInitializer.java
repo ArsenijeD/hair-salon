@@ -59,9 +59,9 @@ public class DataInitializer implements SmartInitializingSingleton {
         skinning.setPrice(350.0);
         skinning.setType(Type.MEDIUM);
 
-        Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 24), HolidayName.NEW_YEAR, Gender.BOTH, "Novu godinu");
+        Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 28), HolidayName.NEW_YEAR, Gender.BOTH, "Novu godinu");
         Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH, "Božić");
-        Holiday internationalWomensDay = new Holiday(3L, MonthDay.of(Month.MARCH, 8), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE, "Osmi mart");
+        Holiday internationalWomensDay = new Holiday(3L, MonthDay.of(Month.NOVEMBER, 28), HolidayName.INTERNATIONAL_WOMENS_DAY, Gender.FEMALE, "Osmi mart");
         Holiday easter = new Holiday(4L, MonthDay.of(Month.APRIL, 15), HolidayName.EASTER, Gender.BOTH, "Uskrs");
 
         authorities.add(admin);
@@ -78,6 +78,8 @@ public class DataInitializer implements SmartInitializingSingleton {
                 "00381691995215", Gender.MALE, authorities.subList(1, 2), null, null, null);
         User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(2, 3), null, null, null);
+        User marinaCustomer = new User(4L, "Marina", "Marina", "marina", passwordEncoder.encode("marina"), LocalDateTime.now(),
+                "00381691995215", Gender.FEMALE, authorities.subList(2, 3), null, null, null);
 
         SmsContent createdReservationContent = new SmsContent(1L, "Poštovani, upravo ste zakazali Vaš termin za {0}, {1} u {2}. Vaš frizer je {3}.", SmsType.CONFIRMATION);
         SmsContent reminderReservationContent = new SmsContent(2L, "Poštovani, podsećamo Vas da je Vaš termin danas u {0}. Hvala.", SmsType.REMINDER);
@@ -88,6 +90,7 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanCustomer);
+        this.userRepository.save(marinaCustomer);
 
         this.tosRepository.save(skinning);
 

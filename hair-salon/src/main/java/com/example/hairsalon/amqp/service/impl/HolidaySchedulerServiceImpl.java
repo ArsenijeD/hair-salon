@@ -43,7 +43,7 @@ public class HolidaySchedulerServiceImpl implements HolidaySchedulerService {
     @Override
     @Scheduled(cron = "0 0 12 * * *")
     @Transactional
-    public void congratulateTodayHolidays() {
+    public void sendHolidayCongratulation() {
         List<Holiday> todayHolidays = holidayRepository.findByDate(MonthDay.now()).orElse(null);
         if (todayHolidays !=  null) {
             authenticationFacadeImpl.authenticateAdmin();
@@ -51,10 +51,13 @@ public class HolidaySchedulerServiceImpl implements HolidaySchedulerService {
             List<User> customers = userRepository.findAllByUserAuthorities_Name(Role.CUSTOMER).orElse(null);
             todayHolidays.forEach(holiday -> {
                 customers.forEach(customer -> {
-                    SmsDTO smsDTO = new SmsDTO(customer.getPhoneNumber(), MessageFormat.format(smsContent.getContent(), holiday.getNameForSms()));
-                    messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
+                    if (holiday.getCelebratingGender() == Gender.BOTH || holiday.getCelebratingGender() == customer.getGender()) {
+                        SmsDTO smsDTO = new SmsDTO(customer.getPhoneNumber(), MessageFormat.format(smsContent.getContent(), holiday.getNameForSms()));
+                        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
+                    }
                 });
             });
         }
     }
+    //TODO Consider optimization for not fetching all the customers if not needed
 }

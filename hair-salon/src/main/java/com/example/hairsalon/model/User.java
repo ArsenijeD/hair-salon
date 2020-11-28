@@ -45,7 +45,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
     
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
