@@ -58,4 +58,15 @@ public class ReservationServiceImpl implements ReservationService {
         return savedReservation;
     }
 
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
+    @Transactional
+    public void delete(Long id) {
+        Reservation reservation = this.reservationRespository.findById(id).orElseThrow(EntityNotFoundException::new);
+        this.reservationRespository.deleteById(id);
+        SmsContent smsContent = smsContentRepository.findByType(SmsType.CANCELLATION).orElseThrow(SmsContentNotFoundException::new);
+        SmsDTO smsDTO = new SmsDTO(reservation.getCustomer().getPhoneNumber(), smsContent.getContent());
+        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+    }
+
 }

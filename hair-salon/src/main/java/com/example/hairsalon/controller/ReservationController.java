@@ -39,8 +39,10 @@ public class ReservationController {
         return ResponseEntity.ok().body(modelMapper.map(created, ReservationDTO.class));
     }
 
-    @GetMapping("test")
-    public String createReservation() {
-        throw new NotImplementedException();
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        reservationServiceImpl.delete(id);
+        return ResponseEntity.noContent().build();
     }
+
 }

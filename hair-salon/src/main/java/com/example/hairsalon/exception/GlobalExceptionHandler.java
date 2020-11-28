@@ -3,6 +3,7 @@ package com.example.hairsalon.exception;
 import org.springframework.amqp.AmqpException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(AUTHENTICATION_EXCEPTIONS_MESSAGE);
     }
 
-    @ExceptionHandler({ EntityNotFoundException.class })
+    @ExceptionHandler({ EntityNotFoundException.class, EmptyResultDataAccessException.class })
     public ResponseEntity<String> handleEntityNotFoundException(Exception exception) {
         if (exception instanceof SmsContentNotFoundException)
             return ResponseEntity.status(424).body(SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE);
