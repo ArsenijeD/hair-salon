@@ -10,6 +10,8 @@ import com.example.hairsalon.model.SmsType;
 import com.example.hairsalon.repository.ReservationRespository;
 import com.example.hairsalon.repository.SmsContentRepository;
 import com.example.hairsalon.service.ReservationService;
+import org.modelmapper.Conditions;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,27 +37,38 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final MessagePublisher messagePublisher;
 
-    public ReservationServiceImpl(ReservationRespository reservationRespository, SmsContentRepository smsContentRepository, MessagePublisher messagePublisher) {
+    private final ModelMapper modelMapper;
+
+    public ReservationServiceImpl(ReservationRespository reservationRespository, SmsContentRepository smsContentRepository, MessagePublisher messagePublisher, ModelMapper modelMapper) {
         this.reservationRespository = reservationRespository;
         this.smsContentRepository = smsContentRepository;
         this.messagePublisher = messagePublisher;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public Reservation createReservation(Reservation reservation) {
-        //TODO Consider configuring date persistence format instead of manually set seconds to zero
+        //TODO Consider configuring LocaleDateTime persistence format instead of manually setting seconds to zero
         reservation.setDate(reservation.getDate().withSecond(0).withNano(0));
         Reservation savedReservation = reservationRespository.save(reservation);
-        SmsContent smsContent = smsContentRepository.findByType(SmsType.CONFIRMATION).orElseThrow(SmsContentNotFoundException::new);
-        String dayOfWeek = savedReservation.getDate().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag(SERBIAN_LANGUAGE_TAG));
-        String dayMonth = savedReservation.getDate().format(DateTimeFormatter.ofPattern(DAY_MONTH_DATE_FORMAT));
-        String hoursMinutes = savedReservation.getDate().format(DateTimeFormatter.ofPattern(HOURS_MINUTES_DATE_FORMAT));
-        String employeeName = savedReservation.getWorker().getFirstName();
-        SmsDTO smsDTO = new SmsDTO(reservation.getCustomer().getPhoneNumber(), MessageFormat.format(smsContent.getContent(), dayOfWeek, dayMonth, hoursMinutes, employeeName));
-//        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+        SmsDTO smsDTO = createSmsDTO(savedReservation);
+        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
         return savedReservation;
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
+    @Transactional
+    public Reservation updateReservation(Reservation newReservation) {
+        Reservation oldReservation = reservationRespository.findById(newReservation.getId()).orElseThrow(EntityNotFoundException::new);
+        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        modelMapper.map(newReservation, oldReservation);
+        Reservation updatedReservation = reservationRespository.save(oldReservation);
+        SmsDTO smsDTO = createSmsDTO(oldReservation);
+        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+        return updatedReservation;
     }
 
     @Override
@@ -69,4 +82,12 @@ public class ReservationServiceImpl implements ReservationService {
         messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
     }
 
+    private SmsDTO createSmsDTO(Reservation reservation) {
+        SmsContent smsContent = smsContentRepository.findByType(SmsType.CONFIRMATION).orElseThrow(SmsContentNotFoundException::new);
+        String dayOfWeek = reservation.getDate().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.forLanguageTag(SERBIAN_LANGUAGE_TAG));
+        String dayMonth = reservation.getDate().format(DateTimeFormatter.ofPattern(DAY_MONTH_DATE_FORMAT));
+        String hoursMinutes = reservation.getDate().format(DateTimeFormatter.ofPattern(HOURS_MINUTES_DATE_FORMAT));
+        String employeeName = reservation.getWorker().getFirstName();
+        return new SmsDTO(reservation.getCustomer().getPhoneNumber(), MessageFormat.format(smsContent.getContent(), dayOfWeek, dayMonth, hoursMinutes, employeeName));
+    }
 }
