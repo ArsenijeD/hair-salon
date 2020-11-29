@@ -34,9 +34,9 @@ public class ReservationController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ReservationDTO>> getDailyReservations(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<Reservation> reservations = reservationServiceImpl.getDailyReservations(date);
+    @GetMapping("worker/{workerId}")
+    public ResponseEntity<List<ReservationDTO>> getWorkersDailyReservations(@PathVariable Long workerId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<Reservation> reservations = reservationServiceImpl.getWorkersDailyReservations(workerId, date);
         return ResponseEntity.ok().body(modelMapper.map(reservations, new TypeToken<List<ReservationDTO>>(){}.getType()));
     }
 

@@ -28,11 +28,4 @@ public class TypeOfService {
     @Column(name = "PRICE")
     private double price;
 
-    @OneToMany
-    @JoinTable(
-            name = "TYPE_OF_SERVICE_RESERVATION",
-            joinColumns = {@JoinColumn(name = "TYPE_OF_SERVICE_ID", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "RESERVATION_ID", referencedColumnName = "id")})
-    @ToString.Exclude
-    private List<Reservation> reservations;
 }

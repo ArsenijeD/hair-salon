@@ -71,15 +71,15 @@ public class DataInitializer implements SmartInitializingSingleton {
         List<Authority> savedAuthorities = this.authorityRepository.saveAll(authorities);
 
         User rootAdmin = new User(1L, "Admin", "Adminovic", "admin", passwordEncoder.encode("admin"), LocalDateTime.now(),
-                "00381691995215", Gender.MALE, authorities.subList(0, 1), null, null, null);
+                "00381691995215", Gender.MALE, authorities.subList(0, 1));
 //        User akiAdmin = new User(2L, "Arsenije", "Degenek", "aki", passwordEncoder.encode("aki"), LocalDateTime.now(),
 //                "00381691995215", Gender.MALE, authorities.subList(0, 1), null, null, null);
         User veskoEmployee = new User(2L, "Veselin", "Martinovic", "vesko", passwordEncoder.encode("vesko"), LocalDateTime.now(),
-                "00381691995215", Gender.MALE, authorities.subList(1, 2), null, null, null);
+                "00381691995215", Gender.MALE, authorities.subList(1, 2));
         User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
-                "00381691995215", Gender.MALE, authorities.subList(2, 3), null, null, null);
+                "00381691995215", Gender.MALE, authorities.subList(2, 3));
         User marinaCustomer = new User(4L, "Marina", "Marina", "marina", passwordEncoder.encode("marina"), LocalDateTime.now(),
-                "00381691995215", Gender.FEMALE, authorities.subList(2, 3), null, null, null);
+                "00381691995215", Gender.FEMALE, authorities.subList(2, 3));
 
         SmsContent createdReservationContent = new SmsContent(1L, "Poštovani, upravo ste zakazali Vaš termin za {0}, {1} u {2}. Vaš frizer je {3}.", SmsType.CONFIRMATION);
         SmsContent reminderReservationContent = new SmsContent(2L, "Poštovani, podsećamo Vas da je Vaš termin danas u {0}. Hvala.", SmsType.REMINDER);

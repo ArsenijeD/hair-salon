@@ -52,29 +52,7 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "id")})
     private List<Authority> userAuthorities;
 
-	@OneToMany
-	@JoinTable(
-			name = "USER_SCHEDULED_RESERVATION",
-			joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "ROLE", referencedColumnName = "id")})
-	@ToString.Exclude
-	private List<Reservation> scheduledReservations;
 
-	@OneToMany
-	@JoinTable(
-			name = "USER_APPROVED_RESERVATION",
-			joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "RESERVATION_ID", referencedColumnName = "id")})
-	@ToString.Exclude
-	private List<Reservation> approvedReservations;
-
-	@OneToMany
-	@JoinTable(
-			name = "USER_SERVED_RESERVATION",
-			joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "id")},
-			inverseJoinColumns = {@JoinColumn(name = "RESERVATION_ID", referencedColumnName = "id")})
-	@ToString.Exclude
-	private List<Reservation> servedReservations;
 
 	//TODO Find lombok way to create this copy-constructor
 	public User(User user) {
@@ -85,9 +63,6 @@ public class User {
 		this.gender = user.getGender();
 		this.setPhoneNumber(user.getPhoneNumber());
 		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
-		this.scheduledReservations = new ArrayList<>(user.getScheduledReservations());
-		this.approvedReservations = new ArrayList<>(user.getApprovedReservations());
-		this.servedReservations = new ArrayList<>(user.getServedReservations());
 	}
 
 	//TODO Consider making combination of firstName and lastName unique in order to avoid confusion for customers with the same firstname and lastname

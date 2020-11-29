@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationService {
-    List<Reservation> getDailyReservations(LocalDate date);
+    List<Reservation> getWorkersDailyReservations(Long workerId, LocalDate date);
     Reservation createReservation(Reservation reservation);
     Reservation updateReservation(Reservation reservation);
     void delete(Long id);

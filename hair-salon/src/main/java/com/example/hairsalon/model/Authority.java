@@ -19,5 +19,4 @@ public class Authority {
     @Column(name = "NAME", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role name;
-
 }

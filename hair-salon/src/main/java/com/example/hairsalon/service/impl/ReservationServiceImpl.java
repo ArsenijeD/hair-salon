@@ -52,10 +52,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
-    public List<Reservation> getDailyReservations(LocalDate date) {
+    public List<Reservation> getWorkersDailyReservations(Long workerId, LocalDate date) {
         LocalDateTime startDate = date.atStartOfDay();
         LocalDateTime endDate = startDate.plusDays(1);
-        List<Reservation> reservations = reservationRespository.findAllByDateBetween(startDate, endDate)
+        List<Reservation> reservations = reservationRespository.findAllByWorker_IdAndDateBetween(workerId, startDate, endDate)
                 .orElseThrow(EntityNotFoundException::new);
         return reservations;
     }
@@ -68,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setDate(reservation.getDate().withSecond(0).withNano(0));
         Reservation savedReservation = reservationRespository.save(reservation);
         SmsDTO smsDTO = createSmsDTO(savedReservation);
-        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+//        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
         return savedReservation;
     }
 
