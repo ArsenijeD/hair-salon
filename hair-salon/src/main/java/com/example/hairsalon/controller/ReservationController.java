@@ -2,13 +2,17 @@ package com.example.hairsalon.controller;
 
 import com.example.hairsalon.dto.ReservationDTO;
 import com.example.hairsalon.model.Reservation;
-import com.example.hairsalon.repository.ReservationRespository;
 import com.example.hairsalon.security.util.AuthenticationFacade;
 import com.example.hairsalon.service.ReservationService;
 import com.example.hairsalon.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("reservations")
@@ -28,6 +32,12 @@ public class ReservationController {
         this.userServiceImpl = userServiceImpl;
         this.authenticationFacadeImpl = authenticationFacadeImpl;
         this.modelMapper = modelMapper;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservationDTO>> getDailyReservations(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        List<Reservation> reservations = reservationServiceImpl.getDailyReservations(date);
+        return ResponseEntity.ok().body(modelMapper.map(reservations, new TypeToken<List<ReservationDTO>>(){}.getType()));
     }
 
     @PostMapping

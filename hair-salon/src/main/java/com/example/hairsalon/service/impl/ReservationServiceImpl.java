@@ -18,8 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -44,6 +47,17 @@ public class ReservationServiceImpl implements ReservationService {
         this.smsContentRepository = smsContentRepository;
         this.messagePublisher = messagePublisher;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
+    @Transactional
+    public List<Reservation> getDailyReservations(LocalDate date) {
+        LocalDateTime startDate = date.atStartOfDay();
+        LocalDateTime endDate = startDate.plusDays(1);
+        List<Reservation> reservations = reservationRespository.findAllByDateBetween(startDate, endDate)
+                .orElseThrow(EntityNotFoundException::new);
+        return reservations;
     }
 
     @Override
