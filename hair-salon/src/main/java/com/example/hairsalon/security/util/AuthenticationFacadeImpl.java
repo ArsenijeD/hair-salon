@@ -1,6 +1,7 @@
 package com.example.hairsalon.security.util;
 
 
+import com.example.hairsalon.model.Role;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,5 +23,12 @@ public class AuthenticationFacadeImpl implements AuthenticationFacade {
     public void authenticateAdmin() {
         Authentication adminAuthentication = new UsernamePasswordAuthenticationToken(ADMIN_USERNAME, ADMIN_PASSWORD);
         SecurityContextHolder.getContext().setAuthentication(adminAuthentication);
+    }
+
+    @Override
+    public boolean authenticationHasRole(Role role) {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(authority ->
+                authority.getAuthority().equals(role.name())
+        );
     }
 }

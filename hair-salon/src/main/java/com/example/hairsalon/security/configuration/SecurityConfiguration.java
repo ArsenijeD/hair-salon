@@ -1,6 +1,5 @@
 package com.example.hairsalon.security.configuration;
 
-import com.example.hairsalon.model.Role;
 import com.example.hairsalon.security.filter.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

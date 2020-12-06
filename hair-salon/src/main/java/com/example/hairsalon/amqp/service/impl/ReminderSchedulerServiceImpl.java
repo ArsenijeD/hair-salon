@@ -55,7 +55,7 @@ public class ReminderSchedulerServiceImpl implements ReminderSchedulerService {
                 reservationsForReminding.forEach(reservationForReminding -> {
                     String hoursMinutes = reservationForReminding.getDate().format(DateTimeFormatter.ofPattern(HOURS_MINUTES_DATE_FORMAT));
                     SmsDTO smsDTO = new SmsDTO(reservationForReminding.getCustomer().getPhoneNumber(), MessageFormat.format(smsContent.getContent(), hoursMinutes));
-                    messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
+//                    messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.HOLIDAYS_ROUTING_KEY);
                 });
             }
         }

@@ -1,10 +1,7 @@
 package com.example.hairsalon.exception;
 
 import org.springframework.amqp.AmqpException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +22,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE = "Unable to find SMS content.";
 
-
     @ExceptionHandler({ BadCredentialsException.class, UsernameNotFoundException.class })
     public ResponseEntity<String> handleAuthenticationExceptions(Exception exception) {
         return ResponseEntity.badRequest().body(AUTHENTICATION_EXCEPTIONS_MESSAGE);
@@ -38,10 +34,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler({ DataIntegrityViolationException.class })
-    public ResponseEntity<?> handleDataIntegrityViolationException(Exception exception) {
-        return ResponseEntity.badRequest().body(INTEGRITY_VIOLATION_EXCEPTION_MESSAGE);
-    }
+//    @ExceptionHandler({ DataIntegrityViolationException.class })
+//    public ResponseEntity<?> handleDataIntegrityViolationException(Exception exception) {
+//        return ResponseEntity.badRequest().body(INTEGRITY_VIOLATION_EXCEPTION_MESSAGE);
+//    }
 
     @ExceptionHandler({ AmqpException.class })
     public ResponseEntity<String> handleAmqpException(Exception exception) {

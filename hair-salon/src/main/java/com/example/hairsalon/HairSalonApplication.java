@@ -1,6 +1,7 @@
 package com.example.hairsalon;
 
 import org.modelmapper.ModelMapper;
+import org.passay.PasswordGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,16 +16,20 @@ public class HairSalonApplication {
 		SpringApplication.run(HairSalonApplication.class, args);
 	}
 
-	//TODO Consider making config class for bean definitions
+	//TODO Consider moving this definitions to util services (to not be tightly coupled)
+
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
 
 	@Bean
-	public WebClient.Builder weClientBuilder() {
+	public WebClient.Builder webClientBuilder() {
 		return WebClient.builder();
 	}
+
+	@Bean
+	PasswordGenerator passwordGenerator() { return new PasswordGenerator(); }
 
 	//TODO Consider making conversion adapter; benefit: third-party-lib independent(both from controllers and from here)
 }

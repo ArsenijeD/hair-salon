@@ -2,7 +2,8 @@ package com.example.hairsalon.dto;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class UserDTO {
@@ -15,11 +16,13 @@ public class UserDTO {
 
     private String username;
 
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     private String phoneNumber;
 
     private String gender;
+
+    private List<AuthorityDTO> userAuthorities;
 
     //TODO Add DTO-fields validation (javax.validation.constraints)
 }
