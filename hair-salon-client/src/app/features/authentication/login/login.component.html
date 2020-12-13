@@ -2,17 +2,18 @@
     <div class="offset-1 col-10 offset-sm-2 col-sm-8 offset-md-3 col-md-6 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4">
         <div class="row card h-100 text-center border-primary px-0">
             <div class="card-header text-white bg-primary">Prijava:</div>
-            <div class="card-body d-flex flex-column flex-grow-1">
-                <form class="card-title forma ">
+            <div class="card-body">
+                <form [formGroup]="loginForm" class="card-title" (ngSubmit)="onSubmit()">
                     <div class="form-group mb-4">
-                        <input type="username" class="form-control" id="usernameInput" aria-describedby="emailHelp" placeholder="Unesite korisničko ime">
+                        <input class="form-control" type="username" formControlName="username" id="usernameInput" aria-describedby="emailHelp" placeholder="Unesite korisničko ime">
                     </div>
                     <div class="form-group mb-4">
-                        <input type="password" class="form-control" id="passwordInput" placeholder="Unesite šifru">
+                        <input class="form-control" type="password" formControlName="password" id="passwordInput" placeholder="Unesite šifru">
                     </div>
-                    <button type="submit" class="btn btn-primary">Prijavi se</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Prijavi se</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
