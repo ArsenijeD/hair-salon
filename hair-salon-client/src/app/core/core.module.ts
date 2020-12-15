@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
 
 
 @NgModule({
@@ -17,6 +18,9 @@ import { ToastrModule } from 'ngx-toastr';
       resetTimeoutOnDuplicate: true,
       timeOut: 3000
     })
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true }
   ]
 })
 export class CoreModule { }

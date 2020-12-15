@@ -20,6 +20,12 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping
+    public ResponseEntity<UserDTO> getUserByUsername(@RequestParam String username) {
+        User user = userServiceImpl.getByUserName(username);
+        return ResponseEntity.ok().body(modelMapper.map(user, UserDTO.class));
+    }
+
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         User user = modelMapper.map(userDTO, User.class);

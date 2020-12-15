@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 import { HttpService } from 'src/app/core/services/http.service';
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { LoginResponse } from 'src/app/model/loginResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +10,9 @@ export class AuthenticationService {
 
   private readonly url = 'authenticate';
 
-  constructor(private httpService: HttpService, private notificationService: NotificationService) { }
+  constructor(private httpService: HttpService) { }
 
-  authenticate(username: string, password: string): void {
-    this.httpService.post(this.url, {username, password}).subscribe({
-      next: (data: any) => { 
-        console.log(data.jwt) 
-      },
-      error: (status: number) => { 
-        this.notificationService.showErrorMessage(status, 'Neuspešna prijava', 'Pogrešno korisničko ime ili šifra.')
-      }
-    });
+  login(username: string, password: string): Observable<LoginResponse> {
+    return this.httpService.post(this.url, { username, password });
   }
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -16,6 +16,19 @@ export class HttpService {
     return this.http.post<V>(
       `${environment.baseUrl}${url}`,
       data
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error.status);
+      })
+    );
+  }
+
+  get<T>(url: string, queryParams?: {[key: string]: string}): Observable<T> {
+    return this.http.get<T>(
+      `${environment.baseUrl}${url}`,
+      {
+        params: queryParams
+      }
     ).pipe(
       catchError((error: HttpErrorResponse) => {
         return throwError(error.status);
