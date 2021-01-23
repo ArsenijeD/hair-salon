@@ -5,6 +5,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./features/authentication/authentication.module').then(m => m.AuthenticationModule)
+  },
+  {
+    path: 'reservation',
+    loadChildren: () => import('./features/reservation/reservation.module').then(m => m.ReservationModule)
   }
 ];
 

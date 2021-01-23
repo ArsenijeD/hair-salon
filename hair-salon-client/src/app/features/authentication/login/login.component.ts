@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SessionManagementService } from 'src/app/core/services/session-management.service';
 import { LoginResponse } from 'src/app/model/loginResponse';
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService, 
               private notificationService: NotificationService,
               private userService: UserService,
-              private session: SessionManagementService) { }
+              private session: SessionManagementService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -34,7 +35,10 @@ export class LoginComponent implements OnInit {
       next: (response: LoginResponse) => { 
         this.session.save('token', response.jwt);
         this.userService.getUserByUsername(this.loginForm.controls['username'].value).subscribe({
-          next: (user: User) => { this.session.save('current-user', user) },
+          next: (user: User) => { 
+            this.session.save('current-user', user);
+            this.router.navigate(['/reservation']);
+          },
           error: () => { 
             //TODO Decide how to handle this 
           }
