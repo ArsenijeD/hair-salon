@@ -57,7 +57,7 @@ public class DataInitializer implements SmartInitializingSingleton {
         skinning.setId(1L);
         skinning.setName("Skinning");
         skinning.setPrice(350.0);
-        skinning.setType(Type.MEDIUM);
+        skinning.setLength(Length.MEDIUM);
 
         Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 28), HolidayName.NEW_YEAR, Gender.BOTH, "Novu godinu");
         Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH, "Božić");

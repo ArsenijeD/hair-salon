@@ -1,6 +1,6 @@
 package com.example.hairsalon.model;
 
-public enum Type {
+public enum Length {
     SHORT,
     MEDIUM,
     LONG

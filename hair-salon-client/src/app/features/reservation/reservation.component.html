@@ -1,1 +1,39 @@
-<p>Reservation works!</p>
+<div class="row reservation-filter-row">
+
+</div>
+<div class="row reservation-root-row mt-2">
+    <div class="offset-2 col-8 h-100">
+        <div class="row card text-center border-primary h-100">
+            <div class="card-body table-sm table-responsive py-0 h-100">
+                <table class="table table-hover h-100 mb-0">
+                    <thead class="table-header">
+                        <tr class="row">
+                            <th class="col-2">Vreme</th>
+                            <th class="col-3">Ime</th>
+                            <th class="col-3">Prezime</th>
+                            <th class="col-2">Usluga</th>
+                            <th class="col-1">Dodaj/Izmeni</th>
+                            <th class="col-1">Obriši</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-body h-100">
+                        <tr class="row table-body-row" *ngFor='let appointment of getReservationAppointments();let i = index'>
+                            <td class="col-2 p-0">{{appointment | date:"HH:mm"}}</td>
+                            <td class="col-3 p-0">Arsenije</td>
+                            <td class="col-3 p-0">Degenek</td>
+                            <td class="col-2 p-0">Šišanje</td>
+                            <td class="col-1 p-0">Da</td>
+                            <td class="col-1 p-0">Da</td>
+                            <!-- <td class="col-1">
+                                <a class="btn btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                            </td>
+                            <td class="col-1">
+                                <button type="button" class="btn btn-link btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

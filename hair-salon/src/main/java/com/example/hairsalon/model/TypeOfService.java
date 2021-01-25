@@ -1,10 +1,8 @@
 package com.example.hairsalon.model;
 
 import lombok.Data;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @Entity(name = "TYPES_OF_SERVICE")
@@ -23,7 +21,7 @@ public class TypeOfService {
 
     @Column(name = "TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private Length length;
 
     @Column(name = "PRICE")
     private double price;
