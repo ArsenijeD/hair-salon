@@ -14,7 +14,6 @@ import { UserService } from '../user.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
 
   constructor(private authenticationService: AuthenticationService, 

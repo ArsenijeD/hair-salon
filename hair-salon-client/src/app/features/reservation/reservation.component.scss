@@ -7,15 +7,80 @@
 }
 
 .table-body {
-    font-size: 70%;
+    font-size: 100%;
 }
 
 .table-header {
-    font-size: 90%;
+    font-size: large;
 }
 
 .table-body-row {
     height: 4%;
 }
 
+.btn-sm {
+    padding: 0;
+}
+
+a:hover {
+    cursor:pointer;
+}
+
+.date-picker-label {
+    font-size: x-large;
+}
+
+.haircutter-label {
+    font-size: x-large;
+    // width: 21%;
+    // border: red dotted 3px;
+
+}
+
+.form-control {
+    border-bottom-left-radius: 0.25rem !important;
+    border-top-left-radius: 00.25rem !important;
+}
+
+h1 {
+    color: #007bff;
+}
+.form-inline {
+    // border: red 5px dotted;
+}
+
+.calendar-btn {
+    background-color: white;
+}
+
+.date-picker-label {
+    // width: 25%;
+}
+
+.haircutter-label {
+    // width: 25%;
+}
+.date-picker-form-group {
+    // border: blue dotted 3px;
+}
+
+.haircutter-form-group {
+    // border: blue dotted 3px;
+}
+
+.date-picker-form-control {
+    // border: 3px green dotted;
+    // width: 62%;
+    background-color: white;
+}
+
+.haircutter-form-control {
+    // border: 3px green dotted;
+    // width: 75%;
+}
+
+.input-group-append {
+    // border: 3px red dotted;
+    // width: 13%;
+}
 

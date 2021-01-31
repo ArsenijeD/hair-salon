@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthenticationInterceptor } from './interceptors/authentication.interceptor';
 
-
 @NgModule({
   declarations: [],
   imports: [

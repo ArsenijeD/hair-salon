@@ -1,5 +1,30 @@
-<div class="row reservation-filter-row">
-
+<div class="row reservation-filter-row mt-2">
+    <div class="col-2">
+        <h1>Rezervacije</h1>
+    </div>
+    <div class="col-8 px-0 d-flex flex-column justify-content-end">
+            <form class="form-inline" [formGroup]="reservationFilterForm">
+                <div class="alert alert-secondary row w-100 ml-0 mb-0" role="alert" d-flex flex-column justify-content-center>
+                    <div class="form-group offset-2 col-4 date-picker-form-group px-0">
+                        <div class="input-group">
+                            <label class="date-picker-label" for="date-picker">Datum:</label>
+                            <input class="form-control date-picker-form-control ml-3" placeholder="gggg-mm-dd"
+                                name="date-picker" ngbDatepicker #d="ngbDatepicker" formControlName="date" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar calendar-btn fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-4 haircutter-form-group px-0">
+                        <label class="haircutter-label ml-5" for="haircutter">Frizer:</label>
+                        <select id="haircutter" class="form-control haircutter-form-control ml-3 col">
+                        <option selected>Dejan</option>
+                        <option>...</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+    </div>
 </div>
 <div class="row reservation-root-row mt-2">
     <div class="offset-2 col-8 h-100">
@@ -12,24 +37,33 @@
                             <th class="col-3">Ime</th>
                             <th class="col-3">Prezime</th>
                             <th class="col-2">Usluga</th>
-                            <th class="col-1">Dodaj/Izmeni</th>
+                            <th class="col-1">Dodaj</th>
                             <th class="col-1">Obriši</th>
                         </tr>
                     </thead>
                     <tbody class="table-body h-100">
                         <tr class="row table-body-row" *ngFor='let appointment of getReservationAppointments();let i = index'>
-                            <td class="col-2 p-0">{{appointment | date:"HH:mm"}}</td>
-                            <td class="col-3 p-0">Arsenije</td>
-                            <td class="col-3 p-0">Degenek</td>
-                            <td class="col-2 p-0">Šišanje</td>
-                            <td class="col-1 p-0">Da</td>
-                            <td class="col-1 p-0">Da</td>
-                            <!-- <td class="col-1">
+                            <td class="d-flex justify-content-center align-items-center col-2 p-0">{{appointment | date:"HH:mm"}}</td>
+                            <td class="d-flex justify-content-center align-items-center col-3 p-0">Arsenije</td>
+                            <td class="d-flex justify-content-center align-items-center col-3 p-0">Degenek</td>
+                            <td class="d-flex justify-content-center align-items-center col-2 p-0">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-secondary dropdown-toggle p-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Izaberite..
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                      <a class="dropdown-item">Šišanje</a>
+                                      <a class="dropdown-item">Feniranje</a>
+                                      <a class="dropdown-item">Pranje kose</a>
+                                    </div>
+                                  </div>
+                            </td>
+                            <td class="d-flex justify-content-center align-items-center col-1 p-0">
                                 <a class="btn btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                             </td>
-                            <td class="col-1">
-                                <button type="button" class="btn btn-link btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                            </td> -->
+                            <td class="cd-flex justify-content-center align-items-center col-1 p-0">
+                                <a class="btn btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
