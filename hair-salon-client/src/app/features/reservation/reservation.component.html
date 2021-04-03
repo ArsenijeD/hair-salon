@@ -1,7 +1,9 @@
+<app-feedback-modal></app-feedback-modal>
 <div class="row reservation-filter-row mt-2">
     <div class="col-2">
         <h1>Rezervacije</h1>
     </div>
+    <button (click)="onButtonClick()">Open myModal</button>
     <div class="col-8 px-0 d-flex flex-column justify-content-end">
             <form class="form-inline" [formGroup]="reservationFilterForm">
                 <div class="alert alert-secondary row w-100 ml-0 mb-0" role="alert" d-flex flex-column justify-content-center>
@@ -15,9 +17,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-4 haircutter-form-group px-0">
-                        <label class="haircutter-label ml-5" for="haircutter">Frizer:</label>
-                        <select id="haircutter" class="form-control haircutter-form-control ml-3 col">
+                    <div class="form-group col-4 worker-form-group px-0">
+                        <label class="worker-label ml-5" for="worker">Frizer:</label>
+                        <select id="worker" class="form-control worker-form-control ml-3 col" formControlName="worker">
                         <option selected>Dejan</option>
                         <option>...</option>
                         </select>
@@ -28,7 +30,7 @@
 </div>
 <div class="row reservation-root-row mt-2">
     <div class="offset-2 col-8 h-100">
-        <div class="row card text-center border-primary h-100">
+        <div class="row card text-center border-secondary h-100">
             <div class="card-body table-sm table-responsive py-0 h-100">
                 <table class="table table-hover h-100 mb-0">
                     <thead class="table-header">
@@ -37,8 +39,8 @@
                             <th class="col-3">Ime</th>
                             <th class="col-3">Prezime</th>
                             <th class="col-2">Usluga</th>
-                            <th class="col-1">Dodaj</th>
-                            <th class="col-1">Obriši</th>
+                            <th class="col-1 pr-4">Dodaj</th>
+                            <th class="col-1 pr-4">Otkaži</th>
                         </tr>
                     </thead>
                     <tbody class="table-body h-100">
@@ -59,13 +61,19 @@
                                   </div>
                             </td>
                             <td class="d-flex justify-content-center align-items-center col-1 p-0">
-                                <a class="btn btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a class="btn btn-sm">
+                                    <i class="fa fa-pencil-square-o pr-4" aria-hidden="true" *ngIf="i%2 === 0"></i>
+                                    <i class="fa fa-plus-square-o pr-4" aria-hidden="true" *ngIf="i%2 !== 0"></i>
+                                </a>
                             </td>
                             <td class="cd-flex justify-content-center align-items-center col-1 p-0">
-                                <a class="btn btn-sm"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a class="btn btn-sm pr-5"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </td>
                         </tr>
                     </tbody>
+                    <a href="#" class="float">
+                        <i class="fa fa-plus my-float"></i>
+                    </a>
                 </table>
             </div>
         </div>

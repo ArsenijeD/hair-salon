@@ -130,6 +130,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "hair-salon-client"
+    }
+  },
+  "defaultProject": "hair-salon-client",
+  "cli": {
+    "analytics": "040fa349-480e-4de3-97ed-bef81c24b84e"
+  }
 }

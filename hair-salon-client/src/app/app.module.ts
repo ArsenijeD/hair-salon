@@ -6,19 +6,20 @@ import { AppComponent } from './app.component';
 import { AuthenticationModule } from './features/authentication/authentication.module';
 import { CoreModule } from './core/core.module';
 import { ReservationModule } from './features/reservation/reservation.module';
+import { ModalModule } from '@bit/valor-software.ngx-bootstrap.modal';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     CoreModule,
     BrowserModule,
     AppRoutingModule,
     AuthenticationModule,
-    ReservationModule
+    ReservationModule,
+    ModalModule.forRoot()
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

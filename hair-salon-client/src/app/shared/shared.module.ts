@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FeedbackModalComponent } from './feedback-modal/feedback-modal.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [FeedbackModalComponent],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     CommonModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FeedbackModalComponent,
   ]
 })
 export class SharedModule { }

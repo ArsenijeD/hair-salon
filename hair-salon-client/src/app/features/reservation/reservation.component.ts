@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomDatepickerI18nService, I18n } from 'src/app/core/services/custom-datepicker-i18n.service';
 import { NgbDateParserFormatter, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { CustomDateParserFormatterService } from 'src/app/core/services/custom-date-parser-formatter.service';
+import { FeedbackModalService } from 'src/app/core/services/feedback-modal.service';
 
 @Component({
   selector: 'app-reservation',
@@ -17,11 +18,12 @@ import { CustomDateParserFormatterService } from 'src/app/core/services/custom-d
 export class ReservationComponent implements OnInit {
   reservationFilterForm: FormGroup;
 
-  constructor() { }
+  constructor(private feedbackModalService: FeedbackModalService) {}
 
   ngOnInit(): void {
     this.reservationFilterForm = new FormGroup({
-      date: new FormControl('', [Validators.required])
+      date: new FormControl('', [Validators.required]),
+      worker: new FormControl('Dejan', [Validators.required])
     })
   }
 
@@ -40,5 +42,16 @@ export class ReservationComponent implements OnInit {
       reservationAppointments.push(new Date(+pivotDate));
     }
     return reservationAppointments;
+  }
+
+  onButtonClick(): void {
+    this.feedbackModalService.openModal(
+      { title: 'Otkazivanje rezervacije', 
+        message: 'Da li ste sigurni da zelite da otkazete ovu rezervaciju?',
+        confirmButtonVisible: true,
+        cancelButtonVisible: true,
+        confirmButtonAction: () => {console.log('Kliknuto!')}
+      }
+    );
   }
 }
