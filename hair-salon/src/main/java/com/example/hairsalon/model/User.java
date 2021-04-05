@@ -65,5 +65,10 @@ public class User {
 		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
 	}
 
+	public boolean hasRole(Role role) {
+		return userAuthorities.stream().anyMatch(authority ->
+				authority.getName().equals(role));
+	}
+
 	//TODO Consider making combination of firstName and lastName unique in order to avoid confusion for customers with the same firstname and lastname
 }

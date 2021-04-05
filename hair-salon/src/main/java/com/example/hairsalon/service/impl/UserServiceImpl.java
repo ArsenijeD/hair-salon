@@ -9,6 +9,7 @@ import com.example.hairsalon.security.util.AuthenticationFacade;
 import com.example.hairsalon.service.UserService;
 import com.example.hairsalon.security.util.CredentialsUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,12 +54,12 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         CharSequence password = credentialsUtil.generatePassword(12);
         user.setPassword(passwordEncoder.encode(password));
-        if (authenticationFacadeImpl.authenticationHasRole(Role.EMPLOYEE)) {
+        if (user.hasRole(Role.CUSTOMER) || (!user.hasRole(Role.CUSTOMER) && user.getUsername() == null)) {
             String username = credentialsUtil.generateUsername(user.getFirstName(), user.getPhoneNumber());
-            Authority userAuthority = authorityRepository.findByName(Role.CUSTOMER).orElseThrow(EntityNotFoundException::new);
             user.setUsername(username);
-            user.setUserAuthorities(Arrays.asList(userAuthority));
         }
         return userRepository.save(user);
     }
+
+
 }
