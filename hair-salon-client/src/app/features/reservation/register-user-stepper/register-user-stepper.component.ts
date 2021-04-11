@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import Stepper from 'bs-stepper';
 
@@ -16,26 +16,54 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    //TODO: Try to install @types/intl-tel-input for geting intlInput... method
+
     this.myForm = new FormGroup({
-      email: new FormControl('', [Validators.required]),
-      password: new FormControl('', Validators.required)
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      gender: new FormControl('', Validators.required),
+      dateOfBirth: new FormControl('', Validators.required),
+      role: new FormControl('', Validators.required),
+      phoneNumber: new FormControl('', Validators.required)
     });
     
   }
 
   ngAfterViewInit(): void {
+    
     this.stepper = new Stepper(this.stepper1.nativeElement, {
       linear: false,
       animation: true
     });
   }
 
-  next() {
+  next(): void {
     this.stepper.next();
   }
 
-  onSubmit() {
+  previous(): void {
+    this.stepper.previous();
+  }
+
+  onSubmit(): boolean {
     return false;
+  }
+
+  hasError(event: any): void {
+
+  }
+
+  getNumber(event: any): void {
+
+  }
+
+  telInputObject(event: any): void {
+
+  }
+
+  onCountryChange(event: any): void {
+
   }
 }

@@ -5,7 +5,7 @@
             <div class="card-body">
                 <form [formGroup]="loginForm" class="card-title" (ngSubmit)="onSubmit()">
                     <div class="form-group mb-4">
-                        <input class="form-control" type="username" formControlName="username" id="usernameInput" aria-describedby="emailHelp" placeholder="Unesite korisničko ime">
+                        <input class="form-control" type="text" formControlName="username" id="usernameInput" aria-describedby="usernameHelp" placeholder="Unesite korisničko ime">
                     </div>
                     <div class="form-group mb-4">
                         <input class="form-control" type="password" formControlName="password" id="passwordInput" placeholder="Unesite šifru">

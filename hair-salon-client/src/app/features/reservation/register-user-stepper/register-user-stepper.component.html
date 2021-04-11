@@ -1,48 +1,112 @@
-<div class="container">
-    <div id="stepper1" #stepper1 class="bs-stepper">
-      <div class="bs-stepper-header">
-        <div class="step" data-target="#test-l-1">
-          <button class="step-trigger">
-            <span class="bs-stepper-circle">1</span>
-            <span class="bs-stepper-label">Email</span>
-          </button>
-        </div>
-        <div class="line"></div>
-        <div class="step" data-target="#test-l-2">
-          <button class="step-trigger">
-            <span class="bs-stepper-circle">2</span>
-            <span class="bs-stepper-label">Password</span>
-          </button>
-        </div>
-        <div class="line"></div>
-        <div class="step" data-target="#test-l-3">
-          <button class="step-trigger">
-            <span class="bs-stepper-circle">3</span>
-            <span class="bs-stepper-label">Validate</span>
-          </button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Dodaj korisnika</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div id="stepper1" #stepper1 class="bs-stepper">
+            <div class="bs-stepper-header">
+              <div class="step" data-target="#test-l-1">
+                <button class="step-trigger">
+                  <span class="bs-stepper-circle">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </span>
+                  <span class="bs-stepper-label">Podaci</span>
+                </button>
+              </div>
+              <div class="line"></div>
+              <div class="step" data-target="#test-l-2">
+                <button class="step-trigger">
+                  <span class="bs-stepper-circle">
+                    <i class="fa fa-phone" aria-hidden="true"></i>
+                  </span>
+                  <span class="bs-stepper-label">Detalji</span>
+                </button>
+              </div>
+              <div class="line"></div>
+              <div class="step" data-target="#test-l-3">
+                <button class="step-trigger">
+                  <span class="bs-stepper-circle">
+                    <i class="fa fa-save" aria-hidden="true"></i>
+                  </span>
+                  <span class="bs-stepper-label">Kraj</span>
+                </button>
+              </div>
+            </div>
+            <div class="bs-stepper-content">
+              <form (ngSubmit)="onSubmit()" [formGroup]="myForm">
+                <div id="test-l-1" class="content text-center">
+                  <div class="form-group">
+                    <input type="text" class="form-control" formControlName="firstName" id="firstName" placeholder="Unesite ime" />
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" formControlName="lastName" id="lastName" placeholder="Unesite prezime" />
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" formControlName="username" id="username" placeholder="Unesite korisničko ime" />
+                  </div>
+                  <button (click)="next()" class="btn btn-primary ml-1">Dalje &gt;</button>
+                </div>
+                <div id="test-l-2" class="content text-center">
+                  <div class="form-group">
+                    <select id="gender" class="form-control" formControlName="gender" placeholder="Izaberite pol">
+                      <option>Muški</option>
+                      <option>Ženski</option>
+                    </select>
+                  </div>
+                  <div class="input-group">
+                    <input class="form-control date-picker-form-control" placeholder="Izaberite datum rođenja"
+                        name="dateOfBirth" ngbDatepicker #d="ngbDatepicker" formControlName="dateOfBirth" readonly>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar calendar-btn fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <select id="role" class="form-control" formControlName="role" placeholder="Izaberite ulogu">
+                    <option selected>Frizer</option>
+                    <option>Šegrt</option>
+                    <option>Mušterija</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <input type="tel" class="form-control" formControlName="phoneNumber" id="phoneNumber" placeholder="Unesite broj telefona" />
+                    <!-- <input type="text" #phoneNumber
+                      ng2TelInput
+                      [ng2TelInputOptions]="{initialCountry: 'in'}"
+                      (hasError)="hasError($event)"
+                      (ng2TelOutput)="getNumber($event)"
+                      (intlTelInputObject)="telInputObject($event)"
+                      (countryChange)="onCountryChange($event)" /> -->
+                  </div>
+                  <button (click)="previous()" class="btn btn-secondary mr-1">&lt; Nazad</button>
+                  <button (click)="next()" class="btn btn-primary ml-1">Dalje &gt;</button>
+                </div>
+                <div id="test-l-3" class="content text-center">
+                  <button (click)="previous()" class="btn btn-secondary mr-1">&lt; Nazad</button>
+                  <button type="submit" class="btn btn-primary ml-1">Završi</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="bs-stepper-content">
-        <form (ngSubmit)="onSubmit()" [formGroup]="myForm">
-          <div id="test-l-1" class="content">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" formControlName="email" id="exampleInputEmail1" placeholder="Enter email" />
-            </div>
-            <button (click)="next()" class="btn btn-primary">Next</button>
-          </div>
-          <div id="test-l-2" class="content">
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" class="form-control" formControlName="password" id="exampleInputPassword1" placeholder="Password" />
-            </div>
-            <button (click)="next()" class="btn btn-primary">Next</button>
-          </div>
-          <div id="test-l-3" class="content text-center">
-            <button type="submit" class="btn btn-primary mt-5">Submit</button>
-          </div>
-        </form>
-      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> -->
     </div>
   </div>
+</div>
+
+
+
   
