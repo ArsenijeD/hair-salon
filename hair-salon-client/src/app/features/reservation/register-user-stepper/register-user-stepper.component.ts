@@ -1,20 +1,29 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbDateParserFormatter, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import Stepper from 'bs-stepper';
+import { CustomDateParserFormatterService } from 'src/app/core/services/custom-date-parser-formatter.service';
+import { CustomDatepickerI18nService, I18n } from 'src/app/core/services/custom-datepicker-i18n.service';
 
 @Component({
   selector: 'app-register-user-stepper',
   templateUrl: './register-user-stepper.component.html',
-  styleUrls: ['./register-user-stepper.component.scss']
+  styleUrls: ['./register-user-stepper.component.scss'],
+  providers: [
+    I18n, 
+    { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18nService },     
+    { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatterService}
+  ]
 })
 export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   private stepper: Stepper;
   myForm: FormGroup;
 
+  
   @ViewChild('stepper1', {read: ElementRef}) stepper1: ElementRef;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit(): void {
     //TODO: Try to install @types/intl-tel-input for geting intlInput... method
@@ -49,21 +58,5 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   onSubmit(): boolean {
     return false;
-  }
-
-  hasError(event: any): void {
-
-  }
-
-  getNumber(event: any): void {
-
-  }
-
-  telInputObject(event: any): void {
-
-  }
-
-  onCountryChange(event: any): void {
-
   }
 }
