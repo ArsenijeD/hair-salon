@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateParserFormatter, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDatepickerI18n, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import Stepper from 'bs-stepper';
 import { CustomDateParserFormatterService } from 'src/app/core/services/custom-date-parser-formatter.service';
 import { CustomDatepickerI18nService, I18n } from 'src/app/core/services/custom-datepicker-i18n.service';
@@ -18,17 +18,14 @@ import { CustomDatepickerI18nService, I18n } from 'src/app/core/services/custom-
 export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   private stepper: Stepper;
-  myForm: FormGroup;
+  registerUserForm: FormGroup;
 
-  
-  @ViewChild('stepper1', {read: ElementRef}) stepper1: ElementRef;
+  @ViewChild('registerUserStepper', {read: ElementRef}) registerUserStepper: ElementRef;
 
   constructor() {}
 
   ngOnInit(): void {
-    //TODO: Try to install @types/intl-tel-input for geting intlInput... method
-
-    this.myForm = new FormGroup({
+    this.registerUserForm = new FormGroup({
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
@@ -37,12 +34,11 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
       role: new FormControl('', Validators.required),
       phoneNumber: new FormControl('', Validators.required)
     });
-    
   }
 
   ngAfterViewInit(): void {
     
-    this.stepper = new Stepper(this.stepper1.nativeElement, {
+    this.stepper = new Stepper(this.registerUserStepper.nativeElement, {
       linear: false,
       animation: true
     });
@@ -58,5 +54,14 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   onSubmit(): boolean {
     return false;
+  }
+
+  getBirthMinDate(): NgbDateStruct {
+    return {year: 1900, month: 1, day: 1};
+  }
+
+  getBirthMaxDate(): NgbDateStruct {
+    const currentDate = new Date();
+    return {year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate()};
   }
 }
