@@ -1,7 +1,6 @@
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#register-user-modal">
-  Launch demo modal
+  Registruj korisnika
 </button>
-
 <div class="modal fade" id="register-user-modal" tabindex="-1" role="dialog" aria-labelledby="register-user-modal-label" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -53,17 +52,25 @@
           <div class="bs-stepper-content">
             <form (ngSubmit)="onSubmit()" [formGroup]="registerUserForm">
               <div id="personal-data-step" class="content">
-                <div class="form-group ">
+                <div class="form-group">
                   <label for="firstName" >Ime:</label>
-                  <input type="text" class="form-control" formControlName="firstName" id="firstName" placeholder="Unesite ime" />
+                  <input type="text" class="form-control" [ngClass]="getValidityClass('firstName')" formControlName="firstName" id="firstName" placeholder="Unesite ime" />
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.firstName.errors?.required">
+                    {{getFormControlErrorMessage('firstName')}}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.firstName.errors?.maxlength">
+                    {{getFormControlErrorMessage('firstName')}}
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="lastName">Prezime:</label>
-                  <input type="text" class="form-control" formControlName="lastName" id="lastName" placeholder="Unesite prezime" />
-                </div>
-                <div class="form-group">
-                  <label for="username">Korisničko ime:</label>
-                  <input type="text" class="form-control" formControlName="username" id="username" placeholder="Unesite korisničko ime" />
+                  <input type="text" class="form-control" [ngClass]="getValidityClass('lastName')" formControlName="lastName" id="lastName" placeholder="Unesite prezime" />
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.lastName.errors?.required">
+                    {{getFormControlErrorMessage('lastName')}}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.lastName.errors?.maxlength">
+                    {{getFormControlErrorMessage('lastName')}}
+                  </div>
                 </div>
                 <div class="d-flex justify-content-center">
                   <button (click)="next()" class="btn btn-primary">Dalje &gt;</button>
@@ -72,7 +79,7 @@
               <div id="details-step" class="content">
                 <div class="form-group">
                   <label for="gender">Pol:</label>
-                  <select id="gender" class="form-control" formControlName="gender" >
+                  <select id="gender" class="form-control select" [ngClass]="getValidityClass('gender')" formControlName="gender" >
                     <option value="" hidden>Izaberite pol</option>
                     <option>Muški</option>
                     <option>Ženski</option>
@@ -80,7 +87,7 @@
                 </div>
                 <label for="dateOfBirth">Datum rođenja:</label>
                 <div class="input-group mb-3">
-                  <input class="form-control date-picker-form-control" placeholder="Izaberite datum rođenja"
+                  <input class="form-control date-picker-form-control" [ngClass]="getValidityClass('dateOfBirth')" placeholder="Izaberite datum rođenja"
                       id="dateOfBirth" name="dateOfBirth" ngbDatepicker #d="ngbDatepicker" formControlName="dateOfBirth" 
                       [minDate]="getBirthMinDate()" [maxDate]="getBirthMaxDate()" readonly>
                   <div class="input-group-append">
@@ -95,11 +102,13 @@
               <div id="contact-step" class="content">
                 <div class="form-group">
                   <label for="role">Uloga:</label>
-                  <select id="role" class="form-control" formControlName="role" placeholder="Izaberite ulogu">
-                    <option value="" hidden>Izaberite ulogu</option>
-                    <option selected>Frizer</option>
-                    <option>Šegrt</option>
-                    <option>Mušterija</option>
+                  <select id="role" class="form-control select" formControlName="role" [ngClass]="getValidityClass('role')" placeholder="Izaberite ulogu">
+                    <option value="" hidden *ngIf="this.advanced">Izaberite ulogu</option>
+                    <option value=0 *ngIf="this.advanced">Administrator</option>
+                    <option value=1 *ngIf="this.advanced">Frizer</option>
+                    <option value=2 *ngIf="this.advanced">Šegrt</option>
+                    <option value=3 *ngIf="this.advanced">Mušterija</option>
+                    <option value=3 selected *ngIf="!this.advanced">Mušterija</option>
                   </select>
                 </div>
                 <label for="phoneNumber">Broj telefona:</label>
@@ -107,7 +116,13 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="phone-number-prefix">+381</span>
                   </div>
-                  <input type="number" class="form-control" formControlName="phoneNumber" id="phoneNumber" placeholder="Unesite broj telefona" />
+                  <input type="number" class="form-control" formControlName="phoneNumber" [ngClass]="getValidityClass('phoneNumber')" id="phoneNumber" placeholder="Unesite broj telefona" />
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.phoneNumber.errors?.required">
+                    {{getFormControlErrorMessage('phoneNumber')}}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.phoneNumber.errors?.pattern">
+                    Neispravan format. Unesite tačno devet cifara, tako da vrednost prve bude 6!
+                  </div>
                 </div>
                 <div class="d-flex justify-content-center">
                   <button (click)="previous()" class="btn btn-secondary mr-1">&lt; Nazad</button>
@@ -115,9 +130,19 @@
                 </div>
               </div>
               <div id="finish-step" class="content">
+                <div class="form-group" *ngIf="showUsername()">
+                  <label for="username">Korisničko ime:</label>
+                  <input type="text" class="form-control" [ngClass]="getValidityClass('username')" formControlName="username" id="username" placeholder="Unesite korisničko ime" />
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.username.errors?.required">
+                    {{getFormControlErrorMessage('username')}}
+                  </div>
+                  <div class="invalid-feedback" *ngIf="registerUserForm.controls.username.errors?.maxlength">
+                    {{getFormControlErrorMessage('username')}}
+                  </div>
+                </div>
                 <div class="d-flex justify-content-center">
                   <button (click)="previous()" class="btn btn-secondary mr-1 mt-2">&lt; Nazad</button>
-                  <button type="submit" class="btn btn-primary ml-1 mt-2">Završi</button>
+                  <button type="submit" class="btn btn-primary ml-1 mt-2" [disabled]="!registerUserForm.valid">Završi</button>
                 </div>
               </div>
             </form>

@@ -1,4 +1,5 @@
 import { Authority } from "./authority";
+import { Gender } from "./gender";
 
 export class User {
     id: number;
@@ -7,6 +8,6 @@ export class User {
     username: string;
     dateOfBirth: Date;
     phoneNumber: string;
-    gender: String;
+    gender: Gender;
     userAuthorities: Authority[];
 }
