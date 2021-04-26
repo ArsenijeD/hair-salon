@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import com.example.hairsalon.model.Gender;
 
 @Data
 public class UserDTO {
@@ -20,7 +21,7 @@ public class UserDTO {
 
     private String phoneNumber;
 
-    private String gender;
+    private Gender gender;
 
     private List<AuthorityDTO> userAuthorities;
 

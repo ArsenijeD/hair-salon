@@ -13,9 +13,11 @@ export class UserService {
   //TODO Consider moving this service in appropriate module
   constructor(private httpService: HttpService) { }
 
-  getUserByUsername(username: string): Observable<User>{
-    const queryParmas = new Map<string, string>();
-    queryParmas.set('username', username);
+  getUserByUsername(username: string): Observable<User> {
     return this.httpService.get(this.url, { username })
+  }
+
+  createUser(user: User): Observable<User> {
+    return this.httpService.post(this.url, user);
   }
 }

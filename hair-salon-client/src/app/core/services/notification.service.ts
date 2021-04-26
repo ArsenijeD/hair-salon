@@ -18,4 +18,8 @@ export class NotificationService {
       }
     }
   }
+
+  showSuccessMessage(title: string, message: string): void {
+    this.toastr.success(message, title);
+  }
 }
