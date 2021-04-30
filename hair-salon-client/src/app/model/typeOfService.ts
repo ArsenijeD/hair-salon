@@ -1,11 +1,11 @@
 import { Type } from "@angular/core";
 import { Length } from "./length";
 
-export class TypeOfService {
-    constructor(
-        public id: number,
-        public name: string,
-        public length: Length,
-        public price: number
-    ) {}
+export enum TypeOfService {
+    HAIRCUT,
+    HAIR_STYLING, 
+    MINIVAL,
+    HAIR_STRANDING,
+    HAIR_DYEING,
+    HAIR_BUN 
 }
