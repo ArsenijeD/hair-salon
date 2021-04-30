@@ -2,7 +2,6 @@ package com.example.hairsalon.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -38,7 +36,7 @@ public class User {
 	@Column(name = "DATE_OF_BIRTH", nullable = false)
 	private LocalDateTime dateOfBirth;
 
-	@Column(name = "PHONE_NUMBER", nullable = false)
+	@Column(name = "PHONE_NUMBER", unique = true, nullable = false)
 	private String phoneNumber;
 
 	@Column(name = "GENDER", nullable = false)

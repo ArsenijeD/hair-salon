@@ -32,7 +32,6 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
   constructor(private userService: UserService, private notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    console.log('Inicijalizovana!');
     this.registerUserForm = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -60,21 +59,7 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
-    const user = new User();
-    user.firstName = this.registerUserForm.controls['firstName'].value;
-    user.lastName = this.registerUserForm.controls['lastName'].value;
-    user.username = this.registerUserForm.controls['username'].value;
-    user.phoneNumber = this.registerUserForm.controls['username'].value;
-    user.gender = this.registerUserForm.controls['gender'].value;
-    const year = this.registerUserForm.controls['dateOfBirth'].value.year;
-    const month = this.registerUserForm.controls['dateOfBirth'].value.month;
-    const day = this.registerUserForm.controls['dateOfBirth'].value.day;
-    user.dateOfBirth = new Date(year, month - 1, day);
-    const authority = new Authority();
-    authority.id = +this.registerUserForm.controls['role'].value + 1;
-    authority.name = +this.registerUserForm.controls['role'].value;
-    user.userAuthorities = [authority];
-    this.userService.createUser(user).subscribe({
+    this.userService.createUser(this.formToUser()).subscribe({
       next: () => { 
         this.closeModalButton.nativeElement.click();
         this.registerUserForm.reset();
@@ -82,7 +67,11 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
         this.notificationService.showSuccessMessage('Registracija korisnika', 'Uspešno ste registrovali novog korisnika.');
       },
       error: (status: number) => { 
-        this.notificationService.showErrorMessage(status, 'Registracija korisnika', 'Greška prilikom registracije korisnika.')
+        if (status === 400) {
+          this.notificationService.showErrorMessage(status, 'Registracija korisnika', 'Korisničko ime ili broj telefona već postoje.')
+        } else {
+          this.notificationService.showErrorMessage(status, 'Registracija korisnika', 'Greška prilikom registracije korisnika.')
+        }
       }
     });
   }
@@ -123,6 +112,25 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
     } else {
       return ``;
     }
+  }
+
+  private formToUser(): User {
+    const year = this.registerUserForm.controls['dateOfBirth'].value.year;
+    const month = this.registerUserForm.controls['dateOfBirth'].value.month;
+    const day = this.registerUserForm.controls['dateOfBirth'].value.day;
+    const dateOfBirth = new Date(year, month - 1, day);
+    const authority = new Authority(
+      +this.registerUserForm.controls['role'].value + 1,
+      +this.registerUserForm.controls['role'].value);
+    return new User(
+      this.registerUserForm.controls['firstName'].value,
+      this.registerUserForm.controls['lastName'].value,
+      this.registerUserForm.controls['username'].value,
+      dateOfBirth,
+      `00381${this.registerUserForm.controls['phoneNumber'].value}`,
+      this.registerUserForm.controls['gender'].value,
+      [authority]
+    );
   }
 
   private resetStepper(): void {

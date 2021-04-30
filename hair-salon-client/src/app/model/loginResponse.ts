@@ -1,3 +1,3 @@
 export class LoginResponse {
-    jwt: string;
+    constructor(public jwt: string) {}
 }

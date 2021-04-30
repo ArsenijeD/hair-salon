@@ -15,7 +15,7 @@ import { AuthenticationInterceptor } from './interceptors/authentication.interce
       preventDuplicates: true,
       countDuplicates: true,
       resetTimeoutOnDuplicate: true,
-      timeOut: 3000
+      timeOut: 4000
     })
   ],
   providers: [

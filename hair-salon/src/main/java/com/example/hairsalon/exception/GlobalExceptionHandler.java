@@ -1,7 +1,7 @@
 package com.example.hairsalon.exception;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.amqp.AmqpException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,6 +21,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE = "Unable to find SMS content.";
 
+    private static final String UNIQUE_CONSTRAINT_EXCEPTION_MESSAGE = "Primary key invalid or duplicated unique attributes.";
+
     @ExceptionHandler({ BadCredentialsException.class })
     public ResponseEntity<String> handleAuthenticationExceptions(Exception exception) {
         return ResponseEntity.badRequest().body(BAD_CREDENTIALS_EXCEPTIONS_MESSAGE);
@@ -37,5 +39,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleAmqpException(Exception exception) {
         //424- Dependency Failed (System unable to send message to the queue)
         return ResponseEntity.status(424).body(AMQP_EXCEPTION_MESSAGE);
+    }
+
+    @ExceptionHandler({ ConstraintViolationException.class })
+    public ResponseEntity<String> handleConstraintViolationException(Exception exception) {
+        return ResponseEntity.badRequest().body(UNIQUE_CONSTRAINT_EXCEPTION_MESSAGE);
     }
 }

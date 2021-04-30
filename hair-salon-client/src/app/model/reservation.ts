@@ -2,9 +2,11 @@ import { TypeOfService } from "./typeOfService";
 import { User } from "./user";
 
 export class Reservation {
-    id: number;
-    date: Date;
-    customer: User;
-    worker: User;
-    typeOfService: TypeOfService;
+    public id: number;
+    constructor(
+        public date: Date,
+        public customer: User,
+        public worker: User,
+        public typeOfService: TypeOfService
+    ) {}
 }
