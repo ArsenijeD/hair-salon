@@ -1,5 +1,6 @@
 package com.example.hairsalon.dto;
 
+import com.example.hairsalon.model.TypeOfService;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,5 +16,5 @@ public class ReservationDTO {
 
     private UserDTO worker;
 
-    private TypeOfServiceDTO typeOfService;
+    private TypeOfService typeOfService;
 }

@@ -19,7 +19,7 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final AuthorityRepository authorityRepository;
 
-    private final TOSRepository tosRepository;
+    private final HairsalonServiceRepository hairsalonServiceRepository;
 
     private final HolidayRepository holidayRepository;
 
@@ -27,10 +27,10 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, TOSRepository tosRepository, HolidayRepository holidayRepository, SmsContentRepository smsContentRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository, HairsalonServiceRepository hairsalonServiceRepository, HolidayRepository holidayRepository, SmsContentRepository smsContentRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
-        this.tosRepository = tosRepository;
+        this.hairsalonServiceRepository = hairsalonServiceRepository;
         this.holidayRepository = holidayRepository;
         this.smsContentRepository = smsContentRepository;
         this.passwordEncoder = passwordEncoder;
@@ -57,11 +57,11 @@ public class DataInitializer implements SmartInitializingSingleton {
         customer.setId(4L);
         customer.setName(Role.CUSTOMER);
 
-        TypeOfService skinning = new TypeOfService();
-        skinning.setId(1L);
-        skinning.setName("Skinning");
-        skinning.setPrice(350.0);
-        skinning.setLength(Length.MEDIUM);
+        HairsalonService haircut = new HairsalonService();
+        haircut.setId(1L);
+        haircut.setName(TypeOfService.HAIRCUT);
+        haircut.setPrice(350.0);
+        haircut.setLength(Length.MEDIUM);
 
         Holiday newYear = new Holiday(1L, MonthDay.of(Month.NOVEMBER, 28), HolidayName.NEW_YEAR, Gender.BOTH, "Novu godinu");
         Holiday christmas = new Holiday(2L, MonthDay.of(Month.JANUARY, 7), HolidayName.CHRISTMAS, Gender.BOTH, "Božić");
@@ -97,7 +97,7 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.userRepository.save(dejanCustomer);
         this.userRepository.save(marinaCustomer);
 
-        this.tosRepository.save(skinning);
+        this.hairsalonServiceRepository.save(haircut);
 
         this.holidayRepository.save(newYear);
         this.holidayRepository.save(christmas);

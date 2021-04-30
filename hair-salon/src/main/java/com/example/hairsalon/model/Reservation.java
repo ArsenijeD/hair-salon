@@ -35,8 +35,8 @@ public class Reservation {
     @JoinColumn(name = "APPROVAL_ID", nullable = false)
     private User approval;
 
-    @ManyToOne
-    @JoinColumn(name = "TYPE_OF_SERVICE_ID", nullable = false)
+    @Column(name="TYPE_OF_SERVICE", nullable = false)
+    @Enumerated(EnumType.STRING)
     private TypeOfService typeOfService;
 
 }
