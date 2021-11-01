@@ -68,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setDate(reservation.getDate().withSecond(0).withNano(0));
         Reservation savedReservation = reservationRespository.save(reservation);
         SmsDTO smsDTO = createSmsDTO(savedReservation);
-//        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+        //messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
         return savedReservation;
     }
 
@@ -81,7 +81,7 @@ public class ReservationServiceImpl implements ReservationService {
         modelMapper.map(newReservation, oldReservation);
         Reservation updatedReservation = reservationRespository.save(oldReservation);
         SmsDTO smsDTO = createSmsDTO(oldReservation);
-        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+        //messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
         return updatedReservation;
     }
 
@@ -93,7 +93,7 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationRespository.deleteById(id);
         SmsContent smsContent = smsContentRepository.findByType(SmsType.CANCELLATION).orElseThrow(SmsContentNotFoundException::new);
         SmsDTO smsDTO = new SmsDTO(reservation.getCustomer().getPhoneNumber(), smsContent.getContent());
-        messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
+        //messagePublisher.enqueue(smsDTO, RabbitMQConfiguration.CONFIRMATION_ROUTING_KEY);
     }
 
     private SmsDTO createSmsDTO(Reservation reservation) {
