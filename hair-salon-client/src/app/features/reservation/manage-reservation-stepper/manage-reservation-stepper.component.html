@@ -1,17 +1,17 @@
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#make-reservation-modal">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#manage-reservation-modal">
     Kreiraj rezervaciju
   </button>
-  <div class="modal fade" #modal id="make-reservation-modal" tabindex="-1" role="dialog" aria-labelledby="make-reservation-modal-label" aria-hidden="true">
+  <div class="modal fade" #modal id="manage-reservation-modal" tabindex="-1" role="dialog" aria-labelledby="manage-reservation-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="make-reservation-modal-label">Kreiraj rezervaciju</h5>
+          <h5 class="modal-title" id="manage-reservation-modal-label">Kreiraj rezervaciju</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeModalButton>
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body p-0">
-          <div id="make-reservation-stepper" #makeReservationStepper class="bs-stepper">
+          <div id="manage-reservation-stepper" #manageReservationStepper class="bs-stepper">
             <div class="bs-stepper-header">
               <div class="step" data-target="#date-step">
                 <button class="step-trigger">
@@ -50,28 +50,23 @@
               </div>
             </div>
             <div class="bs-stepper-content">
-              <form (ngSubmit)="onSubmit()" [formGroup]="makeReservationForm">
+              <form (ngSubmit)="onSubmit()" [formGroup]="manageReservationForm">
                 <div id="date-step" class="content">
-                  <!-- <div class="form-group">
-                    <label for="firstName" >Ime:</label>
-                    <input type="text" class="form-control" [ngClass]="getValidityClass('firstName')" formControlName="firstName" id="firstName" placeholder="Unesite ime" />
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.firstName.errors?.required">
-                      {{getFormControlErrorMessage('firstName')}}
-                    </div>
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.firstName.errors?.maxlength">
-                      {{getFormControlErrorMessage('firstName')}}
+                  <label for="date">Vreme i datum rezervacije:</label>
+                  <div class="input-group mb-3 time-box-initial d-flex justify-content-center" [ngClass]="getTimeBoxClassName('time')">
+                    <ngb-timepicker formControlName="time" [size]="'small'"></ngb-timepicker>
+                    <div class="invalid-feedback time-error-feedback col-12 m-0" *ngIf="manageReservationForm.controls.time.errors?.invalidTime">
+                      Neispravno vreme. Unesite rezervaciju između 08:00 i 20:00 časova!
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="lastName">Prezime:</label>
-                    <input type="text" class="form-control" [ngClass]="getValidityClass('lastName')" formControlName="lastName" id="lastName" placeholder="Unesite prezime" />
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.lastName.errors?.required">
-                      {{getFormControlErrorMessage('lastName')}}
+                  <div class="input-group mb-3">
+                    <input class="form-control date-picker-form-control" [ngClass]="getValidityClass('date')" placeholder="Izaberite vreme"
+                        id="date" name="date" ngbDatepicker #d="ngbDatepicker" formControlName="date" 
+                       readonly>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary calendar calendar-btn fa fa-calendar" (click)="d.toggle()" type="button"></button>
                     </div>
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.lastName.errors?.maxlength">
-                      {{getFormControlErrorMessage('lastName')}}
-                    </div>
-                  </div> -->
+                  </div>
                   <div class="d-flex justify-content-center">
                     <button type="button" (click)="next()" class="btn btn-primary">Dalje &gt;</button>
                   </div>
@@ -107,49 +102,34 @@
                   </div>
                 </div>
                 <div id="type-of-service-step" class="content">
-                  <!-- <div class="form-group">
-                    <label for="role">Uloga:</label>
-                    <select id="role" class="form-control select" formControlName="role" [ngClass]="getValidityClass('role')" placeholder="Izaberite ulogu">
-                      <option value="" hidden *ngIf="this.advanced">Izaberite ulogu</option>
-                      <option value=0 *ngIf="this.advanced">Administrator</option>
-                      <option value=1 *ngIf="this.advanced">Frizer</option>
-                      <option value=2 *ngIf="this.advanced">Šegrt</option>
-                      <option value=3 *ngIf="this.advanced">Mušterija</option>
-                      <option value=3 selected *ngIf="!this.advanced">Mušterija</option>
+                  <div class="form-group">
+                    <label for="typeOfService">Tip usluge:</label>
+                    <select id="typeOfService" class="form-control select" formControlName="typeOfService" [ngClass]="getValidityClass('typeOfService')" placeholder="Izaberite tip usluge">
+                      <option value="" hidden>Izaberite tip usluge</option>
+                      <option value=0 >Šišanje</option>
+                      <option value=1 >Feniranje</option>
+                      <option value=2 >Minival</option>
+                      <option value=3 >Pramenovi</option>
+                      <option value=4 >Farbanje</option>
+                      <option value=5 >Punđa</option>
                     </select>
                   </div>
-                  <label for="phoneNumber">Broj telefona:</label>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="phone-number-prefix">+381</span>
-                    </div>
-                    <input type="number" class="form-control" formControlName="phoneNumber" [ngClass]="getValidityClass('phoneNumber')" id="phoneNumber" placeholder="Unesite broj telefona" />
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.phoneNumber.errors?.required">
-                      {{getFormControlErrorMessage('phoneNumber')}}
-                    </div>
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.phoneNumber.errors?.pattern">
-                      Neispravan format. Unesite tačno devet cifara, tako da vrednost prve bude 6!
-                    </div>
-                  </div> -->
                   <div class="d-flex justify-content-center">
                     <button type="button" (click)="previous()" class="btn btn-secondary mr-1">&lt; Nazad</button>
                     <button type="button" (click)="next()" class="btn btn-primary ml-1">Dalje &gt;</button>
                   </div>
                 </div>
                 <div id="finish-step" class="content">
-                  <!-- <div class="form-group" *ngIf="showUsername()">
-                    <label for="username">Korisničko ime:</label>
-                    <input type="text" class="form-control" [ngClass]="getValidityClass('username')" formControlName="username" id="username" placeholder="Unesite korisničko ime" />
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.username.errors?.required">
-                      {{getFormControlErrorMessage('username')}}
-                    </div>
-                    <div class="invalid-feedback" *ngIf="registerUserForm.controls.username.errors?.maxlength">
-                      {{getFormControlErrorMessage('username')}}
-                    </div>
-                  </div> -->
+                  <div class="form-group">
+                    <label for="worker">Frizer:</label>
+                    <select id="worker" class="form-control select" formControlName="worker" [ngClass]="getValidityClass('worker')" placeholder="Izaberite frizera">
+                      <option hidden value="">Izaberite frizera</option>
+                      <option *ngFor="let employee of employees" value={{employee.id}}>{{employee.firstName}}</option>
+                    </select>
+                  </div>
                   <div class="d-flex justify-content-center">
                     <button type="button" (click)="previous()" class="btn btn-secondary mr-1 mt-2">&lt; Nazad</button>
-                    <button type="submit" class="btn btn-primary ml-1 mt-2" [disabled]="!makeReservationForm.valid">Završi</button>
+                    <button type="submit" class="btn btn-primary ml-1 mt-2" [disabled]="!manageReservationForm.valid">Završi</button>
                   </div>
                 </div>
               </form>

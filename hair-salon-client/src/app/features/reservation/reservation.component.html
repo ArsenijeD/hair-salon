@@ -1,6 +1,6 @@
 <app-feedback-modal></app-feedback-modal>
 <app-register-user-stepper [advanced]="true"></app-register-user-stepper>
-<app-make-reservation-stepper></app-make-reservation-stepper>
+<app-manage-reservation-stepper></app-manage-reservation-stepper>
 <div class="row reservation-filter-row mt-2">
     <div class="col-2">
         <h1>Rezervacije</h1>
@@ -21,9 +21,8 @@
                     </div>
                     <div class="form-group col-4 worker-form-group px-0">
                         <label class="worker-label ml-5" for="worker">Frizer:</label>
-                        <select id="worker" class="form-control worker-form-control ml-3 col" formControlName="worker">
-                        <option selected>Dejan</option>
-                        <option>...</option>
+                        <select id="workerId" class="form-control worker-form-control ml-3 col" formControlName="workerId">
+                            <option *ngFor="let employee of employees" value={{employee.id}}>{{employee.firstName}}</option>
                         </select>
                     </div>
                 </div>
@@ -63,7 +62,7 @@
                                   </div>
                             </td>
                             <td class="d-flex justify-content-center align-items-center col-1 p-0">
-                                <a class="btn btn-sm">
+                                <a class="btn btn-sm" (click)="updateSelectedReservation(appointment)">
                                     <i class="fa fa-pencil-square-o pr-4" aria-hidden="true" *ngIf="i%2 === 0"></i>
                                     <i class="fa fa-plus-square-o pr-4" aria-hidden="true" *ngIf="i%2 !== 0"></i>
                                 </a>
@@ -73,7 +72,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <a href="#" class="float">
+                    <a href="#" class="float" (click)="updateSelectedReservation()">
                         <i class="fa fa-plus my-float"></i>
                     </a>
                 </table>

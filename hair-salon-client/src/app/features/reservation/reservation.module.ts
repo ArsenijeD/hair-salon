@@ -4,13 +4,13 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ReservationRoutingModule } from './reservation-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RegisterUserStepperComponent } from './register-user-stepper/register-user-stepper.component';
-import { MakeReservationStepperComponent } from './make-reservation-stepper/make-reservation-stepper.component';
+import { ManageReservationStepperComponent } from './manage-reservation-stepper/manage-reservation-stepper.component';
 
 @NgModule({
   declarations: [
     ReservationComponent, 
     RegisterUserStepperComponent, 
-    MakeReservationStepperComponent
+    ManageReservationStepperComponent
   ],
   imports: [
     SharedModule,

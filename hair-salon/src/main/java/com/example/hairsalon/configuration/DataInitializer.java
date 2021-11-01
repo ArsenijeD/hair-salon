@@ -81,8 +81,8 @@ public class DataInitializer implements SmartInitializingSingleton {
 //                "00381691995215", Gender.MALE, authorities.subList(0, 1), null, null, null);
         User veskoEmployee = new User(2L, "Veselin", "Martinovic", "vesko", passwordEncoder.encode("vesko"), LocalDateTime.now(),
                 "00381691995215", Gender.MALE, authorities.subList(1, 2));
-        User dejanCustomer = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
-                "00381691995216", Gender.MALE, authorities.subList(3, 4));
+        User dejanEmployee = new User(3L, "Dejan", "Dejanovic", "dejan", passwordEncoder.encode("dejan"), LocalDateTime.now(),
+                "00381691995216", Gender.MALE, authorities.subList(1, 2));
         User marinaCustomer = new User(4L, "Marina", "Marina", "marina", passwordEncoder.encode("marina"), LocalDateTime.now(),
                 "00381691995217", Gender.FEMALE, authorities.subList(3, 4));
 
@@ -94,7 +94,7 @@ public class DataInitializer implements SmartInitializingSingleton {
 
         this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
-        this.userRepository.save(dejanCustomer);
+        this.userRepository.save(dejanEmployee);
         this.userRepository.save(marinaCustomer);
 
         this.hairsalonServiceRepository.save(haircut);

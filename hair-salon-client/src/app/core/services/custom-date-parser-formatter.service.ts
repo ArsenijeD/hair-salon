@@ -4,6 +4,9 @@ import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstra
 @Injectable({
   providedIn: 'root'
 })
+/* Purpose of this service is to convert datepicker format
+(NgbDateStruct) into the desired format required by the client,
+as well as the opposite direction. */
 export class CustomDateParserFormatterService extends NgbDateParserFormatter{
   readonly DELIMITER = '.';
 

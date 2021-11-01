@@ -1,6 +1,5 @@
 package com.example.hairsalon.service.impl;
 
-import com.example.hairsalon.model.Authority;
 import com.example.hairsalon.model.Role;
 import com.example.hairsalon.model.User;
 import com.example.hairsalon.repository.AuthorityRepository;
@@ -9,7 +8,6 @@ import com.example.hairsalon.security.util.AuthenticationFacade;
 import com.example.hairsalon.service.UserService;
 import com.example.hairsalon.security.util.CredentialsUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
+import java.util.List;
 
 
 @Service
@@ -59,6 +58,12 @@ public class UserServiceImpl implements UserService {
             user.setUsername(username);
         }
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> getByRole(Role role) {
+        return userRepository.findAllByUserAuthorities_Name(role)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
 

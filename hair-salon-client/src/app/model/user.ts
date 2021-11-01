@@ -2,7 +2,7 @@ import { Authority } from "./authority";
 import { Gender } from "./gender";
 
 export class User {
-    //TODO: Consider how to handle whis separate id, 
+    //TODO: Consider how to handle this separate id, 
     //because some model calsses need to be instantiated without id
     public id: number;
     constructor(

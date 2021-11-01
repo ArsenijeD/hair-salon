@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { SessionManagementService } from 'src/app/core/services/session-management.service';
+import { ApplicationStorageManagementService } from 'src/app/core/services/session-management.service';
 import { LoginResponse } from 'src/app/model/loginResponse';
 import { User } from 'src/app/model/user';
 import { AuthenticationService } from '../authentication.service';
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService, 
               private notificationService: NotificationService,
               private userService: UserService,
-              private session: SessionManagementService,
+              private session: ApplicationStorageManagementService,
               private router: Router) { }
 
   ngOnInit(): void {

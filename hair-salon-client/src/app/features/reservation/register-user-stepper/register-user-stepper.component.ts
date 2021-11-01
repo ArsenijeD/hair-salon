@@ -9,6 +9,7 @@ import { Authority } from 'src/app/model/authority';
 import { Role } from 'src/app/model/role';
 import { User } from 'src/app/model/user';
 import { UserService } from '../../authentication/user.service';
+import * as util from './../../../core/util/util';
 
 @Component({
   selector: 'app-register-user-stepper',
@@ -37,7 +38,7 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
       lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       username: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       gender: new FormControl('', Validators.required),
-      dateOfBirth: new FormControl('', Validators.required),
+      dateOfBirth: new FormControl(undefined, Validators.required),
       role: new FormControl({ value : '', disabled: !this.advanced }, Validators.required),
       phoneNumber: new FormControl('', [Validators.required, Validators.pattern('^[6][0-9]{8}$')])
     });
@@ -82,7 +83,7 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
 
   getBirthMaxDate(): NgbDateStruct {
     const currentDate = new Date();
-    return {year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate()};
+    return util.convertDateToNgbDateStruct(currentDate);
   }
 
   showUsername(): boolean {
@@ -90,16 +91,8 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
     return +selectedRole !== Role.CUSTOMER && selectedRole !== "" && this.advanced;
   }
 
-  //TODO: Make this method global by moving it to the util
   getValidityClass(formControlName: string): string {
-    const formControl = this.registerUserForm.controls[formControlName];
-    if (formControl.errors && formControl.dirty) {
-      return `is-invalid`;
-    } else if (!formControl.errors && formControl.dirty) {
-      return `is-valid`;
-    } else {
-      return ``;
-    }
+    return util.getValidityClass(this.registerUserForm, formControlName);
   }
 
   //TODO: Make this method global by moving it to the util
@@ -115,10 +108,7 @@ export class RegisterUserStepperComponent implements OnInit, AfterViewInit {
   }
 
   private formToUser(): User {
-    const year = this.registerUserForm.controls['dateOfBirth'].value.year;
-    const month = this.registerUserForm.controls['dateOfBirth'].value.month;
-    const day = this.registerUserForm.controls['dateOfBirth'].value.day;
-    const dateOfBirth = new Date(year, month - 1, day);
+    const dateOfBirth = util.convertNgbDateStructToDate(this.registerUserForm.controls['dateOfBirth'].value);
     const authority = new Authority(
       +this.registerUserForm.controls['role'].value + 1,
       +this.registerUserForm.controls['role'].value);

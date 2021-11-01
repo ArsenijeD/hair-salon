@@ -6,12 +6,12 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SessionManagementService } from '../services/session-management.service';
+import { ApplicationStorageManagementService } from '../services/session-management.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  constructor(private session: SessionManagementService) {}
+  constructor(private session: ApplicationStorageManagementService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const jwt = this.session.get('token');

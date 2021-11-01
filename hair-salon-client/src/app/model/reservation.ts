@@ -5,8 +5,8 @@ export class Reservation {
     public id: number;
     constructor(
         public date: Date,
-        public customer: User,
         public worker: User,
-        public typeOfService: TypeOfService
+        public customer?: User,
+        public typeOfService?: TypeOfService
     ) {}
 }
