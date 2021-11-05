@@ -6,6 +6,9 @@
 2. Install **Maven** (build tool)
 3. Install **Docker** (platform for OS-level virtualization)
 4. Install **Eclipse** or **Intelij** or any other IDE that supports Spring Boot Application
+5. Install **Project Lombok** (plugin for IDE)
+
+****If Project Lombok is not working with higer versions of Java (16+), explicitly add the latest version of Project Lombok dependency in pom.xml file***
 
 <h2> Setup docker containers (for linux os): </h2>
 
