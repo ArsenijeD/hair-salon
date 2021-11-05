@@ -8,8 +8,8 @@
 4. Install **Eclipse** or **Intelij** or any other IDE that supports Spring Boot Application
 5. Install **Project Lombok** (plugin for IDE)
 
-*note If Project Lombok is not working with higer versions of Java (16+), explicitly add the latest version of Project Lombok dependency in pom.xml file
-
+_*note If Project Lombok is not working with higer versions of Java (16+), explicitly add the latest version of Project Lombok dependency in pom.xml file
+_
 <h2> Setup docker containers (for linux os): </h2>
 
 1. Open terminal (ctrl + alt + T)
