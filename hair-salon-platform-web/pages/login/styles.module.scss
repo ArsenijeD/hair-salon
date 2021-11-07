@@ -1,0 +1,10 @@
+.container {
+  height: 100vh;
+}
+
+.form {
+  > * {
+    display: block;
+    margin-bottom: 20px;
+  }
+}
