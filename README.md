@@ -35,5 +35,5 @@
 <h1> Steps to access Rest API Documentation: </h1>
   
 1. Run spring-boot application on port 8080
-2. Access the following url in web-browser: **localhost:8080/swagger-ui.html **
+2. Access the following url in web-browser: **localhost:8080/swagger-ui.html**
 3. User-readable html content with all the available endpoints and their description should be shown
