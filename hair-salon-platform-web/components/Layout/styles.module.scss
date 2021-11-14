@@ -1,10 +1,14 @@
 .navigationBar {
   align-items: center;
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  margin: 0 20px;
   position: sticky;
   top: 0;
+  z-index: 1000;
 }
 
 .user {

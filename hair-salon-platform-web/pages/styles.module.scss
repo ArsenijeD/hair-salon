@@ -1,0 +1,81 @@
+.title {
+  font-weight: 900;
+}
+
+.main {
+  padding: 30px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Time slots
+
+.slotsContainer {
+  margin-top: 30px;
+  position: relative;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+}
+
+.line {
+  flex: 1;
+  background: rgb(227, 227, 227);
+  height: 1px;
+}
+
+.slotTime {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.reservation {
+  top: 0;
+  background-color: rgb(121, 86, 160);
+  color: white;
+  width: 400px;
+  height: 100px;
+  position: absolute;
+  left: 50px;
+}
+
+// Date Picker
+
+.dateActions {
+  display: flex;
+  align-items: center;
+}
+.datePicker {
+  position: relative;
+
+  button {
+    position: absolute;
+    border-radius: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    > * {
+      display: none;
+    }
+  }
+
+  .datePickerInput {
+    width: 300px;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+      Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+      sans-serif;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 900;
+    padding: 20px;
+    border: none;
+  }
+}
