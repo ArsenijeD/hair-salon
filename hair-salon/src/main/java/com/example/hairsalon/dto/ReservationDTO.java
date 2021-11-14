@@ -12,6 +12,8 @@ public class ReservationDTO {
 
     private LocalDateTime date;
 
+    private Long durationMinutes;
+
     private UserDTO customer;
 
     private UserDTO worker;

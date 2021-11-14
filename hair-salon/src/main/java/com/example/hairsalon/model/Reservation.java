@@ -23,6 +23,9 @@ public class Reservation {
     @Column(name="DATE", nullable = false)
     private LocalDateTime date;
 
+    @Column(name="DURATION_MINUTES", nullable = false)
+    private Long durationMinutes;
+
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     private User customer;
