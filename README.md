@@ -30,3 +30,10 @@
   4.1 Red square indicates that in-memory h2 database is running <br/>
   4.2 Green square indicates that tomcat server is running on 8080 port <br/>
   4.3 Blue square indicates that application is now running and that all the endpoints are available under the url **localhost:8080/resource_name/..**
+  
+  
+<h1> Steps to access Rest API Documentation: </h1>
+  
+1. Run spring-boot application on port 8080
+2. Access the following url in web-browser: **localhost:8080/swagger-ui.html **
+3. User-readable html content with all the available endpoints and their description should be shown
