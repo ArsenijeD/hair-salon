@@ -1,0 +1,21 @@
+.slotsContainer {
+  margin-top: 30px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+}
+
+.line {
+  flex: 1;
+  background: rgb(227, 227, 227);
+  height: 1px;
+}
+
+.slotTime {
+  width: 40px;
+  margin-right: 10px;
+}

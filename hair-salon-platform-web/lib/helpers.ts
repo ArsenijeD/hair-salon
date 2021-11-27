@@ -1,16 +1,42 @@
-import { slotsConfig } from "./constants";
 import dayjs from "dayjs";
 
-export const generateSlots = () => {
-  let startDate = dayjs().hour(slotsConfig.start).minute(0);
-  let endDate = dayjs().hour(slotsConfig.end).minute(0);
+import { slotsConfig } from "./constants";
+
+export const generateSlots = (config: {
+  start: number;
+  end: number;
+  interval: number;
+  range?: boolean;
+}) => {
+  let startDate = dayjs().hour(config.start).minute(0);
+  let endDate = dayjs().hour(config.end).minute(0);
 
   const slots = [];
 
   while (startDate.isBefore(endDate) || startDate.isSame(endDate)) {
-    slots.push(startDate.format("HH:mm"));
-    startDate = startDate.add(slotsConfig.interval, "minutes");
+    let item = startDate.format("HH:mm");
+    if (!config.range) {
+      slots.push(item);
+      startDate = startDate.add(config.interval, "minutes");
+    } else {
+      startDate = startDate.add(config.interval, "minutes");
+      item = `${item} - ${startDate.format("HH:mm")}`;
+      slots.push(item);
+    }
   }
 
   return slots;
+};
+
+export const calcSlotTopOffset = (start: string) => {
+  const startDate = dayjs(start, "HH:mm");
+  const dayStartDate = dayjs(`${slotsConfig.start}: 00`, "HH");
+
+  const diff = startDate.diff(dayStartDate, "minutes");
+
+  return diff * (slotsConfig.slotHeight / 60) + slotsConfig.slotHeight / 2;
+};
+
+export const calcSlotHeight = (duration: number) => {
+  return duration * (slotsConfig.slotHeight / 60);
 };

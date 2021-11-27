@@ -1,3 +1,5 @@
+import { generateSlots } from "./helpers";
+
 export enum routerPaths {
   HOME = "/",
   LOGIN = "/login",
@@ -12,3 +14,18 @@ export const slotsConfig = {
   // Pixels
   slotHeight: 100,
 };
+
+export const slots = generateSlots(slotsConfig);
+
+export enum UserRole {
+  ADMIN = "ADMIN",
+  APPRENTICE = "APPRENTICE",
+  CUSTOMER = "CUSTOMER",
+  EMPLOYEE = "EMPLOYEE",
+}
+
+export enum TypeOfService {
+  HAIRCUT = "HAIRCUT",
+  NAILS = "NAILS",
+  SHAVING = "SHAVING",
+}

@@ -70,6 +70,7 @@ const Auth = () => {
               name="username"
               onChange={formik.handleChange}
               value={formik.values.username}
+              margin="normal"
             />
             <TextField
               error={formik.touched.password && Boolean(formik.errors.password)}
@@ -79,6 +80,7 @@ const Auth = () => {
               onChange={formik.handleChange}
               type="password"
               value={formik.values.password}
+              margin="normal"
             />
             <Button color="primary" variant="contained" fullWidth type="submit">
               Submit
