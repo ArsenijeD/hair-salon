@@ -50,7 +50,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "id")})
     private List<Authority> userAuthorities;
 
-
+	@OneToMany(mappedBy= "user")
+	private List<UserHairsalonService> userServices;
 
 	//TODO Find lombok way to create this copy-constructor
 	public User(User user) {
@@ -61,6 +62,7 @@ public class User {
 		this.gender = user.getGender();
 		this.setPhoneNumber(user.getPhoneNumber());
 		this.userAuthorities = new ArrayList<>(user.getUserAuthorities());
+		this.userServices = new ArrayList<>(user.getUserServices());
 	}
 
 	public boolean hasRole(Role role) {

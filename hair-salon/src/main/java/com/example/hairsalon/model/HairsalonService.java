@@ -3,6 +3,7 @@ package com.example.hairsalon.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity(name = "HAIRSALON_SERVICE")
@@ -26,5 +27,8 @@ public class HairsalonService {
 
     @Column(name = "PRICE")
     private double price;
+
+    @OneToMany(mappedBy= "hairsalonService")
+    private List<UserHairsalonService> userServices;
 
 }
