@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from "react";
+import { FC, useEffect } from "react";
 
 import { useRouter } from "next/router";
 
@@ -6,32 +6,69 @@ import FullPageLoading from "@/components/FullPageLoading";
 
 import { apiClient, getUserByUsername } from "api";
 import { routerPaths } from "lib/constants";
-import { useUserActions, getToken } from "lib/authService";
 import { useQuery } from "react-query";
+import { useRecoilState } from "recoil";
+import { authState } from "./state";
 
 const AuthGuard: FC = ({ children }) => {
   const router = useRouter();
-  const { auth, logoutUser, isLoading } = useUserActions();
-  const token = getToken();
-  useQuery("user", () => getUserByUsername(auth?.sub || ""), {
-    enabled: !!auth?.sub,
-  });
 
+  // Auth State
+  const [auth, setAuth] = useRecoilState(authState);
+  const { user, decoded, jwt, loading } = auth;
+
+  // Will fetch user if token is present
+  const { data: userData } = useQuery(
+    ["user", decoded?.sub],
+    () => getUserByUsername(decoded?.sub || ""),
+    {
+      enabled: !!decoded,
+    }
+  );
+
+  // Set user in recoil state and finish loading
+  useEffect(() => {
+    userData &&
+      setAuth((oldAuth) => ({
+        ...oldAuth,
+        user: userData.data,
+        loading: false,
+      }));
+  }, [userData, setAuth]);
+
+  // Remove loading if token is invalid, and show Login
+  useEffect(() => {
+    if (!decoded) {
+      setAuth((oldAuth) => ({
+        ...oldAuth,
+        loading: false,
+      }));
+    }
+  }, [decoded, setAuth]);
+
+  // Set Axios headers
   useEffect(() => {
     apiClient.interceptors.request.use(async (config) => {
       if (process.browser) {
         // Logout if token expired
-        if (auth && Date.now() >= auth.exp * 1000) {
-          logoutUser();
+        if (decoded && Date.now() >= decoded.exp * 1000) {
+          localStorage.removeItem("userToken");
+          setAuth((oldAuth) => ({
+            ...oldAuth,
+            user: null,
+            jwt: null,
+            decoded: null,
+          }));
           return;
         }
 
-        if (token) {
+        // Set Auth Headers
+        if (decoded) {
           return {
             ...config,
             headers: {
               ...config.headers,
-              ["Authorization"]: `Bearer ${token}`,
+              ["Authorization"]: `Bearer ${jwt}`,
             },
           };
         }
@@ -39,18 +76,19 @@ const AuthGuard: FC = ({ children }) => {
 
       return config;
     });
-  }, [auth, token, logoutUser]);
+  }, [decoded, jwt, setAuth]);
 
+  // Handle auth redirects and loading screen
   useEffect(() => {
-    if (auth && router.pathname === routerPaths.LOGIN) {
+    if (user && router.pathname === routerPaths.LOGIN) {
       router.push(routerPaths.HOME);
     }
-    if (!isLoading && !auth && router.pathname !== routerPaths.LOGIN) {
+    if (!loading && !user && router.pathname !== routerPaths.LOGIN) {
       router.push(routerPaths.LOGIN);
     }
-  }, [auth, router, isLoading]);
+  }, [user, router, loading]);
 
-  if ((isLoading || !auth) && router.pathname !== routerPaths.LOGIN) {
+  if ((loading || !user) && router.pathname !== routerPaths.LOGIN) {
     return <FullPageLoading />;
   }
 

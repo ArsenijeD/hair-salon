@@ -1,0 +1,38 @@
+.reservation {
+  top: 0;
+  padding: 0 10px;
+  background-color: rgb(208, 244, 236);
+  border: 1px solid rgb(79, 182, 175);
+  width: calc(80% - 50px);
+  height: 100px;
+  position: absolute;
+  left: 50px;
+  cursor: pointer;
+
+  &.new {
+    animation: shake 1.8s normal forwards ease-in-out;
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-7px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(7px, 0, 0);
+  }
+}

@@ -1,20 +1,29 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-import { Typography, Button, MenuItem, Box } from "@mui/material";
-import { Field, Form, Formik } from "formik";
-import { TextField } from "formik-mui";
+import {
+  Typography,
+  Button,
+  MenuItem,
+  Box,
+  Alert,
+  AutocompleteRenderOptionState,
+} from "@mui/material";
+import { DeleteOutline } from "@mui/icons-material";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { Field, Form, Formik, useFormikContext } from "formik";
+import { TextField, Autocomplete } from "formik-mui";
 import * as yup from "yup";
-import { useQueryClient, useMutation } from "react-query";
-import { Dayjs } from "dayjs";
-import CustomerSelect from "./CustomerSelect";
-import UserForm from "../UserForm";
+import { useQueryClient, useMutation, useQuery } from "react-query";
 
-import { createReservation } from "api";
-import { useAuth } from "lib/hooks";
+import UserForm from "../UserForm";
+import Popconfirm from "../Popconfirm";
+
+import { createReservation, deleteReservation, getCustomers } from "api";
 import { generateSlots } from "lib/helpers";
-import { slotsConfig, TypeOfService } from "lib/constants";
-import { Reservation, User } from "lib/types";
+import { slotsConfig, TypeOfService, TYPES_OF_SERVICE } from "lib/constants";
+import { Reservation, User, CustomersResponse } from "lib/types";
 import dayjs from "lib/dayjs";
+import { dateState, editState, userState } from "../Reservations/state";
 import styles from "./styles.module.scss";
 
 const validationSchema = yup.object({
@@ -34,24 +43,77 @@ const validationSchema = yup.object({
     ),
 });
 
+const EndTimeField: FC<{ startSlots: string[] }> = ({ startSlots }) => {
+  const {
+    values: { startTime },
+    setFieldValue,
+  } = useFormikContext<NewReservation>();
+
+  useEffect(() => {
+    if (startTime) {
+      const end = dayjs(startTime, "HH:mm").add(15, "m").format("HH:mm");
+      setFieldValue("endTime", end);
+    }
+  }, [startTime, setFieldValue]);
+
+  return (
+    <Field
+      disabled={false}
+      component={TextField}
+      label="Kraj"
+      name="endTime"
+      select
+    >
+      {startSlots.map((slot) => (
+        <MenuItem key={slot} value={slot}>
+          {slot}
+        </MenuItem>
+      ))}
+    </Field>
+  );
+};
+
 interface NewReservation {
   customer: User | null;
   startTime: string;
   endTime: string;
-  typeOfService: string;
-  worker: string;
+  typeOfService: TypeOfService;
+  worker: User | null;
 }
-const ReservationForm: FC<{ date: Dayjs | null }> = ({ date }) => {
+
+interface ReservationFormProps {
+  onSuccess?: (data: Reservation) => void;
+  onClose: () => void;
+}
+const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
+  const date = useRecoilValue(dateState);
+  const user = useRecoilValue(userState);
+  const [newUser, setNewUser] = useState<User | null>(null);
+  const [editReservation, setEditReservation] = useRecoilState(editState);
   const [showUserForm, setShowUserForm] = useState(false);
-  const authUser = useAuth();
+  const [apiError, setApiError] = useState(false);
   const queryClient = useQueryClient();
 
-  const initialValues: NewReservation = {
-    customer: null,
-    startTime: "12:00",
-    endTime: "15:00",
-    typeOfService: "HAIRCUT",
-    worker: "",
+  const initialValues = (): NewReservation => {
+    if (editReservation) {
+      return {
+        customer: editReservation.customer,
+        startTime: dayjs(editReservation.date).format("HH:mm"),
+        endTime: dayjs(editReservation.date)
+          .add(editReservation.durationMinutes, "m")
+          .format("HH:mm"),
+        typeOfService: editReservation.typeOfService,
+        worker: editReservation.worker,
+      };
+    } else {
+      return {
+        customer: null,
+        startTime: "12:00",
+        endTime: "12:30",
+        typeOfService: TypeOfService.Haircut,
+        worker: user,
+      };
+    }
   };
 
   const startSlots = generateSlots({
@@ -67,16 +129,21 @@ const ReservationForm: FC<{ date: Dayjs | null }> = ({ date }) => {
     {
       onSuccess: (res) => {
         const reservation = res.data as Reservation;
+
         queryClient.invalidateQueries([
           "reservations",
           reservation.worker.id,
           date?.toISOString(),
         ]);
+        onSuccess?.(reservation);
+      },
+      onError: () => {
+        setApiError(true);
       },
     }
   );
 
-  const onSubmit = (values: NewReservation) => {
+  const onSubmit = async (values: NewReservation) => {
     // Has to be +1 for dayjs
     const hour = Number(values.startTime.split(":")[0]) + 1;
     const minut = Number(values.startTime.split(":")[1]);
@@ -91,107 +158,180 @@ const ReservationForm: FC<{ date: Dayjs | null }> = ({ date }) => {
       date: dayjs(date).hour(hour).minute(minut).second(0).toISOString(),
       durationMinutes,
       typeOfService: values.typeOfService,
-      worker: authUser,
+      worker: user,
     };
 
-    mutate(data);
+    return console.log(data);
+
+    if (editReservation) {
+      console.log(data);
+      return;
+    }
+
+    return await mutate(data);
   };
 
-  const onUserFormChange = () => {
+  const onUserFormChange = (user?: User) => {
+    user && setNewUser(user);
     setShowUserForm(false);
   };
 
-  return (
-    <div className={styles.container}>
-      {showUserForm ? (
-        <UserForm onChange={onUserFormChange} />
-      ) : (
-        <>
-          <Typography variant="h4">Nova rezervacija</Typography>
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>
-            {date?.format("dddd, DD.MM.YYYY")}
-          </Typography>
+  // Delete reservatino
+  const { mutate: handleDelete } = useMutation(
+    (reservation: Reservation) => {
+      return deleteReservation(reservation.id);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([
+          "reservations",
+          editReservation?.worker.id,
+          date?.toISOString(),
+        ]);
+      },
+    }
+  );
 
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
+  const { data: customersData } = useQuery<CustomersResponse>(
+    "customers",
+    getCustomers
+  );
+
+  return (
+    <>
+      <div className={styles.container}>
+        <div
+          className={styles.userForm}
+          style={{ visibility: showUserForm ? "visible" : "hidden" }}
+        >
+          <UserForm onChange={onUserFormChange} />
+        </div>
+        {apiError && (
+          <Alert
+            sx={{ mb: 1 }}
+            severity="error"
+            onClose={() => setApiError(false)}
           >
-            {({ values, handleChange, isSubmitting, isValid }) => (
-              <Form className={styles.form}>
-                <Box mb={3}>
-                  <Button
-                    sx={{ mb: 2 }}
-                    variant="outlined"
-                    onClick={() => setShowUserForm(true)}
-                  >
-                    Dodaj novu musteriju
-                  </Button>
-                  <CustomerSelect name="customer" label="Izaberi musteriju" />
-                </Box>
-                <Box
-                  marginBottom={3}
-                  sx={{
-                    "& > :not(style)": { mr: 1, width: "150px" },
+            Greška, vremenski period nije slobodan
+          </Alert>
+        )}
+        <Typography variant="h4">
+          {editReservation ? "Izmeni podatke" : "Nova rezervacija"}
+        </Typography>
+        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+          {date?.format("dddd, DD.MM.YYYY")}
+        </Typography>
+
+        <Formik
+          initialValues={initialValues()}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ values, handleChange, isSubmitting, isValid, setFieldValue }) => (
+            <Form className={styles.form}>
+              <Box mb={3}>
+                <Button
+                  sx={{ mb: 2 }}
+                  variant="outlined"
+                  onClick={() => setShowUserForm(true)}
+                >
+                  Dodaj novu mušteriju
+                </Button>
+
+                <Field
+                  component={Autocomplete}
+                  getOptionLabel={(option: User) =>
+                    `${option.firstName} ${option.lastName}, ${option.phoneNumber}`
+                  }
+                  options={customersData?.data || []}
+                  renderOption={(
+                    props: AutocompleteRenderOptionState,
+                    option: User
+                  ) => {
+                    return (
+                      <Box component="li" {...props}>
+                        {option.firstName} {option.lastName} <br />{" "}
+                        {option.phoneNumber}
+                      </Box>
+                    );
+                  }}
+                  name="customer"
+                  label="Izaberi mušteriju"
+                ></Field>
+                <Button onClick={() => setFieldValue("customer", null)}>
+                  Test
+                </Button>
+                {/* <CustomerSelect
+                  name="customer"
+                  label="Izaberi mušteriju"
+                  newValue={newUser}
+                  setFieldValue={setFieldValue}
+                /> */}
+              </Box>
+              <Box
+                marginBottom={3}
+                sx={{
+                  "& > :not(style)": { mr: 1, width: "150px" },
+                }}
+              >
+                <Field
+                  component={TextField}
+                  disabled={false}
+                  label="Početak"
+                  name="startTime"
+                  select
+                >
+                  {startSlots.map((slot) => (
+                    <MenuItem key={slot} value={slot}>
+                      {slot}
+                    </MenuItem>
+                  ))}
+                </Field>
+                <EndTimeField startSlots={startSlots} />
+              </Box>
+
+              <Box marginBottom={2}>
+                <Field
+                  component={TextField}
+                  select
+                  disabled={false}
+                  label="Tip usluge"
+                  name="typeOfService"
+                >
+                  {Object.keys(TYPES_OF_SERVICE).map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {TYPES_OF_SERVICE[key]}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Box>
+
+              <Button
+                size="large"
+                color="primary"
+                variant="contained"
+                type="submit"
+                sx={{ mr: 2, minWidth: 200 }}
+              >
+                {editReservation ? "Sačuvaj izmene" : "Kreiraj"}
+              </Button>
+              {editReservation && (
+                <Popconfirm
+                  onConfirm={() => {
+                    handleDelete(editReservation);
+                    onClose();
                   }}
                 >
-                  <Field
-                    component={TextField}
-                    disabled={false}
-                    label="Pocetak"
-                    name="startTime"
-                    select
-                  >
-                    {startSlots.map((slot) => (
-                      <MenuItem key={slot} value={slot}>
-                        {slot}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                  <Field
-                    disabled={false}
-                    component={TextField}
-                    label="Kraj"
-                    name="endTime"
-                    select
-                  >
-                    {startSlots.map((slot) => (
-                      <MenuItem key={slot} value={slot}>
-                        {slot}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </Box>
-
-                <Box marginBottom={2}>
-                  <Field
-                    component={TextField}
-                    select
-                    disabled={false}
-                    label="Tip usluge"
-                    name="typeOfService"
-                  >
-                    <MenuItem value={TypeOfService.HAIRCUT}>Sisanje</MenuItem>
-                    <MenuItem value={TypeOfService.SHAVING}>Brijanje</MenuItem>
-                    <MenuItem value={TypeOfService.NAILS}>Nokti</MenuItem>
-                  </Field>
-                </Box>
-
-                <Button
-                  size="large"
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                  type="submit"
-                >
-                  Kreiraj
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </>
-      )}
-    </div>
+                  <Button variant="outlined" size="large" color="error">
+                    <DeleteOutline />
+                  </Button>
+                </Popconfirm>
+              )}
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </>
   );
 };
 

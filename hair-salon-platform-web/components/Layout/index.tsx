@@ -8,8 +8,9 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Avatar from "@mui/material/Avatar";
 
-import { useUserActions } from "lib/authService";
 import styles from "./styles.module.scss";
+import { useRecoilState } from "recoil";
+import { authState } from "../AuthGuard/state";
 
 function LinkTab(props: any) {
   return (
@@ -21,11 +22,22 @@ function LinkTab(props: any) {
 
 const Layout: FC = ({ children }) => {
   const router = useRouter();
-  const { logoutUser, auth } = useUserActions();
+  const [auth, setAuth] = useRecoilState(authState);
+  const { user } = auth;
+
+  function logoutUser() {
+    localStorage.removeItem("userToken");
+    setAuth((oldAuth) => ({
+      ...oldAuth,
+      user: null,
+      jwt: null,
+      decoded: null,
+    }));
+  }
 
   return (
     <>
-      {auth && (
+      {user && (
         <nav className={styles.navigationBar}>
           <div>HairSalon</div>
           <Tabs aria-label="Navigacija" value={router.pathname}>
@@ -38,7 +50,7 @@ const Layout: FC = ({ children }) => {
             />
           </Tabs>
           <div className={styles.user}>
-            <Avatar>{auth.sub[0]}</Avatar>
+            <Avatar>{user.firstName[0]}</Avatar>
             <Button onClick={() => logoutUser()}>Logout</Button>
           </div>
         </nav>

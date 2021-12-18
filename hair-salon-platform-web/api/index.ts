@@ -14,12 +14,20 @@ export const loginUser = (data: LoginData) => {
   return apiClient.post("authenticate", data);
 };
 
-export const getUserByUsername = (username: string) => {
-  return apiClient.get<User>("users", { params: { username } });
+export const getUserByUsername = async (username: string) => {
+  return await apiClient.get<User>("users", { params: { username } });
 };
 
 export const getCustomers = () => {
-  return apiClient.get("users", { params: { role: UserRole.CUSTOMER } });
+  return apiClient.get<User[]>("users", {
+    params: { role: UserRole.Customer },
+  });
+};
+
+export const getWorkers = () => {
+  return apiClient.get<User[]>("users", {
+    params: { role: UserRole.Employee },
+  });
 };
 
 export const createUser = (values: NewUser) => {
@@ -34,4 +42,8 @@ export const getReservations = (workerId: number, date: string) => {
   return apiClient.get<Reservation[]>(`reservations/worker/${workerId}`, {
     params: { date },
   });
+};
+
+export const deleteReservation = (id: number) => {
+  return apiClient.delete(`reservations/${id}`);
 };

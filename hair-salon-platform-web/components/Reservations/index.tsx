@@ -4,15 +4,14 @@ import { Typography } from "@mui/material";
 
 import { slots, slotsConfig } from "lib/constants";
 import styles from "./styles.module.scss";
-import { useAuth } from "lib/hooks";
 import ReservationsListing from "./ReservationsListing";
+import { useRecoilValue } from "recoil";
+import { dateState } from "./state";
+import { authState } from "../AuthGuard/state";
 
-interface ReservationsProps {
-  date: string | undefined | null;
-}
-
-const Reservations: FC<ReservationsProps> = ({ date }) => {
-  const workerId = useAuth()?.id;
+const Reservations: FC = () => {
+  const workerId = useRecoilValue(authState)?.user?.id;
+  const date = useRecoilValue(dateState);
 
   return (
     <div className={styles.dataGrid}>
@@ -34,7 +33,7 @@ const Reservations: FC<ReservationsProps> = ({ date }) => {
           </div>
         ))}
         {workerId && date && (
-          <ReservationsListing workerId={workerId} date={date} />
+          <ReservationsListing workerId={workerId} date={date.toISOString()} />
         )}
       </div>
     </div>

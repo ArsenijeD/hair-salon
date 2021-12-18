@@ -27,7 +27,7 @@
     "react-query": "^3.32.0",
     "react-select": "^5.2.1",
     "react-singleton-hook": "^3.2.1",
-    "recoil": "^0.5.1",
+    "recoil": "^0.5.2",
     "sass": "^1.43.4",
     "yup": "^0.32.11"
   },

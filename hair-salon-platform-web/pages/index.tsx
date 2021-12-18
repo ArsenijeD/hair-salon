@@ -1,84 +1,46 @@
-import { useState } from "react";
 import type { NextPage } from "next";
-import { Dayjs } from "dayjs";
+
+import { useQueryClient } from "react-query";
+import { Container, Drawer } from "@mui/material";
 
 import Reservations from "@/components/Reservations";
 import ReservationForm from "@/components/ReservationForm";
+import ReservationHeader from "@/components/Reservations/Header";
 
+import { Reservation } from "lib/types";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
-  Button,
-  Box,
-  Typography,
-  IconButton,
-  Tooltip,
-  Container,
-  Drawer,
-} from "@mui/material";
-import { Add, ChevronLeft, ChevronRight } from "@mui/icons-material";
-import DatePicker from "@mui/lab/DatePicker";
-
-import dayjs from "lib/dayjs";
-import styles from "./styles.module.scss";
+  activeIdState,
+  editState,
+  formState,
+} from "@/components/Reservations/state";
 
 const Home: NextPage = () => {
-  const [date, setDate] = useState<Dayjs | null>(dayjs());
-  const [showReservationForm, setShowReservationForm] = useState(false);
+  const [showForm, setShowForm] = useRecoilState(formState);
+  const setEditReservation = useSetRecoilState(editState);
+  const setActiveId = useSetRecoilState(activeIdState);
 
   return (
     <>
-      <Container>
-        <main className={styles.main}>
-          <div className={styles.controls}>
-            <Typography className={styles.title} variant="h5">
-              Rezervacije
-            </Typography>
-            <div className={styles.dateActions}>
-              <Tooltip title="Prethodni dan">
-                <IconButton>
-                  <ChevronLeft />
-                </IconButton>
-              </Tooltip>
-              <DatePicker
-                renderInput={({ inputRef, inputProps, InputProps }) => (
-                  <Box
-                    className={styles.datePicker}
-                    sx={{ display: "flex", alignItems: "center" }}
-                  >
-                    <input
-                      className={styles.datePickerInput}
-                      ref={inputRef}
-                      {...inputProps}
-                    />
-                    {InputProps?.endAdornment}
-                  </Box>
-                )}
-                inputFormat="dddd, DD.MM.YYYY"
-                onChange={(value) => setDate(value)}
-                value={date}
-              />
-              <Tooltip title="Sledeći dan">
-                <IconButton>
-                  <ChevronRight />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <Button
-              onClick={() => setShowReservationForm(true)}
-              variant="contained"
-              endIcon={<Add />}
-            >
-              Dodaj
-            </Button>
-          </div>
-          <Reservations date={date?.toISOString()} />
-        </main>
+      <Container sx={{ mt: 2 }}>
+        <ReservationHeader />
+        <Reservations />
       </Container>
       <Drawer
         anchor="right"
-        open={showReservationForm}
-        onClose={() => setShowReservationForm(false)}
+        open={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setEditReservation(null);
+        }}
       >
-        <ReservationForm date={date} />
+        <ReservationForm
+          onSuccess={(reservation: Reservation) => {
+            setActiveId(reservation.id);
+            setShowForm(false);
+          }}
+          onClose={() => setShowForm(false)}
+        />
       </Drawer>
     </>
   );

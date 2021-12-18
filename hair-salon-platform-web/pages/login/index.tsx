@@ -12,9 +12,11 @@ import { useFormik } from "formik";
 import { useMutation } from "react-query";
 
 import { loginUser } from "api";
-import { useUserActions } from "lib/authService";
-import { LoginData } from "lib/types";
+import { Auth, LoginData, TokenDecoded } from "lib/types";
 import styles from "./styles.module.scss";
+import { useSetRecoilState } from "recoil";
+import { authState } from "@/components/AuthGuard/state";
+import jwtDecode from "jwt-decode";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -23,7 +25,7 @@ const validationSchema = yup.object({
 
 const Auth = () => {
   const [showError, setShowError] = useState(false);
-  const { authenticateUser } = useUserActions();
+  const setAuth = useSetRecoilState(authState);
 
   // React-query client
   const { mutate } = useMutation(
@@ -31,7 +33,13 @@ const Auth = () => {
     (data: LoginData) => loginUser(data),
     {
       onSuccess: (res) => {
-        authenticateUser(res.data.jwt);
+        const tokenData = jwtDecode(res.data.jwt) as TokenDecoded;
+        setAuth((oldAuth: Auth) => ({
+          ...oldAuth,
+          decoded: tokenData,
+          jwt: res.data.jwt,
+        }));
+        localStorage.setItem("userToken", res.data.jwt);
       },
       onError: (error) => {
         setShowError(!!error);

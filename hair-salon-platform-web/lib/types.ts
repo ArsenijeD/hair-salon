@@ -5,6 +5,19 @@ export interface LoginData {
   password: string;
 }
 
+export interface TokenDecoded {
+  sub: string;
+  exp: number;
+  iat: number;
+}
+
+export interface Auth {
+  user: User | null;
+  loading: boolean;
+  decoded: TokenDecoded | null;
+  jwt: string | null;
+}
+
 export interface UserAuthority {
   id: number;
   name: UserRole;

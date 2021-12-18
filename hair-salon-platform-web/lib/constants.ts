@@ -12,20 +12,32 @@ export const slotsConfig = {
   // Minutes
   interval: 60,
   // Pixels
-  slotHeight: 100,
+  slotHeight: 140,
 };
 
 export const slots = generateSlots(slotsConfig);
 
 export enum UserRole {
-  ADMIN = "ADMIN",
-  APPRENTICE = "APPRENTICE",
-  CUSTOMER = "CUSTOMER",
-  EMPLOYEE = "EMPLOYEE",
+  Admin = "ADMIN",
+  Apprentice = "APPRENTICE",
+  Customer = "CUSTOMER",
+  Employee = "EMPLOYEE",
 }
 
 export enum TypeOfService {
-  HAIRCUT = "HAIRCUT",
-  NAILS = "NAILS",
-  SHAVING = "SHAVING",
+  Haircut = "HAIRCUT",
+  HairStyling = "HAIR_STYLING", //Feniranje
+  Minival = "MINIVAL",
+  HairStranding = "HAIR_STRANDING", //Pramenovi
+  HairDyeing = "HAIR_DYEING",
+  HairBun = "HAIR_BUN",
 }
+
+export const TYPES_OF_SERVICE: { [key: string]: string } = {
+  [TypeOfService.Haircut]: "Šišanje",
+  [TypeOfService.HairStyling]: "Feniranje",
+  [TypeOfService.Minival]: "Minival",
+  [TypeOfService.HairStranding]: "Pramenovi",
+  [TypeOfService.HairDyeing]: "Farbanje",
+  [TypeOfService.HairBun]: "Pundja",
+};
