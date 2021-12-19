@@ -11,6 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import styles from "./styles.module.scss";
 import { useRecoilState } from "recoil";
 import { authState } from "../AuthGuard/state";
+import { UserRole } from "lib/constants";
 
 function LinkTab(props: any) {
   return (
@@ -42,7 +43,9 @@ const Layout: FC = ({ children }) => {
           <div>HairSalon</div>
           <Tabs aria-label="Navigacija" value={router.pathname}>
             <LinkTab label="Rezervacije" value="/" href="/" />
-            <LinkTab label="Troskovi" value="/troskovi" href="/troskovi" />
+            {user.userAuthorities.some(
+              (role) => role.name === UserRole.Admin
+            ) && <LinkTab label="Usluge" value="/usluge" href="/usluge" />}
             <LinkTab
               label="Podesavanje"
               value="/podesavanje"

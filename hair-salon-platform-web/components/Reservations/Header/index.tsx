@@ -47,36 +47,38 @@ const Header: FC = () => {
   );
 
   return (
-    <div className={styles.controls}>
-      <div className={styles.dateActions}>
+    <div className={styles.header}>
+      <Box className={styles.titleContainer}>
         <Badge badgeContent={reservationsCount} color="primary">
           <Typography className={styles.title} variant="h6">
             Rezervacije
           </Typography>
         </Badge>
-        <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} />
-        {user && (
-          <Select
-            disabled={isLoadingWorkers}
-            classes={{ outlined: styles.workerSelect }}
-            variant="outlined"
-            onChange={(e) =>
-              setUser(
-                workersData?.data.find(
-                  (worker) => worker.id === Number(e.target.value)
-                ) as User
-              )
-            }
-            value={user.id}
-          >
-            {workersData?.data.map((worker) => (
-              <MenuItem key={worker.id} value={worker.id}>
-                {worker.firstName} {worker.lastName}
-              </MenuItem>
-            ))}
-          </Select>
-        )}
-        <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} />
+      </Box>
+      {/* <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} /> */}
+      {user && (
+        <Select
+          disabled={isLoadingWorkers}
+          classes={{ outlined: styles.workerSelect }}
+          variant="outlined"
+          onChange={(e) =>
+            setUser(
+              workersData?.data.find(
+                (worker) => worker.id === Number(e.target.value)
+              ) as User
+            )
+          }
+          value={user.id}
+        >
+          {workersData?.data.map((worker) => (
+            <MenuItem key={worker.id} value={worker.id}>
+              {worker.firstName} {worker.lastName}
+            </MenuItem>
+          ))}
+        </Select>
+      )}
+      {/* <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} /> */}
+      <Box className={styles.datePickerContainer}>
         <Tooltip title="Prethodni dan">
           <IconButton
             onClick={() => {
@@ -113,15 +115,19 @@ const Header: FC = () => {
             <ChevronRight />
           </IconButton>
         </Tooltip>
-      </div>
+      </Box>
 
-      <Button
-        onClick={() => setFormVisible(true)}
-        variant="contained"
-        endIcon={<Add />}
+      <Box
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        Napravi Rezervaciju
-      </Button>
+        <Button
+          onClick={() => setFormVisible(true)}
+          variant="contained"
+          endIcon={<Add />}
+        >
+          Napravi Rezervaciju
+        </Button>
+      </Box>
     </div>
   );
 };

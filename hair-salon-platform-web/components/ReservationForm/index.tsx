@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import {
   Typography,
@@ -6,11 +6,13 @@ import {
   MenuItem,
   Box,
   Alert,
+  TextField as MuiTextField,
   AutocompleteRenderOptionState,
+  AutocompleteRenderInputParams,
 } from "@mui/material";
 import { DeleteOutline } from "@mui/icons-material";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Field, Form, Formik, useFormikContext } from "formik";
+import { Field, Form, Formik, useFormikContext, FormikProps } from "formik";
 import { TextField, Autocomplete } from "formik-mui";
 import * as yup from "yup";
 import { useQueryClient, useMutation, useQuery } from "react-query";
@@ -86,13 +88,15 @@ interface ReservationFormProps {
   onClose: () => void;
 }
 const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
+  const queryClient = useQueryClient();
+
   const date = useRecoilValue(dateState);
   const user = useRecoilValue(userState);
-  const [newUser, setNewUser] = useState<User | null>(null);
   const [editReservation, setEditReservation] = useRecoilState(editState);
+
+  const form = useRef<FormikProps<NewReservation>>(null);
   const [showUserForm, setShowUserForm] = useState(false);
   const [apiError, setApiError] = useState(false);
-  const queryClient = useQueryClient();
 
   const initialValues = (): NewReservation => {
     if (editReservation) {
@@ -161,8 +165,6 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
       worker: user,
     };
 
-    return console.log(data);
-
     if (editReservation) {
       console.log(data);
       return;
@@ -172,7 +174,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
   };
 
   const onUserFormChange = (user?: User) => {
-    user && setNewUser(user);
+    user && form.current?.setFieldValue("customer", user);
     setShowUserForm(false);
   };
 
@@ -223,6 +225,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
         </Typography>
 
         <Formik
+          innerRef={form}
           initialValues={initialValues()}
           validationSchema={validationSchema}
           onSubmit={onSubmit}
@@ -240,10 +243,13 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
 
                 <Field
                   component={Autocomplete}
+                  options={customersData?.data || []}
                   getOptionLabel={(option: User) =>
                     `${option.firstName} ${option.lastName}, ${option.phoneNumber}`
                   }
-                  options={customersData?.data || []}
+                  renderInput={(params: AutocompleteRenderInputParams) => (
+                    <MuiTextField {...params} label="Izaberi mušteriju" />
+                  )}
                   renderOption={(
                     props: AutocompleteRenderOptionState,
                     option: User
@@ -258,15 +264,6 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
                   name="customer"
                   label="Izaberi mušteriju"
                 ></Field>
-                <Button onClick={() => setFieldValue("customer", null)}>
-                  Test
-                </Button>
-                {/* <CustomerSelect
-                  name="customer"
-                  label="Izaberi mušteriju"
-                  newValue={newUser}
-                  setFieldValue={setFieldValue}
-                /> */}
               </Box>
               <Box
                 marginBottom={3}

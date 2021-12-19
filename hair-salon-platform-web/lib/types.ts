@@ -1,4 +1,4 @@
-import { UserRole, TypeOfService } from "./constants";
+import { UserRole, TypeOfService, Length } from "./constants";
 
 export interface LoginData {
   username: string;
@@ -32,15 +32,8 @@ export interface NewUser {
   username: string;
 }
 
-export interface User {
-  dateOfBirth: string;
-  firstName: string;
-  gender: string;
+export interface User extends NewUser {
   id: number;
-  lastName: string;
-  phoneNumber: string;
-  userAuthorities: UserAuthority[];
-  username: string;
 }
 
 export interface Reservation {
@@ -54,4 +47,24 @@ export interface Reservation {
 
 export interface CustomersResponse {
   data: User[];
+}
+
+export interface HairSalonService {
+  length: Length;
+  name: TypeOfService;
+  price: number;
+}
+
+export interface NewHairSalonService extends HairSalonService {
+  id: number;
+}
+
+export interface NewService {
+  hairsalonService: HairSalonService;
+  percentage: number;
+  user: User;
+}
+
+export interface Service extends NewService {
+  id: number;
 }

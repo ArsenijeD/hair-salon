@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 
 import {
   Typography,
@@ -11,7 +11,7 @@ import {
   FormLabel,
   Button,
 } from "@mui/material";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField, RadioGroup } from "formik-mui";
 import { DatePicker } from "formik-mui-lab/";
 import * as yup from "yup";
@@ -24,6 +24,10 @@ import { createUser } from "api";
 import styles from "./styles.module.scss";
 import dayjs from "lib/dayjs";
 
+interface UserFormProps {
+  onChange: (user?: User) => void;
+}
+
 const validationSchema = yup.object({
   dateOfBirth: yup.date(),
   firstName: yup.string().required(),
@@ -32,14 +36,22 @@ const validationSchema = yup.object({
   phoneNumber: yup.string().required(),
 });
 
-interface UserFormProps {
-  onChange: (user?: User) => void;
-}
+const initialValues: NewUser = {
+  dateOfBirth: "12.02.1994",
+  firstName: "",
+  gender: "",
+  lastName: "",
+  phoneNumber: "",
+  userAuthorities: [{ id: 4, name: UserRole.Customer }],
+  username: "",
+};
 
 const UserForm: FC<UserFormProps> = ({ onChange }) => {
   const queryClient = useQueryClient();
+  const form = useRef<FormikProps<NewUser>>();
+
   // React-query client
-  const { mutate, isLoading } = useMutation(
+  const { mutate } = useMutation(
     (values: NewUser) => {
       const data = {
         ...values,
@@ -49,28 +61,21 @@ const UserForm: FC<UserFormProps> = ({ onChange }) => {
     },
     {
       onSuccess: (res) => {
+        form.current?.resetForm();
         queryClient.invalidateQueries("customers");
         onChange(res.data);
       },
     }
   );
 
-  const initialValues: NewUser = {
-    dateOfBirth: "12.02.1994",
-    firstName: "",
-    gender: "",
-    lastName: "",
-    phoneNumber: "",
-    userAuthorities: [{ id: 4, name: UserRole.Customer }],
-    username: "",
-  };
-
   return (
     <>
       <IconButton onClick={() => onChange()}>
         <ArrowBack />
       </IconButton>
-      <Typography variant="h4">Kreiraj musteriju</Typography>
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Kreiraj musteriju
+      </Typography>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

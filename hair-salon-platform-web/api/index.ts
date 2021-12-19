@@ -1,6 +1,13 @@
 import axios from "axios";
 
-import { LoginData, NewUser, User, Reservation } from "lib/types";
+import {
+  LoginData,
+  NewUser,
+  User,
+  Reservation,
+  NewService,
+  Service,
+} from "lib/types";
 import { UserRole } from "lib/constants";
 
 export const apiClient = axios.create({
@@ -10,6 +17,7 @@ export const apiClient = axios.create({
   },
 });
 
+// Users and Auth
 export const loginUser = (data: LoginData) => {
   return apiClient.post("authenticate", data);
 };
@@ -34,6 +42,7 @@ export const createUser = (values: NewUser) => {
   return apiClient.post("users", values);
 };
 
+// Reservations
 export const createReservation = (values: any) => {
   return apiClient.post("reservations", values);
 };
@@ -46,4 +55,24 @@ export const getReservations = (workerId: number, date: string) => {
 
 export const deleteReservation = (id: number) => {
   return apiClient.delete(`reservations/${id}`);
+};
+
+// Services
+export const getServices = (workerId: number) => {
+  return apiClient.get<Service[]>(`hairsalon-services/worker/${workerId}`);
+};
+
+export const createService = (values: NewService) => {
+  return apiClient.post("hairsalon-services", values);
+};
+
+export const updateService = (
+  values: { percentage: number },
+  workerId: number,
+  serviceId: number
+) => {
+  return apiClient.patch(
+    `hairsalon-services/worker/${workerId}/service/${serviceId}`,
+    values
+  );
 };

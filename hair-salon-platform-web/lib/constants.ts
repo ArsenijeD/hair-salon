@@ -41,3 +41,15 @@ export const TYPES_OF_SERVICE: { [key: string]: string } = {
   [TypeOfService.HairDyeing]: "Farbanje",
   [TypeOfService.HairBun]: "Pundja",
 };
+
+export enum Length {
+  Short = "SHORT",
+  Medium = "MEDIUM",
+  Long = "LONG",
+}
+
+export const LENGTH: { [key: string]: string } = {
+  [Length.Short]: "Kratko",
+  [Length.Medium]: "Srednje",
+  [Length.Long]: "Dugo",
+};
