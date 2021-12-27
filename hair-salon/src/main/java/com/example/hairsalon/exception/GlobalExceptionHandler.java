@@ -1,5 +1,6 @@
 package com.example.hairsalon.exception;
 
+import com.example.hairsalon.dto.EmptyJsonResponse;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.amqp.AmqpException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -28,8 +29,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(BAD_CREDENTIALS_EXCEPTIONS_MESSAGE);
     }
 
-    @ExceptionHandler({ EntityNotFoundException.class, EmptyResultDataAccessException.class, UsernameNotFoundException.class })
-    public ResponseEntity<String> handleEntityNotFoundException(Exception exception) {
+    @ExceptionHandler({ EntityNotFoundException.class })
+    public ResponseEntity<EmptyJsonResponse> handleEntityNotFoundException(Exception exception) {
+        return ResponseEntity.ok().body(new EmptyJsonResponse());
+    }
+
+    @ExceptionHandler({ SmsContentNotFoundException.class, EmptyResultDataAccessException.class, UsernameNotFoundException.class })
+    public ResponseEntity<String> handleCustomNotFoundException(Exception exception) {
         if (exception instanceof SmsContentNotFoundException)
             return ResponseEntity.status(424).body(SMS_CONTENT_NOT_FOUND_EXCEPTION_MESSAGE);
         return ResponseEntity.notFound().build();
