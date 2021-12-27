@@ -25,7 +25,7 @@ import { generateSlots } from "lib/helpers";
 import { slotsConfig, TypeOfService, TYPES_OF_SERVICE } from "lib/constants";
 import { Reservation, User, CustomersResponse } from "lib/types";
 import dayjs from "lib/dayjs";
-import { dateState, editState, userState } from "../Reservations/state";
+import { dateState, editState, workerState } from "../Reservations/state";
 import styles from "./styles.module.scss";
 
 const validationSchema = yup.object({
@@ -91,7 +91,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
   const queryClient = useQueryClient();
 
   const date = useRecoilValue(dateState);
-  const user = useRecoilValue(userState);
+  const worker = useRecoilValue(workerState);
   const [editReservation, setEditReservation] = useRecoilState(editState);
 
   const form = useRef<FormikProps<NewReservation>>(null);
@@ -115,7 +115,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
         startTime: "12:00",
         endTime: "12:30",
         typeOfService: TypeOfService.Haircut,
-        worker: user,
+        worker: worker,
       };
     }
   };
@@ -162,7 +162,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
       date: dayjs(date).hour(hour).minute(minut).second(0).toISOString(),
       durationMinutes,
       typeOfService: values.typeOfService,
-      worker: user,
+      worker: worker,
     };
 
     if (editReservation) {

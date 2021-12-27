@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
 
-import { useQueryClient } from "react-query";
 import { Container, Drawer } from "@mui/material";
 
 import Reservations from "@/components/Reservations";
@@ -22,8 +21,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Container sx={{ mt: 2 }}>
-        <ReservationHeader />
+      <ReservationHeader />
+      <Container>
         <Reservations />
       </Container>
       <Drawer

@@ -17,7 +17,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 
 import { getReservations, getWorkers } from "api";
-import { dateState, formState, userState } from "../state";
+import { dateState, formState, workerState } from "../state";
 
 import { authState } from "@/components/AuthGuard/state";
 
@@ -26,18 +26,18 @@ import { User } from "lib/types";
 
 const Header: FC = () => {
   const [date, setDate] = useRecoilState(dateState);
-  const [user, setUser] = useRecoilState(userState);
+  const [worker, setWorker] = useRecoilState(workerState);
   const authUser = useRecoilValue(authState).user;
   const setFormVisible = useSetRecoilState(formState);
 
   useEffect(() => {
-    authUser && setUser(authUser);
-  }, [authUser, setUser]);
+    authUser && setWorker(authUser);
+  }, [authUser, setWorker]);
 
   const { data } = useQuery(
-    ["reservations", user?.id, date?.toISOString()],
-    () => getReservations(user?.id || 1, date?.toISOString?.() || ""),
-    { enabled: !!user?.id && !!date }
+    ["reservations", worker?.id, date?.toISOString()],
+    () => getReservations(worker?.id || 1, date?.toISOString?.() || ""),
+    { enabled: !!worker?.id && !!date }
   );
   const reservationsCount = data?.data.length;
 
@@ -56,19 +56,19 @@ const Header: FC = () => {
         </Badge>
       </Box>
       {/* <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} /> */}
-      {user && (
+      {worker && (
         <Select
           disabled={isLoadingWorkers}
           classes={{ outlined: styles.workerSelect }}
           variant="outlined"
           onChange={(e) =>
-            setUser(
+            setWorker(
               workersData?.data.find(
                 (worker) => worker.id === Number(e.target.value)
               ) as User
             )
           }
-          value={user.id}
+          value={worker.id}
         >
           {workersData?.data.map((worker) => (
             <MenuItem key={worker.id} value={worker.id}>

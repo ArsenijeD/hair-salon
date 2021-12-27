@@ -20,7 +20,7 @@ import {
 import PercentageForm from "@/components/PercentageForm";
 
 import { authState } from "@/components/AuthGuard/state";
-import { workerState } from "./state";
+import { workerState } from "@/components/Services/state";
 import { getServices, getWorkers } from "api";
 import styles from "./styles.module.scss";
 import { LENGTH, TYPES_OF_SERVICE } from "lib/constants";

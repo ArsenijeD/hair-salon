@@ -17,6 +17,7 @@ const ReservationsListing: FC<ReservationsListingProps> = ({
   workerId,
   date,
 }) => {
+  console.log(workerId);
   const { data, isLoading } = useQuery(["reservations", workerId, date], () =>
     getReservations(workerId, date)
   );

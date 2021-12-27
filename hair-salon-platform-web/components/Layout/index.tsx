@@ -37,11 +37,15 @@ const Layout: FC = ({ children }) => {
   }
 
   return (
-    <>
+    <div className={styles.layout}>
       {user && (
         <nav className={styles.navigationBar}>
           <div>HairSalon</div>
-          <Tabs aria-label="Navigacija" value={router.pathname}>
+          <Tabs
+            aria-label="Navigacija"
+            orientation="vertical"
+            value={router.pathname}
+          >
             <LinkTab label="Rezervacije" value="/" href="/" />
             {user.userAuthorities.some(
               (role) => role.name === UserRole.Admin
@@ -58,8 +62,8 @@ const Layout: FC = ({ children }) => {
           </div>
         </nav>
       )}
-      {children}
-    </>
+      <main className={styles.page}>{children}</main>
+    </div>
   );
 };
 

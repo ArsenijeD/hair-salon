@@ -24,7 +24,7 @@ export const editState = atom<Reservation | null>({
   default: null,
 });
 
-export const userState = atom<User | null>({
-  key: "reservationUser",
+export const workerState = atom<User | null>({
+  key: "reservationsWorker",
   default: null,
 });

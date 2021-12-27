@@ -6,11 +6,10 @@ import { slots, slotsConfig } from "lib/constants";
 import styles from "./styles.module.scss";
 import ReservationsListing from "./ReservationsListing";
 import { useRecoilValue } from "recoil";
-import { dateState } from "./state";
-import { authState } from "../AuthGuard/state";
+import { dateState, workerState } from "./state";
 
 const Reservations: FC = () => {
-  const workerId = useRecoilValue(authState)?.user?.id;
+  const workerId = useRecoilValue(workerState)?.id;
   const date = useRecoilValue(dateState);
 
   return (
