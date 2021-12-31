@@ -71,12 +71,7 @@ const ReservationCard: FC<ReservationCardProps> = ({ reservation }) => {
           <Typography variant="h6">
             {reservation.customer.firstName} {reservation.customer.lastName},{" "}
             {TYPES_OF_SERVICE[reservation.typeOfService]},{" "}
-            {dayjs(reservation.date).format("HH:mm")} -{" "}
-            {dayjs(reservation.date)
-              .minute(
-                reservation.durationMinutes + dayjs(reservation.date).minute()
-              )
-              .format("HH:mm")}
+            {dayjs(reservation.date).format("HH:mm")}
           </Typography>
         </Grid>
         <Grid item>

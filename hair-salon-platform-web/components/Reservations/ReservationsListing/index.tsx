@@ -1,37 +1,21 @@
 import { FC } from "react";
 
+import isEmpty from "lodash/isEmpty";
 import { CircularProgress } from "@mui/material";
 import { useQuery } from "react-query";
 
-import { getReservations } from "api";
+import EmptyState from "../EmptyState";
 import ReservationCard from "../ReservationCard";
 
-import styles from "./styles.module.scss";
+import { Reservation } from "lib/types";
 
 interface ReservationsListingProps {
-  workerId: number;
-  date: string;
+  reservations: Reservation[];
 }
 
 const ReservationsListing: FC<ReservationsListingProps> = ({
-  workerId,
-  date,
+  reservations,
 }) => {
-  console.log(workerId);
-  const { data, isLoading } = useQuery(["reservations", workerId, date], () =>
-    getReservations(workerId, date)
-  );
-
-  const reservations = data?.data;
-
-  if (isLoading) {
-    return (
-      <div className={styles.loader}>
-        <CircularProgress />
-      </div>
-    );
-  }
-
   return (
     <>
       {reservations?.map((reservation) => (

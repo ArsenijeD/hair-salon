@@ -67,14 +67,14 @@ const Auth = () => {
         justifyContent="center"
       >
         <Paper sx={{ maxWidth: 600, p: 4 }}>
-          <Typography variant="h1" gutterBottom>
-            Log in
+          <Typography variant="h2" gutterBottom>
+            Prijavite se
           </Typography>
           <form className={styles.form} onSubmit={formik.handleSubmit}>
             <TextField
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
-              label="Username"
+              label="Korisničko ime"
               name="username"
               onChange={formik.handleChange}
               value={formik.values.username}
@@ -83,7 +83,7 @@ const Auth = () => {
             <TextField
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              label="Password"
+              label="Šifra"
               name="password"
               onChange={formik.handleChange}
               type="password"
@@ -91,7 +91,7 @@ const Auth = () => {
               margin="normal"
             />
             <Button color="primary" variant="contained" fullWidth type="submit">
-              Submit
+              Prijavi se
             </Button>
           </form>
         </Paper>

@@ -30,10 +30,6 @@ const Header: FC = () => {
   const authUser = useRecoilValue(authState).user;
   const setFormVisible = useSetRecoilState(formState);
 
-  useEffect(() => {
-    authUser && setWorker(authUser);
-  }, [authUser, setWorker]);
-
   const { data } = useQuery(
     ["reservations", worker?.id, date?.toISOString()],
     () => getReservations(worker?.id || 1, date?.toISOString?.() || ""),
@@ -46,6 +42,16 @@ const Header: FC = () => {
     () => getWorkers()
   );
 
+  // Set default worker in Select
+  useEffect(() => {
+    if (authUser && workersData) {
+      const initalUser = workersData.data.find(
+        (worker) => worker.id === authUser.id
+      );
+      setWorker(initalUser ? initalUser : workersData.data[0]);
+    }
+  }, [authUser, workersData, setWorker]);
+
   return (
     <div className={styles.header}>
       <Box className={styles.titleContainer}>
@@ -55,10 +61,10 @@ const Header: FC = () => {
           </Typography>
         </Badge>
       </Box>
-      {/* <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} /> */}
       {worker && (
         <Select
           disabled={isLoadingWorkers}
+          placeholder="Izaberi radnika"
           classes={{ outlined: styles.workerSelect }}
           variant="outlined"
           onChange={(e) =>
@@ -77,7 +83,6 @@ const Header: FC = () => {
           ))}
         </Select>
       )}
-      {/* <Divider orientation="vertical" flexItem sx={{ ml: 1, mr: 1 }} /> */}
       <Box className={styles.datePickerContainer}>
         <Tooltip title="Prethodni dan">
           <IconButton

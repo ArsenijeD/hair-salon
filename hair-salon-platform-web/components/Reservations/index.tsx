@@ -1,16 +1,37 @@
 import { FC } from "react";
 
+import { isEmpty } from "lodash";
 import { Typography } from "@mui/material";
-
-import { slots, slotsConfig } from "lib/constants";
-import styles from "./styles.module.scss";
-import ReservationsListing from "./ReservationsListing";
+import { useQuery } from "react-query";
 import { useRecoilValue } from "recoil";
+
+import EmptyState from "./EmptyState";
+import ReservationsListing from "./ReservationsListing";
+import Loading from "../Loading";
+
 import { dateState, workerState } from "./state";
+import { slots, slotsConfig } from "lib/constants";
+import { getReservations } from "api";
+import styles from "./styles.module.scss";
 
 const Reservations: FC = () => {
   const workerId = useRecoilValue(workerState)?.id;
   const date = useRecoilValue(dateState);
+
+  const { data, isLoading } = useQuery(
+    ["reservations", workerId, date],
+    () => getReservations(workerId || 1, date?.toISOString() || ""),
+    { enabled: !!workerId && !!date }
+  );
+  const reservations = data?.data;
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!reservations || isEmpty(reservations)) {
+    return <EmptyState />;
+  }
 
   return (
     <div className={styles.dataGrid}>
@@ -21,19 +42,11 @@ const Reservations: FC = () => {
             style={{ height: slotsConfig.slotHeight }}
             key={slot}
           >
-            <Typography
-              variant="caption"
-              color="GrayText"
-              className={styles.slotTime}
-            >
-              {slot}
-            </Typography>
+            <Typography className={styles.slotTime}>{slot}</Typography>
             <span className={styles.line}></span>
           </div>
         ))}
-        {workerId && date && (
-          <ReservationsListing workerId={workerId} date={date.toISOString()} />
-        )}
+        <ReservationsListing reservations={reservations} />
       </div>
     </div>
   );

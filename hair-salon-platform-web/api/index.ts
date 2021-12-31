@@ -44,7 +44,11 @@ export const createUser = (values: NewUser) => {
 
 // Reservations
 export const createReservation = (values: any) => {
-  return apiClient.post("reservations", values);
+  return apiClient.post<Reservation>("reservations", values);
+};
+
+export const putReservation = (values: any, id: number) => {
+  return apiClient.put<Reservation>(`reservations/${id}`, values);
 };
 
 export const getReservations = (workerId: number, date: string) => {

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
 import {
   Typography,
@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { DeleteOutline } from "@mui/icons-material";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { Field, Form, Formik, useFormikContext, FormikProps } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField, Autocomplete } from "formik-mui";
 import * as yup from "yup";
 import { useQueryClient, useMutation, useQuery } from "react-query";
@@ -20,7 +20,12 @@ import { useQueryClient, useMutation, useQuery } from "react-query";
 import UserForm from "../UserForm";
 import Popconfirm from "../Popconfirm";
 
-import { createReservation, deleteReservation, getCustomers } from "api";
+import {
+  createReservation,
+  putReservation,
+  deleteReservation,
+  getCustomers,
+} from "api";
 import { generateSlots } from "lib/helpers";
 import { slotsConfig, TypeOfService, TYPES_OF_SERVICE } from "lib/constants";
 import { Reservation, User, CustomersResponse } from "lib/types";
@@ -32,53 +37,11 @@ const validationSchema = yup.object({
   typeOfService: yup.string().required("Izaberi tip usluge"),
   customer: yup.object().required("Izaberi musteriju").nullable(),
   startTime: yup.string().required("Pocetno vreme je obavezno"),
-  endTime: yup
-    .string()
-    .required("Krajnje vreme je obavezno")
-    .test(
-      "posle-pocetnog",
-      "Krajnje vreme mora biti posle pocetnog",
-      function (value) {
-        const { startTime } = this.parent;
-        return dayjs(value, "HH:mm").isAfter(dayjs(startTime, "HH:mm"));
-      }
-    ),
 });
-
-const EndTimeField: FC<{ startSlots: string[] }> = ({ startSlots }) => {
-  const {
-    values: { startTime },
-    setFieldValue,
-  } = useFormikContext<NewReservation>();
-
-  useEffect(() => {
-    if (startTime) {
-      const end = dayjs(startTime, "HH:mm").add(15, "m").format("HH:mm");
-      setFieldValue("endTime", end);
-    }
-  }, [startTime, setFieldValue]);
-
-  return (
-    <Field
-      disabled={false}
-      component={TextField}
-      label="Kraj"
-      name="endTime"
-      select
-    >
-      {startSlots.map((slot) => (
-        <MenuItem key={slot} value={slot}>
-          {slot}
-        </MenuItem>
-      ))}
-    </Field>
-  );
-};
 
 interface NewReservation {
   customer: User | null;
   startTime: string;
-  endTime: string;
   typeOfService: TypeOfService;
   worker: User | null;
 }
@@ -103,9 +66,6 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
       return {
         customer: editReservation.customer,
         startTime: dayjs(editReservation.date).format("HH:mm"),
-        endTime: dayjs(editReservation.date)
-          .add(editReservation.durationMinutes, "m")
-          .format("HH:mm"),
         typeOfService: editReservation.typeOfService,
         worker: editReservation.worker,
       };
@@ -113,7 +73,6 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
       return {
         customer: null,
         startTime: "12:00",
-        endTime: "12:30",
         typeOfService: TypeOfService.Haircut,
         worker: worker,
       };
@@ -125,14 +84,14 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
     interval: 15,
   });
 
-  // React-query
+  // React-query (create or edit)
   const { mutate } = useMutation(
-    (values: any) => {
-      return createReservation(values);
+    (values: any, id?: number) => {
+      return id ? putReservation(values, id) : createReservation(values);
     },
     {
       onSuccess: (res) => {
-        const reservation = res.data as Reservation;
+        const reservation = res.data;
 
         queryClient.invalidateQueries([
           "reservations",
@@ -147,30 +106,24 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
     }
   );
 
-  const onSubmit = async (values: NewReservation) => {
+  const onSubmit = (values: NewReservation) => {
     // Has to be +1 for dayjs
     const hour = Number(values.startTime.split(":")[0]) + 1;
     const minut = Number(values.startTime.split(":")[1]);
 
-    const durationMinutes = dayjs(values.endTime, "HH:mm").diff(
-      dayjs(values.startTime, "HH:mm"),
-      "minute"
-    );
-
     const data = {
       customer: values.customer,
       date: dayjs(date).hour(hour).minute(minut).second(0).toISOString(),
-      durationMinutes,
+      durationMinutes: 15,
       typeOfService: values.typeOfService,
       worker: worker,
     };
 
     if (editReservation) {
-      console.log(data);
-      return;
+      return mutate({ ...data, id: editReservation.id });
     }
 
-    return await mutate(data);
+    return mutate(data);
   };
 
   const onUserFormChange = (user?: User) => {
@@ -178,7 +131,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
     setShowUserForm(false);
   };
 
-  // Delete reservatino
+  // Delete reservation
   const { mutate: handleDelete } = useMutation(
     (reservation: Reservation) => {
       return deleteReservation(reservation.id);
@@ -284,10 +237,6 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
                     </MenuItem>
                   ))}
                 </Field>
-                <EndTimeField startSlots={startSlots} />
-              </Box>
-
-              <Box marginBottom={2}>
                 <Field
                   component={TextField}
                   select
@@ -310,7 +259,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
                 type="submit"
                 sx={{ mr: 2, minWidth: 200 }}
               >
-                {editReservation ? "Sačuvaj izmene" : "Kreiraj"}
+                {editReservation ? "Sačuvaj izmene" : "Zakaži"}
               </Button>
               {editReservation && (
                 <Popconfirm
