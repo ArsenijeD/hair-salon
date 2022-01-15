@@ -42,6 +42,10 @@ export const createUser = (values: NewUser) => {
   return apiClient.post("users", values);
 };
 
+export const deleteUser = (id: number) => {
+  return apiClient.delete(`users/${id}`);
+};
+
 // Reservations
 export const createReservation = (values: any) => {
   return apiClient.post<Reservation>("reservations", values);

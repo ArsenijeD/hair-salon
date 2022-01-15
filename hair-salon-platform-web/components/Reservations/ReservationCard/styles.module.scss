@@ -1,8 +1,8 @@
 .reservation {
   top: 0;
   padding: 0 10px;
-  background-color: rgb(208, 244, 236);
-  border: 1px solid rgb(79, 182, 175);
+  background-color: rgb(224, 239, 255);
+  border: 1px solid rgb(55, 134, 218);
   width: calc(80% - 50px);
   height: 100px;
   position: absolute;
@@ -11,6 +11,31 @@
 
   &.new {
     animation: shake 1.8s normal forwards ease-in-out;
+  }
+
+  // Default
+  // &.HAIRCUT {
+  //   background-color: red;
+  // }
+  &.HAIR_STYLING {
+    background-color: rgb(210, 244, 208);
+    border: 1px solid rgb(79, 182, 120);
+  }
+  &.MINIVAL {
+    background-color: rgb(247, 243, 213);
+    border: 1px solid rgb(182, 170, 79);
+  }
+  &.HAIR_STRANDING {
+    background-color: rgb(208, 244, 236);
+    border: 1px solid rgb(79, 182, 175);
+  }
+  &.HAIR_DYEING {
+    background-color: rgb(255, 226, 254);
+    border: 1px solid rgb(182, 79, 161);
+  }
+  &.HAIR_BUN {
+    background-color: rgb(255, 233, 225);
+    border: 1px solid rgb(182, 124, 79);
   }
 }
 

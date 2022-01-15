@@ -15,17 +15,19 @@ import { Field, Form, Formik, FormikProps } from "formik";
 import { TextField, RadioGroup } from "formik-mui";
 import { DatePicker } from "formik-mui-lab/";
 import * as yup from "yup";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { ArrowBack } from "@mui/icons-material";
 
-import { NewUser, User } from "lib/types";
-import { UserRole } from "lib/constants";
+import { NewUser, User, UserAuthority } from "lib/types";
 import { createUser } from "api";
 import styles from "./styles.module.scss";
 import dayjs from "lib/dayjs";
 
 interface UserFormProps {
   onChange: (user?: User) => void;
+  onBack?: () => void;
+  role: UserAuthority;
+  title: string;
 }
 
 const validationSchema = yup.object({
@@ -36,19 +38,18 @@ const validationSchema = yup.object({
   phoneNumber: yup.string().required(),
 });
 
-const initialValues: NewUser = {
-  dateOfBirth: "12.02.1994",
-  firstName: "",
-  gender: "",
-  lastName: "",
-  phoneNumber: "",
-  userAuthorities: [{ id: 4, name: UserRole.Customer }],
-  username: "",
-};
-
-const UserForm: FC<UserFormProps> = ({ onChange }) => {
-  const queryClient = useQueryClient();
+const UserForm: FC<UserFormProps> = ({ onChange, role, title, onBack }) => {
   const form = useRef<FormikProps<NewUser>>();
+
+  const initialValues: NewUser = {
+    dateOfBirth: "12.02.1994",
+    firstName: "",
+    gender: "",
+    lastName: "",
+    phoneNumber: "",
+    userAuthorities: [role],
+    username: "",
+  };
 
   // React-query client
   const { mutate } = useMutation(
@@ -62,7 +63,6 @@ const UserForm: FC<UserFormProps> = ({ onChange }) => {
     {
       onSuccess: (res) => {
         form.current?.resetForm();
-        queryClient.invalidateQueries("customers");
         onChange(res.data);
       },
     }
@@ -70,11 +70,13 @@ const UserForm: FC<UserFormProps> = ({ onChange }) => {
 
   return (
     <>
-      <IconButton onClick={() => onChange()}>
-        <ArrowBack />
-      </IconButton>
+      {onBack && (
+        <IconButton onClick={() => onBack()}>
+          <ArrowBack />
+        </IconButton>
+      )}
       <Typography variant="h4" sx={{ mb: 2 }}>
-        Kreiraj musteriju
+        {title}
       </Typography>
       <Formik
         initialValues={initialValues}

@@ -4,11 +4,12 @@ import { useRouter } from "next/router";
 
 import FullPageLoading from "@/components/FullPageLoading";
 
+import { UserRole } from "lib/constants";
 import { apiClient, getUserByUsername } from "api";
+import { authState } from "./state";
 import { routerPaths } from "lib/constants";
 import { useQuery } from "react-query";
 import { useRecoilState } from "recoil";
-import { authState } from "./state";
 
 const AuthGuard: FC = ({ children }) => {
   const router = useRouter();
@@ -31,6 +32,9 @@ const AuthGuard: FC = ({ children }) => {
     userData &&
       setAuth((oldAuth) => ({
         ...oldAuth,
+        isAdmin: userData.data.userAuthorities.some(
+          (role) => role.name === UserRole.Admin
+        ),
         user: userData.data,
         loading: false,
       }));

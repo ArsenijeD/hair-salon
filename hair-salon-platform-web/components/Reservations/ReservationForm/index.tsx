@@ -17,20 +17,26 @@ import { TextField, Autocomplete } from "formik-mui";
 import * as yup from "yup";
 import { useQueryClient, useMutation, useQuery } from "react-query";
 
-import UserForm from "../UserForm";
-import Popconfirm from "../Popconfirm";
+import UserForm from "../../UserForm";
+import Popconfirm from "../../Popconfirm";
 
 import {
   createReservation,
   putReservation,
   deleteReservation,
   getCustomers,
+  getWorkers,
 } from "api";
 import { generateSlots } from "lib/helpers";
-import { slotsConfig, TypeOfService, TYPES_OF_SERVICE } from "lib/constants";
+import {
+  slotsConfig,
+  TypeOfService,
+  TYPES_OF_SERVICE,
+  ROLES,
+} from "lib/constants";
 import { Reservation, User, CustomersResponse } from "lib/types";
 import dayjs from "lib/dayjs";
-import { dateState, editState, workerState } from "../Reservations/state";
+import { dateState, editState, workerState } from "../state";
 import styles from "./styles.module.scss";
 
 const validationSchema = yup.object({
@@ -43,7 +49,7 @@ interface NewReservation {
   customer: User | null;
   startTime: string;
   typeOfService: TypeOfService;
-  worker: User | null;
+  worker: number | undefined | null;
 }
 
 interface ReservationFormProps {
@@ -67,14 +73,14 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
         customer: editReservation.customer,
         startTime: dayjs(editReservation.date).format("HH:mm"),
         typeOfService: editReservation.typeOfService,
-        worker: editReservation.worker,
+        worker: editReservation.worker.id,
       };
     } else {
       return {
         customer: null,
         startTime: "12:00",
         typeOfService: TypeOfService.Haircut,
-        worker: worker,
+        worker: worker?.id,
       };
     }
   };
@@ -127,6 +133,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
   };
 
   const onUserFormChange = (user?: User) => {
+    queryClient.invalidateQueries("customers");
     user && form.current?.setFieldValue("customer", user);
     setShowUserForm(false);
   };
@@ -152,6 +159,11 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
     getCustomers
   );
 
+  const { data: workersData } = useQuery<CustomersResponse>(
+    "workers",
+    getWorkers
+  );
+
   return (
     <>
       <div className={styles.container}>
@@ -159,7 +171,12 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
           className={styles.userForm}
           style={{ visibility: showUserForm ? "visible" : "hidden" }}
         >
-          <UserForm onChange={onUserFormChange} />
+          <UserForm
+            onBack={() => setShowUserForm(false)}
+            onChange={onUserFormChange}
+            role={ROLES.CUSTOMER}
+            title="Kreiraj mušteriju"
+          />
         </div>
         {apiError && (
           <Alert
@@ -217,6 +234,21 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
                   name="customer"
                   label="Izaberi mušteriju"
                 ></Field>
+              </Box>
+              <Box marginBottom={3}>
+                <Field
+                  component={TextField}
+                  disabled={false}
+                  label="Radnik"
+                  name="worker"
+                  select
+                >
+                  {workersData?.data.map((worker) => (
+                    <MenuItem key={worker.id} value={worker.id}>
+                      {worker.firstName} {worker.lastName}
+                    </MenuItem>
+                  ))}
+                </Field>
               </Box>
               <Box
                 marginBottom={3}

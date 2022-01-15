@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { Container, Drawer } from "@mui/material";
 
 import Reservations from "@/components/Reservations";
-import ReservationForm from "@/components/ReservationForm";
+import ReservationForm from "@/components/Reservations/ReservationForm";
 import ReservationHeader from "@/components/Reservations/Header";
 
 import { Reservation } from "lib/types";

@@ -39,7 +39,7 @@ const Header: FC = () => {
 
   const { data: workersData, isLoading: isLoadingWorkers } = useQuery(
     "workers",
-    () => getWorkers()
+    getWorkers
   );
 
   // Set default worker in Select
@@ -48,9 +48,10 @@ const Header: FC = () => {
       const initalUser = workersData.data.find(
         (worker) => worker.id === authUser.id
       );
-      setWorker(initalUser ? initalUser : workersData.data[0]);
+      // Set default if not allready selected
+      !worker && setWorker(initalUser ? initalUser : workersData.data[0]);
     }
-  }, [authUser, workersData, setWorker]);
+  }, [authUser, worker, workersData, setWorker]);
 
   return (
     <div className={styles.header}>

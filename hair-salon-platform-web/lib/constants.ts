@@ -24,6 +24,13 @@ export enum UserRole {
   Employee = "EMPLOYEE",
 }
 
+export const ROLES = {
+  ADMIN: { id: 1, name: UserRole.Admin },
+  EMPLOYEE: { id: 2, name: UserRole.Employee },
+  APPRENTICE: { id: 3, name: UserRole.Apprentice },
+  CUSTOMER: { id: 4, name: UserRole.Customer },
+};
+
 export enum TypeOfService {
   Haircut = "HAIRCUT",
   HairStyling = "HAIR_STYLING", //Feniranje

@@ -3,7 +3,7 @@ import { FC, useEffect, useRef } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import cx from "clsx";
 import { Grid, Card, Typography, IconButton } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, TryOutlined } from "@mui/icons-material";
 
 import Popconfirm from "@/components/Popconfirm";
 import dayjs from "lib/dayjs";
@@ -61,7 +61,7 @@ const ReservationCard: FC<ReservationCardProps> = ({ reservation }) => {
         setReservationEdit(reservation);
         setShowForm(true);
       }}
-      className={cx(styles.reservation, {
+      className={cx(styles.reservation, styles[reservation.typeOfService], {
         [styles.new]: activeId === reservation.id,
       })}
       key={reservation.id}

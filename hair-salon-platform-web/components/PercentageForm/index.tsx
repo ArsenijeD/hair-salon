@@ -43,7 +43,7 @@ const PercentageForm: FC<PercentageFormProps> = ({
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["services", workerId, serviceId]);
+        queryClient.invalidateQueries(["services", workerId]);
         setRef(null);
       },
       onError: () => {

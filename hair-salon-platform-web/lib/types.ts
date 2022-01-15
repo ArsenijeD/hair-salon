@@ -12,10 +12,11 @@ export interface TokenDecoded {
 }
 
 export interface Auth {
-  user: User | null;
-  loading: boolean;
   decoded: TokenDecoded | null;
+  isAdmin: boolean;
   jwt: string | null;
+  loading: boolean;
+  user: User | null;
 }
 
 export interface UserAuthority {

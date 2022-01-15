@@ -29,6 +29,7 @@ export const authState = atom<Auth>({
   key: "auth",
   default: {
     user: null,
+    isAdmin: false,
     loading: true,
     decoded: getTokenData(),
     jwt: getJwt(),
