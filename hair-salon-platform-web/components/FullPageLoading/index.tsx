@@ -1,11 +1,13 @@
 import { FC } from "react";
 
+import { CircularProgress } from "@mui/material";
+
 import styles from "./styles.module.scss";
 
 const FullPageLoading: FC = () => {
   return (
     <div className={styles.loadingScreen}>
-      <h1>Loading...</h1>
+      <CircularProgress />
     </div>
   );
 };

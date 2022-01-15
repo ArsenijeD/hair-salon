@@ -60,7 +60,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
   const queryClient = useQueryClient();
 
   const date = useRecoilValue(dateState);
-  const worker = useRecoilValue(workerState);
+  const [worker, setWorker] = useRecoilState(workerState);
   const [editReservation, setEditReservation] = useRecoilState(editState);
 
   const form = useRef<FormikProps<NewReservation>>(null);
@@ -104,6 +104,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
           reservation.worker.id,
           date?.toISOString(),
         ]);
+        setWorker(reservation.worker);
         onSuccess?.(reservation);
       },
       onError: () => {
@@ -122,7 +123,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
       date: dayjs(date).hour(hour).minute(minut).second(0).toISOString(),
       durationMinutes: 15,
       typeOfService: values.typeOfService,
-      worker: worker,
+      worker: workersData?.data.find((worker) => worker.id === values.worker),
     };
 
     if (editReservation) {
