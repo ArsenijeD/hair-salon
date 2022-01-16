@@ -26,7 +26,6 @@ public class ReservationController {
 
     private final ModelMapper modelMapper;
 
-
     public ReservationController(ReservationService reservationServiceImpl, UserService userServiceImpl, AuthenticationFacade authenticationFacadeImpl, ModelMapper modelMapper) {
         this.reservationServiceImpl = reservationServiceImpl;
         this.userServiceImpl = userServiceImpl;
