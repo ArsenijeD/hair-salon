@@ -86,7 +86,7 @@ const Usluge: NextPage = () => {
         </main>
       </Container>
       <Drawer anchor="right" open={showForm} onClose={() => setShowForm(false)}>
-        <ServiceForm />
+        <ServiceForm onSuccess={() => setShowForm(false)} />
       </Drawer>
     </>
   );

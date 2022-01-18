@@ -15,14 +15,14 @@ import {
 
 import Loading from "@/components/Loading";
 
-import { getServices } from "api";
+import { getUserServices } from "api";
 
 import PercentageForm from "@/components/PercentageForm";
 import { LENGTH, TYPES_OF_SERVICE } from "lib/constants";
 
 const Services: FC<{ workerId: number }> = ({ workerId }) => {
-  const { data, isLoading } = useQuery(["services", workerId], () =>
-    getServices(workerId)
+  const { data, isLoading } = useQuery(["userServices", workerId], () =>
+    getUserServices(workerId)
   );
   const services = data?.data;
 

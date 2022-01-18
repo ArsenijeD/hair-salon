@@ -5,7 +5,8 @@ import {
   NewUser,
   User,
   Reservation,
-  NewService,
+  NewUserService,
+  UserService,
   Service,
 } from "lib/types";
 import { UserRole } from "lib/constants";
@@ -66,15 +67,19 @@ export const deleteReservation = (id: number) => {
 };
 
 // Services
-export const getServices = (workerId: number) => {
-  return apiClient.get<Service[]>(`hairsalon-services/worker/${workerId}`);
+export const getServices = () => {
+  return apiClient.get<Service[]>("services");
 };
 
-export const createService = (values: NewService) => {
+export const getUserServices = (workerId: number) => {
+  return apiClient.get<UserService[]>(`hairsalon-services/worker/${workerId}`);
+};
+
+export const createUserService = (values: NewUserService) => {
   return apiClient.post("hairsalon-services", values);
 };
 
-export const updateService = (
+export const updateUserService = (
   values: { percentage: number },
   workerId: number,
   serviceId: number

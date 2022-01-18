@@ -12,7 +12,7 @@ import {
   Popover,
 } from "@mui/material";
 
-import { updateService } from "api";
+import { updateUserService } from "api";
 
 interface PercentageFormProps {
   percentage: number;
@@ -39,7 +39,7 @@ const PercentageForm: FC<PercentageFormProps> = ({
   // React-query
   const { mutate } = useMutation(
     (values: FormValues) => {
-      return updateService(values, workerId, serviceId);
+      return updateUserService(values, workerId, serviceId);
     },
     {
       onSuccess: () => {

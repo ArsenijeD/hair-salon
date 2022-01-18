@@ -60,10 +60,20 @@ export interface NewHairSalonService extends HairSalonService {
   id: number;
 }
 
-export interface NewService {
+export interface NewUserService {
   hairsalonService: HairSalonService;
   percentage: number;
   user: User;
+}
+
+export interface UserService extends NewUserService {
+  id: number;
+}
+
+export interface NewService {
+  length: Length;
+  name: TypeOfService;
+  price: number;
 }
 
 export interface Service extends NewService {

@@ -1,14 +1,22 @@
 import { FC, useState } from "react";
 
-import { Button, InputAdornment, Box } from "@mui/material";
+import {
+  Button,
+  InputAdornment,
+  Box,
+  MenuItem,
+  Typography,
+  Alert,
+} from "@mui/material";
 import { useRecoilState } from "recoil";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import { TYPES_OF_SERVICE } from "lib/constants";
+import { createUserService, getServices, getWorkers } from "api";
 import { workerState } from "@/components/Services/state";
-import { User } from "lib/types";
 
 import styles from "./styles.module.scss";
 
@@ -16,49 +24,113 @@ const validationSchema = yup.object({
   percentage: yup.number().required("Obavezno polje 1-100"),
 });
 
-interface Service {
+interface ServiceForm {
   percentage: number;
-  user: User | null;
-  hairsalonService: number;
+  user: number | null | undefined;
+  hairsalonService: number | null | undefined;
 }
 
-const ServiceForm: FC = () => {
+interface ServiceFormProps {
+  onSuccess?: () => void;
+}
+
+const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
+  const queryClient = useQueryClient();
   const [worker, setWorker] = useRecoilState(workerState);
-  const [showUserForm, setShowUserForm] = useState(false);
   const [apiError, setApiError] = useState(false);
 
-  const initialValues: Service = {
+  const { data: servicesData } = useQuery("services", () => getServices());
+  const services = servicesData?.data;
+
+  const { data: workersData } = useQuery("workers", getWorkers);
+  const workers = workersData?.data;
+
+  const initialValues = (): ServiceForm => ({
     percentage: 0,
-    user: worker,
-    hairsalonService: 1,
+    user: worker?.id,
+    hairsalonService: services?.[0]?.id,
+  });
+
+  // Update
+  const { mutate } = useMutation((values: any) => createUserService(values), {
+    onSuccess: (res) => {
+      const newService = res.data;
+      queryClient.invalidateQueries(["userServices", newService.user.id]);
+      onSuccess?.();
+    },
+    onError: () => {
+      setApiError(true);
+    },
+  });
+
+  const handleSubmit = (values: ServiceForm) => {
+    const data = {
+      ...values,
+      hairsalonService: services?.find(
+        (service) => service.id === values.hairsalonService
+      ),
+      user: workers?.find((worker) => worker.id === values.user),
+    };
+
+    mutate(data);
   };
 
   return (
     <div className={styles.container}>
+      {apiError && (
+        <Alert
+          sx={{ mb: 1 }}
+          severity="error"
+          onClose={() => setApiError(false)}
+        >
+          Greška, usluga već postoji
+        </Alert>
+      )}
+      <Typography variant="h4" sx={{ mb: 4 }}>
+        Dodaj uslugu
+      </Typography>
       <Formik
-        initialValues={initialValues}
+        initialValues={initialValues()}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
+        onSubmit={handleSubmit}
       >
         {({ values, handleChange, isSubmitting, isValid, setFieldValue }) => (
           <Form className={styles.form}>
-            {/* <Box marginBottom={3}>
-              <Field
-                component={TextField}
-                disabled={false}
-                label="Radnik"
-                name="worker"
-                select
-              >
-                {workersData?.data.map((worker) => (
-                  <MenuItem key={worker.id} value={worker.id}>
-                    {worker.firstName} {worker.lastName}
-                  </MenuItem>
-                ))}
-              </Field>
-            </Box> */}
+            <Box marginBottom={3}>
+              {workers && (
+                <Field
+                  component={TextField}
+                  disabled={false}
+                  label="Radnik"
+                  name="user"
+                  select
+                >
+                  {workers.map((worker) => (
+                    <MenuItem key={worker.id} value={worker.id}>
+                      {worker.firstName} {worker.lastName}
+                    </MenuItem>
+                  ))}
+                </Field>
+              )}
+            </Box>
+
+            <Box marginBottom={3}>
+              {services && (
+                <Field
+                  component={TextField}
+                  disabled={false}
+                  label="Usluga"
+                  name="hairsalonService"
+                  select
+                >
+                  {services.map((service) => (
+                    <MenuItem key={service.id} value={service.id}>
+                      {TYPES_OF_SERVICE[service.name]}
+                    </MenuItem>
+                  ))}
+                </Field>
+              )}
+            </Box>
 
             <Box marginBottom={3}>
               <Field
