@@ -17,7 +17,7 @@ import { TextField, Autocomplete } from "formik-mui";
 import * as yup from "yup";
 import { useQueryClient, useMutation, useQuery } from "react-query";
 
-import UserForm from "../../UserForm";
+import UserForm from "../../Users/UserForm";
 import Popconfirm from "../../Popconfirm";
 
 import {

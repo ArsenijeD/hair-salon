@@ -1,10 +1,12 @@
 import { FC } from "react";
-
 import {
   createTheme,
   StyledEngineProvider,
   ThemeProvider,
 } from "@mui/material/styles";
+
+// When using TypeScript 4.x and above
+import type {} from "@mui/x-data-grid/themeAugmentation";
 
 const theme = createTheme({
   typography: {
@@ -21,6 +23,15 @@ const theme = createTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(","),
+  },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          border: "none",
+        },
+      },
+    },
   },
 });
 

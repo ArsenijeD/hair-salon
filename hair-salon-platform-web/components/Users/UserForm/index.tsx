@@ -56,6 +56,7 @@ const UserForm: FC<UserFormProps> = ({ onChange, role, title, onBack }) => {
     (values: NewUser) => {
       const data = {
         ...values,
+        phoneNumber: "00381" + values.phoneNumber,
         dateOfBirth: dayjs(values.dateOfBirth).toISOString(),
       };
       return createUser(data);

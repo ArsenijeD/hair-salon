@@ -3,7 +3,6 @@ import { FC } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import Button from "@mui/material/Button";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Avatar from "@mui/material/Avatar";
@@ -16,7 +15,7 @@ import { Typography } from "@mui/material";
 function LinkTab(props: any) {
   return (
     <Link href={props.href} passHref>
-      <Tab component="a" {...props} />
+      <Tab component="a" classes={{ root: styles.tab }} {...props} />
     </Link>
   );
 }
@@ -40,23 +39,25 @@ const Layout: FC = ({ children }) => {
     <div className={styles.layout}>
       {user && (
         <nav className={styles.navigationBar}>
-          <div className={styles.logoWrapper}>
-            <span className={styles.logo}>Just Hair</span>
+          <div>
+            <div className={styles.logoWrapper}>
+              <span className={styles.logo}>Just Hair</span>
+            </div>
+            <Tabs
+              aria-label="Navigacija"
+              orientation="vertical"
+              value={router.pathname}
+            >
+              <LinkTab label="Rezervacije" value="/" href="/" />
+              {isAdmin && (
+                <LinkTab label="Usluge" value="/usluge" href="/usluge" />
+              )}
+              {isAdmin && (
+                <LinkTab label="Radnici" value="/radnici" href="/radnici" />
+              )}
+              <LinkTab label="Klijenti" value="/klijenti" href="/klijenti" />
+            </Tabs>
           </div>
-          <Tabs
-            aria-label="Navigacija"
-            orientation="vertical"
-            value={router.pathname}
-          >
-            <LinkTab label="Rezervacije" value="/" href="/" />
-            {isAdmin && (
-              <LinkTab label="Usluge" value="/usluge" href="/usluge" />
-            )}
-            {isAdmin && (
-              <LinkTab label="Radnici" value="/radnici" href="/radnici" />
-            )}
-            <LinkTab label="Mušterije" value="/musterije" href="/musterije" />
-          </Tabs>
           <div className={styles.user}>
             <Avatar sx={{ mr: 1 }}>{user.firstName[0]}</Avatar>
             <span>

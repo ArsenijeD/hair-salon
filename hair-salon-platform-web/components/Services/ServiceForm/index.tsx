@@ -55,6 +55,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
   const { mutate } = useMutation((values: any) => createUserService(values), {
     onSuccess: (res) => {
       const newService = res.data;
+      console.log(newService);
       queryClient.invalidateQueries(["userServices", newService.user.id]);
       onSuccess?.();
     },
@@ -103,6 +104,10 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
                   disabled={false}
                   label="Radnik"
                   name="user"
+                  InputProps={{
+                    sx: { minWidth: 200 },
+                  }}
+                  Form
                   select
                 >
                   {workers.map((worker) => (
@@ -121,6 +126,9 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
                   disabled={false}
                   label="Usluga"
                   name="hairsalonService"
+                  InputProps={{
+                    sx: { minWidth: 200 },
+                  }}
                   select
                 >
                   {services.map((service) => (

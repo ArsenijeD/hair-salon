@@ -41,7 +41,7 @@ const Services: FC<{ workerId: number }> = ({ workerId }) => {
           <TableRow>
             <TableCell>Usluga</TableCell>
             <TableCell align="right">Cena</TableCell>
-            <TableCell align="right">Duzina</TableCell>
+            <TableCell align="right">Dužina</TableCell>
             <TableCell align="right">Procenat</TableCell>
           </TableRow>
         </TableHead>

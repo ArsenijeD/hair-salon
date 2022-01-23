@@ -8,7 +8,7 @@ import {
 
 import { Button, Card, Typography, Popper } from "@mui/material";
 
-import ClickAwayListener from "@mui/core/ClickAwayListener";
+import ClickAwayListener from "@mui/base/ClickAwayListener";
 
 const Popconfirm: FC<{ onConfirm: () => void }> = ({ children, onConfirm }) => {
   const [anchorEl, setAnchorEl] = useState<any>(null);

@@ -25,6 +25,7 @@
 
 .logoWrapper {
   padding-top: 20px;
+  margin-bottom: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,4 +40,10 @@
   line-height: 1;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+}
+
+.tab {
+  align-items: flex-start;
+  letter-spacing: 0.05em;
+  padding-left: 30px;
 }
