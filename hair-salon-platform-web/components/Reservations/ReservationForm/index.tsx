@@ -115,7 +115,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
 
   const onSubmit = (values: NewReservation) => {
     // Has to be +1 for dayjs
-    const hour = Number(values.startTime.split(":")[0]) + 1;
+    const hour = Number(values.startTime.split(":")[0]);
     const minut = Number(values.startTime.split(":")[1]);
 
     const data = {
