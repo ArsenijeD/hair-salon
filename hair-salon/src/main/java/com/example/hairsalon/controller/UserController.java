@@ -2,6 +2,7 @@ package com.example.hairsalon.controller;
 
 import com.example.hairsalon.dto.ReservationDTO;
 import com.example.hairsalon.dto.UserDTO;
+import com.example.hairsalon.model.Reservation;
 import com.example.hairsalon.model.Role;
 import com.example.hairsalon.model.User;
 import com.example.hairsalon.service.UserService;
@@ -43,4 +44,5 @@ public class UserController {
         User created = userServiceImpl.createUser(user);
         return ResponseEntity.ok().body(modelMapper.map(created, UserDTO.class));
     }
+
 }
