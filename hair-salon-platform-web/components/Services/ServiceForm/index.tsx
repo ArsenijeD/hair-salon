@@ -8,73 +8,84 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import { useRecoilState } from "recoil";
 import * as yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-mui";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
-import { TYPES_OF_SERVICE } from "lib/constants";
-import { createUserService, getServices, getWorkers } from "api";
-import { workerState } from "@/components/Services/state";
+import {
+  createService,
+  deleteService,
+  getLengths,
+  getTypesOfServices,
+  updateService,
+} from "api";
 
+import { translateLength, translateTypeOfService } from "lib/helpers";
+import { Service } from "lib/types";
 import styles from "./styles.module.scss";
+import { Construction } from "@mui/icons-material";
 
 const validationSchema = yup.object({
-  percentage: yup.number().required("Obavezno polje 1-100"),
+  name: yup.string().required("Obavezno"),
+  length: yup.string().required("Obavezno"),
+  price: yup.number().required("Obavezno"),
 });
 
 interface ServiceForm {
-  percentage: number;
-  user: number | null | undefined;
-  hairsalonService: number | null | undefined;
+  name: string;
+  length: string;
+  price: number;
+  id?: number;
 }
 
 interface ServiceFormProps {
   onSuccess?: () => void;
+  editService?: Service | null;
 }
 
-const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
+const ServiceForm: FC<ServiceFormProps> = ({ onSuccess, editService }) => {
   const queryClient = useQueryClient();
-  const [worker, setWorker] = useRecoilState(workerState);
   const [apiError, setApiError] = useState(false);
 
-  const { data: servicesData } = useQuery("services", () => getServices());
-  const services = servicesData?.data;
+  const { data: typesOfServicesData } = useQuery(
+    "type-of-services",
+    getTypesOfServices
+  );
+  const typesOfServices = typesOfServicesData?.data;
 
-  const { data: workersData } = useQuery("workers", getWorkers);
-  const workers = workersData?.data;
+  const { data: lengthsData } = useQuery("lengths", getLengths);
+  const lengths = lengthsData?.data;
 
-  const initialValues = (): ServiceForm => ({
-    percentage: 0,
-    user: worker?.id,
-    hairsalonService: services?.[0]?.id,
-  });
+  const initialValues = (): ServiceForm => {
+    if (editService) {
+      return editService;
+    }
+    return {
+      name: "",
+      length: "",
+      price: 0,
+    };
+  };
 
   // Update
-  const { mutate } = useMutation((values: any) => createUserService(values), {
-    onSuccess: (res) => {
-      const newService = res.data;
-      console.log(newService);
-      queryClient.invalidateQueries(["userServices", newService.user.id]);
-      onSuccess?.();
+  const { mutate: handleSubmit } = useMutation(
+    (values: any) => {
+      if (!!editService) {
+        return updateService(values, editService.id);
+      }
+      return createService(values);
     },
-    onError: () => {
-      setApiError(true);
-    },
-  });
-
-  const handleSubmit = (values: ServiceForm) => {
-    const data = {
-      ...values,
-      hairsalonService: services?.find(
-        (service) => service.id === values.hairsalonService
-      ),
-      user: workers?.find((worker) => worker.id === values.user),
-    };
-
-    mutate(data);
-  };
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("services");
+        onSuccess?.();
+      },
+      onError: () => {
+        setApiError(true);
+      },
+    }
+  );
 
   return (
     <div className={styles.container}>
@@ -88,31 +99,31 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
         </Alert>
       )}
       <Typography variant="h4" sx={{ mb: 4 }}>
-        Dodaj uslugu
+        {!!editService ? "Izmeni uslugu" : "Dodaj uslugu"}
       </Typography>
       <Formik
         initialValues={initialValues()}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={(values) => handleSubmit(values)}
       >
-        {({ values, handleChange, isSubmitting, isValid, setFieldValue }) => (
+        {() => (
           <Form className={styles.form}>
             <Box marginBottom={3}>
-              {workers && (
+              {typesOfServices && (
                 <Field
                   component={TextField}
                   disabled={false}
-                  label="Radnik"
-                  name="user"
+                  label="Ime usluge"
+                  name="name"
                   InputProps={{
                     sx: { minWidth: 200 },
                   }}
                   Form
                   select
                 >
-                  {workers.map((worker) => (
-                    <MenuItem key={worker.id} value={worker.id}>
-                      {worker.firstName} {worker.lastName}
+                  {typesOfServices.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {translateTypeOfService(type)}
                     </MenuItem>
                   ))}
                 </Field>
@@ -120,20 +131,20 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
             </Box>
 
             <Box marginBottom={3}>
-              {services && (
+              {lengths && (
                 <Field
                   component={TextField}
                   disabled={false}
-                  label="Usluga"
-                  name="hairsalonService"
+                  label="Duzina"
+                  name="length"
                   InputProps={{
                     sx: { minWidth: 200 },
                   }}
                   select
                 >
-                  {services.map((service) => (
-                    <MenuItem key={service.id} value={service.id}>
-                      {TYPES_OF_SERVICE[service.name]}
+                  {lengths.map((length) => (
+                    <MenuItem key={length} value={length}>
+                      {translateLength(length)}
                     </MenuItem>
                   ))}
                 </Field>
@@ -143,15 +154,14 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
             <Box marginBottom={3}>
               <Field
                 component={TextField}
-                name="percentage"
-                label="Unesi procenat"
+                name="price"
+                label="Cena"
                 InputProps={{
                   sx: { width: 150 },
                   endAdornment: (
-                    <InputAdornment position="end">%</InputAdornment>
+                    <InputAdornment position="end">din</InputAdornment>
                   ),
                 }}
-                autoFocus
               ></Field>
             </Box>
 
@@ -162,7 +172,7 @@ const ServiceForm: FC<ServiceFormProps> = ({ onSuccess }) => {
               type="submit"
               sx={{ mr: 2, minWidth: 200 }}
             >
-              Kreiraj
+              {!!editService ? "Izmeni" : "Kreiraj"}
             </Button>
           </Form>
         )}

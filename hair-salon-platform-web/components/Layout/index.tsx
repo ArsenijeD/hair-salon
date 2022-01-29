@@ -53,6 +53,13 @@ const Layout: FC = ({ children }) => {
                 <LinkTab label="Usluge" value="/usluge" href="/usluge" />
               )}
               {isAdmin && (
+                <LinkTab
+                  label="Zarada radnika"
+                  value="/procenti-usluga"
+                  href="/procenti-usluga"
+                />
+              )}
+              {isAdmin && (
                 <LinkTab label="Radnici" value="/radnici" href="/radnici" />
               )}
               <LinkTab label="Klijenti" value="/klijenti" href="/klijenti" />

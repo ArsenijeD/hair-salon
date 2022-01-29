@@ -71,6 +71,19 @@ export const getServices = () => {
   return apiClient.get<Service[]>("services");
 };
 
+export const createService = (data: Service) => {
+  return apiClient.post<Service>("services", data);
+};
+
+export const updateService = (data: Service, id: number) => {
+  return apiClient.put<Service>(`services/${id}`, data);
+};
+
+export const deleteService = (id: number) => {
+  return apiClient.delete(`services/${id}`);
+};
+
+// User Services
 export const getUserServices = (workerId: number) => {
   return apiClient.get<UserService[]>(`hairsalon-services/worker/${workerId}`);
 };
@@ -88,4 +101,22 @@ export const updateUserService = (
     `hairsalon-services/worker/${workerId}/service/${serviceId}`,
     values
   );
+};
+
+export const deleteUserService = (workerId: number, serviceId: number) => {
+  return apiClient.delete(
+    `hairsalon-services/worker/${workerId}/service/${serviceId}`
+  );
+};
+
+// CONSTANTS ---
+
+// Types of services
+export const getTypesOfServices = () => {
+  return apiClient.get<string[]>("type-of-services");
+};
+
+// Length
+export const getLengths = () => {
+  return apiClient.get<string[]>("lengths");
 };

@@ -114,13 +114,18 @@ const ReservationForm: FC<ReservationFormProps> = ({ onSuccess, onClose }) => {
   );
 
   const onSubmit = (values: NewReservation) => {
-    // Has to be +1 for dayjs
-    const hour = Number(values.startTime.split(":")[0]);
+    // Has to be +1 (we aren't considering timezone), also cut 'Z' from final string
+    const hour = Number(values.startTime.split(":")[0]) + 1;
     const minut = Number(values.startTime.split(":")[1]);
 
     const data = {
       customer: values.customer,
-      date: dayjs(date).hour(hour).minute(minut).second(0).toISOString(),
+      date: dayjs(date)
+        .hour(hour)
+        .minute(minut)
+        .second(0)
+        .toISOString()
+        .slice(0, -1),
       durationMinutes: 15,
       typeOfService: values.typeOfService,
       worker: workersData?.data.find((worker) => worker.id === values.worker),

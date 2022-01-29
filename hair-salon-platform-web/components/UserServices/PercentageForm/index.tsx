@@ -39,10 +39,12 @@ const PercentageForm: FC<PercentageFormProps> = ({
   // React-query
   const { mutate } = useMutation(
     (values: FormValues) => {
+      console.log(values, workerId, serviceId);
       return updateUserService(values, workerId, serviceId);
     },
     {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        console.log(res);
         queryClient.invalidateQueries(["userServices", workerId]);
         setRef(null);
       },

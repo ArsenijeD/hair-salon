@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-import { slotsConfig } from "./constants";
+import { LENGTH, slotsConfig, TYPES_OF_SERVICE } from "./constants";
 
 export const generateSlots = (config: {
   start: number;
@@ -39,4 +39,12 @@ export const calcSlotTopOffset = (start: string) => {
 
 export const calcSlotHeight = (duration: number) => {
   return duration * (slotsConfig.slotHeight / 60);
+};
+
+export const translateLength = (length: string) => {
+  return LENGTH[length] || length.toLowerCase();
+};
+
+export const translateTypeOfService = (type: string) => {
+  return TYPES_OF_SERVICE[type] || type.toLowerCase();
 };

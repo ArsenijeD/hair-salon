@@ -13,7 +13,7 @@ import { ROLES } from "lib/constants";
 import styles from "./styles.module.scss";
 import UserTable from "@/components/Users/UserTable";
 
-const Podesavanje: NextPage = () => {
+const Workers: NextPage = () => {
   const [showForm, setShowForm] = useState(false);
   const queryClient = useQueryClient();
   const { data: response } = useQuery<CustomersResponse>("workers", getWorkers);
@@ -83,4 +83,4 @@ const Podesavanje: NextPage = () => {
   );
 };
 
-export default Podesavanje;
+export default Workers;

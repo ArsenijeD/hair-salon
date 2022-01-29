@@ -54,6 +54,7 @@ export interface HairSalonService {
   length: Length;
   name: TypeOfService;
   price: number;
+  id: number;
 }
 
 export interface NewHairSalonService extends HairSalonService {
