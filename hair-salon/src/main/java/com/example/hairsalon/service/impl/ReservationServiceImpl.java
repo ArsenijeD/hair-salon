@@ -1,6 +1,5 @@
 package com.example.hairsalon.service.impl;
 
-import com.example.hairsalon.amqp.configuration.RabbitMQConfiguration;
 import com.example.hairsalon.amqp.dto.SmsDTO;
 import com.example.hairsalon.amqp.publisher.MessagePublisher;
 import com.example.hairsalon.exception.SmsContentNotFoundException;

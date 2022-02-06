@@ -27,12 +27,14 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final SmsContentRepository smsContentRepository;
 
+    private final MaterialRepository materialRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository,
                            HairsalonServiceRepository hairsalonServiceRepository, HolidayRepository holidayRepository,
                            SmsContentRepository smsContentRepository, PasswordEncoder passwordEncoder,
-                           UserHairsalonServiceRepository userHairsalonServiceRepository) {
+                           UserHairsalonServiceRepository userHairsalonServiceRepository, MaterialRepository materialRepository) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.hairsalonServiceRepository = hairsalonServiceRepository;
@@ -40,6 +42,7 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.smsContentRepository = smsContentRepository;
         this.passwordEncoder = passwordEncoder;
         this.userHairsalonServiceRepository = userHairsalonServiceRepository;
+        this.materialRepository = materialRepository;
     }
 
     @Override
@@ -106,6 +109,8 @@ public class DataInitializer implements SmartInitializingSingleton {
         SmsContent canceledReservationContent = new SmsContent(4L, "Vaša rezervacija je otkazana. Vaš frizer.", SmsType.CANCELLATION);
         SmsContent holidayContent = new SmsContent(5L, "Poštovani, čestitamo Vam {0}.", SmsType.HOLIDAYS);
 
+        Material hairGel = new Material(1L, "Gel za kosu", "Taft lux", 350.0, 3);
+        Material hairDye = new Material(2L, "Farba za kosu", "Maybelinne", 700.0, 2);
         this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanEmployee);
@@ -126,5 +131,8 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.smsContentRepository.save(gratitudeReservationContent);
         this.smsContentRepository.save(canceledReservationContent);
         this.smsContentRepository.save(holidayContent);
+
+        this.materialRepository.save(hairGel);
+        this.materialRepository.save(hairDye);
     }
 }
