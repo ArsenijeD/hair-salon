@@ -25,7 +25,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN)")
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public List<Material> getAll() {
         List<Material> materials = materialRepository.findAll();
@@ -37,14 +37,14 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN)")
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public Material createMaterial(Material material) {
         return materialRepository.save(material);
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN)")
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public Material updateMaterial(Material newMaterial) {
         Material oldMaterial = materialRepository.findById(newMaterial.getId()).orElseThrow(EntityNotFoundException::new);
@@ -55,7 +55,7 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN)")
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
     @Transactional
     public void delete(Long id) {
         this.materialRepository.deleteById(id);
