@@ -8,6 +8,8 @@ import {
   NewUserService,
   UserService,
   Service,
+  Material,
+  NewMaterial,
 } from "lib/types";
 import { UserRole } from "lib/constants";
 
@@ -66,21 +68,21 @@ export const deleteReservation = (id: number) => {
   return apiClient.delete(`reservations/${id}`);
 };
 
-// Services
-export const getServices = () => {
-  return apiClient.get<Service[]>("services");
+// Materials
+export const getMaterials = () => {
+  return apiClient.get<Material[]>("materials");
 };
 
-export const createService = (data: Service) => {
-  return apiClient.post<Service>("services", data);
+export const createMaterial = (data: NewMaterial) => {
+  return apiClient.post<Material>("materials", data);
 };
 
-export const updateService = (data: Service, id: number) => {
-  return apiClient.put<Service>(`services/${id}`, data);
+export const updateMaterial = (data: Material, id: number) => {
+  return apiClient.put<Material>(`materials/${id}`, data);
 };
 
-export const deleteService = (id: number) => {
-  return apiClient.delete(`services/${id}`);
+export const deleteMaterial = (id: number) => {
+  return apiClient.delete(`materials/${id}`);
 };
 
 // User Services
@@ -107,6 +109,23 @@ export const deleteUserService = (workerId: number, serviceId: number) => {
   return apiClient.delete(
     `hairsalon-services/worker/${workerId}/service/${serviceId}`
   );
+};
+
+// Services
+export const getServices = () => {
+  return apiClient.get<Service[]>("services");
+};
+
+export const createService = (data: Service) => {
+  return apiClient.post<Service>("services", data);
+};
+
+export const updateService = (data: Service, id: number) => {
+  return apiClient.put<Service>(`services/${id}`, data);
+};
+
+export const deleteService = (id: number) => {
+  return apiClient.delete(`services/${id}`);
 };
 
 // CONSTANTS ---

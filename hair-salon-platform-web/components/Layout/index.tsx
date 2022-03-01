@@ -63,6 +63,11 @@ const Layout: FC = ({ children }) => {
                 <LinkTab label="Radnici" value="/radnici" href="/radnici" />
               )}
               <LinkTab label="Klijenti" value="/klijenti" href="/klijenti" />
+              <LinkTab
+                label="Materijali"
+                value="/materijali"
+                href="/materijali"
+              />
             </Tabs>
           </div>
           <div className={styles.user}>

@@ -80,3 +80,14 @@ export interface NewService {
 export interface Service extends NewService {
   id: number;
 }
+
+export interface NewMaterial {
+  brand: string;
+  name: string;
+  numberInStock: number;
+  price: number;
+}
+
+export interface Material extends NewMaterial {
+  id: number;
+}
