@@ -29,12 +29,17 @@ public class DataInitializer implements SmartInitializingSingleton {
 
     private final MaterialRepository materialRepository;
 
+    private final FinalizedHairsalonServiceRepository finalizedHairsalonServiceRepository;
+
+    private final UsedMaterialRepository usedMaterialRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository, AuthorityRepository authorityRepository,
                            HairsalonServiceRepository hairsalonServiceRepository, HolidayRepository holidayRepository,
                            SmsContentRepository smsContentRepository, PasswordEncoder passwordEncoder,
-                           UserHairsalonServiceRepository userHairsalonServiceRepository, MaterialRepository materialRepository) {
+                           UserHairsalonServiceRepository userHairsalonServiceRepository, MaterialRepository materialRepository,
+                           FinalizedHairsalonServiceRepository finalizedHairsalonServiceRepository, UsedMaterialRepository usedMaterialRepository) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.hairsalonServiceRepository = hairsalonServiceRepository;
@@ -43,6 +48,8 @@ public class DataInitializer implements SmartInitializingSingleton {
         this.passwordEncoder = passwordEncoder;
         this.userHairsalonServiceRepository = userHairsalonServiceRepository;
         this.materialRepository = materialRepository;
+        this.finalizedHairsalonServiceRepository = finalizedHairsalonServiceRepository;
+        this.usedMaterialRepository = usedMaterialRepository;
     }
 
     @Override
@@ -111,6 +118,12 @@ public class DataInitializer implements SmartInitializingSingleton {
 
         Material hairGel = new Material(1L, "Gel za kosu", "Taft lux", 350.0, 3);
         Material hairDye = new Material(2L, "Farba za kosu", "Maybelinne", 700.0, 2);
+
+        FinalizedHairsalonService veskoHaircut = new FinalizedHairsalonService(1L, LocalDateTime.now(), marinaCustomer, veskoHaircutPercentage);
+
+        UsedMaterial veskoHaircutGel = new UsedMaterial(1L, hairGel, veskoHaircut, 0.3);
+        UsedMaterial veskoHaircutDye = new UsedMaterial(2L, hairDye, veskoHaircut, 0.7);
+
         this.userRepository.save(rootAdmin);
         this.userRepository.save(veskoEmployee);
         this.userRepository.save(dejanEmployee);
@@ -134,5 +147,10 @@ public class DataInitializer implements SmartInitializingSingleton {
 
         this.materialRepository.save(hairGel);
         this.materialRepository.save(hairDye);
+
+        this.finalizedHairsalonServiceRepository.save(veskoHaircut);
+
+        this.usedMaterialRepository.save(veskoHaircutGel);
+        this.usedMaterialRepository.save(veskoHaircutDye);
     }
 }
