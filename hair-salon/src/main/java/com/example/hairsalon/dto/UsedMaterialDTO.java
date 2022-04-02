@@ -11,4 +11,6 @@ public class UsedMaterialDTO {
     private Material material;
 
     private double materialSpent;
+
+    private FinalizedHairsalonServiceDTO finalizedHairsalonService;
 }

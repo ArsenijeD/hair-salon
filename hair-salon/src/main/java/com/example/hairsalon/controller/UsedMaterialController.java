@@ -2,6 +2,7 @@ package com.example.hairsalon.controller;
 
 import com.example.hairsalon.dto.FinalizedHairsalonServiceDTO;
 import com.example.hairsalon.dto.UsedMaterialDTO;
+import com.example.hairsalon.model.FinalizedHairsalonService;
 import com.example.hairsalon.model.UsedMaterial;
 import com.example.hairsalon.service.UsedMatierialService;
 import org.modelmapper.ModelMapper;
@@ -28,5 +29,12 @@ public class UsedMaterialController {
     public ResponseEntity<List<UsedMaterialDTO>> getUsedMaterialsForFinalizedService(@PathVariable Long finalisedServiceId) {
         List<UsedMaterial> usedMaterials = usedMatierialServiceImpl.getAllForFinalizedService(finalisedServiceId);
         return ResponseEntity.ok().body(modelMapper.map(usedMaterials, new TypeToken<List<UsedMaterialDTO>>(){}.getType()));
+    }
+
+    @PostMapping
+    public ResponseEntity<UsedMaterialDTO> createUsedMaterial(@RequestBody UsedMaterialDTO usedMaterialDTO) {
+        UsedMaterial usedMaterial = modelMapper.map(usedMaterialDTO, UsedMaterial.class);
+        UsedMaterial created = usedMatierialServiceImpl.createUsedMaterial(usedMaterial);
+        return ResponseEntity.ok().body(modelMapper.map(created, UsedMaterialDTO.class));
     }
 }

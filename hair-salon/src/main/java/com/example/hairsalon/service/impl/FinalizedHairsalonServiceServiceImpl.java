@@ -1,6 +1,8 @@
 package com.example.hairsalon.service.impl;
 
+import com.example.hairsalon.amqp.dto.SmsDTO;
 import com.example.hairsalon.model.FinalizedHairsalonService;
+import com.example.hairsalon.model.Reservation;
 import com.example.hairsalon.repository.FinalizedHairsalonServiceRepository;
 import com.example.hairsalon.service.FinalizedHairsalonServiceService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,5 +32,14 @@ public class FinalizedHairsalonServiceServiceImpl implements FinalizedHairsalonS
         List<FinalizedHairsalonService> finalizedHairsalonServices = finalizedHairsalonServiceRepository.findAllByUserHairsalonService_User_IdAndDateBetween(workerId, startDate, endDate)
                 .orElseThrow(EntityNotFoundException::new);
         return finalizedHairsalonServices;
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(Role).ADMIN, T(Role).EMPLOYEE)")
+    @Transactional
+    public FinalizedHairsalonService createFinalizedHairsalonService(FinalizedHairsalonService finalizedHairsalonService) {
+        finalizedHairsalonService.setDate(finalizedHairsalonService.getDate().withSecond(0).withNano(0));
+        FinalizedHairsalonService savedFinalizedHairsalonService = finalizedHairsalonServiceRepository.save(finalizedHairsalonService);
+        return savedFinalizedHairsalonService;
     }
 }

@@ -31,4 +31,12 @@ public class FinalizedHairsalonServiceController {
         List<FinalizedHairsalonService> finalizedHairsalonServices = finalizedHairsalonServiceServiceImpl.getWorkersDailyFinalizedServices(workerId, date);
         return ResponseEntity.ok().body(modelMapper.map(finalizedHairsalonServices, new TypeToken<List<FinalizedHairsalonServiceDTO>>(){}.getType()));
     }
+
+    @PostMapping
+    public ResponseEntity<FinalizedHairsalonServiceDTO> createFinalizedHairsalonService(@RequestBody FinalizedHairsalonServiceDTO finalizedHairsalonServiceDTO) {
+        FinalizedHairsalonService finalizedHairsalonService = modelMapper.map(finalizedHairsalonServiceDTO, FinalizedHairsalonService.class);
+        FinalizedHairsalonService created = finalizedHairsalonServiceServiceImpl.createFinalizedHairsalonService(finalizedHairsalonService);
+        return ResponseEntity.ok().body(modelMapper.map(created, FinalizedHairsalonServiceDTO.class));
+    }
+
 }

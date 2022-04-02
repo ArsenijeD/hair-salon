@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface FinalizedHairsalonServiceService {
     List<FinalizedHairsalonService> getWorkersDailyFinalizedServices(Long workerId, LocalDate date);
+    FinalizedHairsalonService createFinalizedHairsalonService(FinalizedHairsalonService finalizedHairsalonService);
+
 
 }
