@@ -39,4 +39,17 @@ public class FinalizedHairsalonServiceController {
         return ResponseEntity.ok().body(modelMapper.map(created, FinalizedHairsalonServiceDTO.class));
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<FinalizedHairsalonServiceDTO> updateFinalizedHairsalonService(@PathVariable Long id, @RequestBody FinalizedHairsalonServiceDTO finalizedHairsalonServiceDTO) {
+        FinalizedHairsalonService finalizedHairsalonService = modelMapper.map(finalizedHairsalonServiceDTO, FinalizedHairsalonService.class);
+        finalizedHairsalonService.setId(id);
+        FinalizedHairsalonService updated = finalizedHairsalonServiceServiceImpl.updateFinalizedHairsalonService(finalizedHairsalonService);
+        return ResponseEntity.ok().body(modelMapper.map(updated, FinalizedHairsalonServiceDTO.class));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteFinalizedHairsalonService(@PathVariable Long id) {
+        finalizedHairsalonServiceServiceImpl.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

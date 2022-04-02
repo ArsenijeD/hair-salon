@@ -37,4 +37,18 @@ public class UsedMaterialController {
         UsedMaterial created = usedMatierialServiceImpl.createUsedMaterial(usedMaterial);
         return ResponseEntity.ok().body(modelMapper.map(created, UsedMaterialDTO.class));
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<UsedMaterialDTO> updateUsedMaterial(@PathVariable Long id, @RequestBody UsedMaterialDTO usedMaterialDTO) {
+        UsedMaterial usedMaterial = modelMapper.map(usedMaterialDTO, UsedMaterial.class);
+        usedMaterial.setId(id);
+        UsedMaterial updated = usedMatierialServiceImpl.updateUsedMaterial(usedMaterial);
+        return ResponseEntity.ok().body(modelMapper.map(updated, UsedMaterialDTO.class));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteUsedMaterial(@PathVariable Long id) {
+        usedMatierialServiceImpl.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

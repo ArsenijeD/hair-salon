@@ -24,6 +24,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String UNIQUE_CONSTRAINT_EXCEPTION_MESSAGE = "Primary key invalid or duplicated unique attributes.";
 
+    private static final String MISSING_MATERIAL_EXCEPTION_MESSAGE = "There is not enough material for this service.";
+
+
     @ExceptionHandler({ BadCredentialsException.class })
     public ResponseEntity<String> handleAuthenticationExceptions(Exception exception) {
         return ResponseEntity.badRequest().body(BAD_CREDENTIALS_EXCEPTIONS_MESSAGE);
@@ -50,5 +53,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ ConstraintViolationException.class })
     public ResponseEntity<String> handleConstraintViolationException(Exception exception) {
         return ResponseEntity.badRequest().body(UNIQUE_CONSTRAINT_EXCEPTION_MESSAGE);
+    }
+
+    @ExceptionHandler({ MissingMaterialException.class })
+    public ResponseEntity<String> handleMissingMaterialException(Exception exception) {
+        return ResponseEntity.badRequest().body(MISSING_MATERIAL_EXCEPTION_MESSAGE);
     }
 }
