@@ -91,3 +91,19 @@ export interface NewMaterial {
 export interface Material extends NewMaterial {
   id: number;
 }
+
+export interface NewFinalizedService {
+  customer: User;
+  date: string;
+  userHairsalonService: UserService;
+}
+
+export interface FinalizedService extends NewFinalizedService {
+  id: number;
+}
+
+export interface UsedMaterial {
+  id: number;
+  material: Material;
+  materialSpent: number;
+}

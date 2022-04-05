@@ -10,6 +10,8 @@ import {
   Service,
   Material,
   NewMaterial,
+  FinalizedService,
+  UsedMaterial,
 } from "lib/types";
 import { UserRole } from "lib/constants";
 
@@ -126,6 +128,34 @@ export const updateService = (data: Service, id: number) => {
 
 export const deleteService = (id: number) => {
   return apiClient.delete(`services/${id}`);
+};
+
+// Finalized Services
+export const getFinalizedServices = (workerId: number, date: string) => {
+  return apiClient.get<FinalizedService[]>(
+    `finalized-hairsalon-services/worker/${workerId}`,
+    {
+      params: { date },
+    }
+  );
+};
+
+// Used Materials
+export const getUsedMaterials = (finalizedServiceIds: number[] | undefined) => {
+  if (!finalizedServiceIds) {
+    return;
+  }
+  return Promise.all(
+    finalizedServiceIds.map((id) =>
+      apiClient.get<UsedMaterial[]>(`used-materials/finalized-service/${id}`)
+    )
+  ).then((results) => {
+    const res: any = {};
+    results.forEach((result, index) => {
+      res[finalizedServiceIds[index]] = result.data;
+    });
+    return res;
+  });
 };
 
 // CONSTANTS ---
