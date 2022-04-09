@@ -39,7 +39,7 @@ const Customers: NextPage = () => {
         </Head>
 
         <main className={styles.main}>
-          <Container>
+          <Container maxWidth={false}>
             <Grid
               container
               sx={{ justifyContent: "space-between", mb: 2, mt: 3 }}

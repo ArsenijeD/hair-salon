@@ -11,10 +11,10 @@ import {
 } from "@mui/x-data-grid";
 import { useMutation, useQueryClient } from "react-query";
 
-import { deleteMaterial } from "api";
+import { deleteFinalizedServices } from "api";
 import { FinalizedService } from "lib/types";
-import { useSetRecoilState } from "recoil";
-import { editState } from "../state";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { dateState, editState, workerState } from "../state";
 import { LENGTH, TYPES_OF_SERVICE } from "lib/constants";
 import MaterialsDetails from "../MaterialsDetails";
 
@@ -26,13 +26,19 @@ const FinalizedServicesTable: FC<MaterialTableProps> = ({
   finalizedServices,
 }) => {
   const setEdit = useSetRecoilState(editState);
+  const workerId = useRecoilValue(workerState)?.id;
+  const dateString = useRecoilValue(dateState)?.toISOString();
 
   const queryClient = useQueryClient();
   const { mutate: handleDelete } = useMutation(
-    (id: number) => deleteMaterial(id),
+    (id: number) => deleteFinalizedServices(id),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["materials"]);
+        queryClient.invalidateQueries([
+          "finalized-services",
+          workerId,
+          dateString,
+        ]);
       },
     }
   );

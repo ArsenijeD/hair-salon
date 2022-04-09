@@ -59,7 +59,7 @@ const Header: FC = () => {
       <Box className={styles.titleContainer}>
         <Badge badgeContent={reservationsCount} color="primary">
           <Typography className={styles.title} variant="h6">
-            Izveštaj
+            Realizovane usluge
           </Typography>
         </Badge>
       </Box>

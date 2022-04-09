@@ -33,7 +33,7 @@ const MaterialsDetails: FC<{ finalizedServiceId: number }> = ({
           horizontal: "left",
         }}
       >
-        Content to show
+        Prikaz used-materials...
       </Popover>
     </div>
   );

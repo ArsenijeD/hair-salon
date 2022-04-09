@@ -37,7 +37,7 @@ const Usluge: NextPage = () => {
 
   return (
     <>
-      <Container>
+      <Container maxWidth={false}>
         <Head>
           <title>Usluge</title>
         </Head>

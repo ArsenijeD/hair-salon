@@ -49,7 +49,7 @@ const Layout: FC = ({ children }) => {
               value={router.pathname}
             >
               <LinkTab label="Rezervacije" value="/" href="/" />
-              <LinkTab label="Izveštaj" value="/izvestaj" href="/izvestaj" />
+              <LinkTab label="Moj dan" value="/moj-dan" href="/moj-dan" />
               {isAdmin && (
                 <LinkTab label="Usluge" value="/usluge" href="/usluge" />
               )}

@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from "react";
 
+import { useRecoilValue } from "recoil";
 import { Typography } from "@mui/material";
 
+import { authState } from "@/components/AuthGuard/state";
 import { FinalizedService, UsedMaterial } from "lib/types";
 import styles from "./styles.module.scss";
 
@@ -11,6 +13,7 @@ interface SummaryProps {
 }
 
 const Summary: FC<SummaryProps> = ({ finalizedServices, usedMaterials }) => {
+  const { isAdmin } = useRecoilValue(authState);
   const [summaryData, setSummaryData] = useState<{
     workerIncome: number;
     salonIncome: number;
@@ -27,8 +30,6 @@ const Summary: FC<SummaryProps> = ({ finalizedServices, usedMaterials }) => {
     let workerIncome = 0;
     let salonIncome = 0;
     let totalIncome = 0;
-
-    console.log("Finalized services: ", finalizedServices);
 
     finalizedServices?.forEach((item) => {
       workerIncome +=
@@ -58,20 +59,32 @@ const Summary: FC<SummaryProps> = ({ finalizedServices, usedMaterials }) => {
     <>
       <Typography variant="subtitle1">
         Ukupna zarada radnika:{" "}
-        <span className={styles.alignRight}>{summaryData.workerIncome}</span>
+        <span className={styles.alignRight}>
+          {summaryData.workerIncome} din
+        </span>
       </Typography>
-      <Typography variant="subtitle1">
-        Ukupna zarada salona:{" "}
-        <span className={styles.alignRight}>{summaryData.salonIncome}</span>
-      </Typography>
-      <Typography variant="subtitle1">
-        Utroseno na materijal:{" "}
-        <span className={styles.alignRight}>{summaryData.materials}</span>
-      </Typography>
-      <Typography variant="subtitle1">
-        Prihod Salona:{" "}
-        <span className={styles.alignRight}>{summaryData.totalIncome}</span>
-      </Typography>
+      {isAdmin && (
+        <>
+          <Typography variant="subtitle1">
+            Ukupna zarada salona:{" "}
+            <span className={styles.alignRight}>
+              {summaryData.salonIncome} din
+            </span>
+          </Typography>
+          <Typography variant="subtitle1">
+            Utroseno na materijal:{" "}
+            <span className={styles.alignRight}>
+              {summaryData.materials} din
+            </span>
+          </Typography>
+          <Typography variant="subtitle1">
+            Prihod Salona:{" "}
+            <span className={styles.alignRight}>
+              {summaryData.totalIncome} din
+            </span>
+          </Typography>{" "}
+        </>
+      )}
     </>
   );
 };

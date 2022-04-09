@@ -12,6 +12,7 @@ import {
   NewMaterial,
   FinalizedService,
   UsedMaterial,
+  NewFinalizedService,
 } from "lib/types";
 import { UserRole } from "lib/constants";
 
@@ -138,6 +139,21 @@ export const getFinalizedServices = (workerId: number, date: string) => {
       params: { date },
     }
   );
+};
+
+export const createFinalizedServices = (data: NewFinalizedService) => {
+  return apiClient.post<FinalizedService>("finalized-hairsalon-services", data);
+};
+
+export const updateFinalizedServices = (data: FinalizedService) => {
+  return apiClient.put<FinalizedService>(
+    `finalized-hairsalon-services/${data.id}`,
+    data
+  );
+};
+
+export const deleteFinalizedServices = (id: number) => {
+  return apiClient.delete(`finalized-hairsalon-services/${id}`);
 };
 
 // Used Materials
