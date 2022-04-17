@@ -74,11 +74,11 @@ const Report: NextPage = () => {
             {noResults ? (
               <EmptyState />
             ) : (
-              <Grid container columnSpacing={2}>
-                <Grid item xs>
+              <Grid container columnSpacing={2} rowSpacing={2}>
+                <Grid item xs order={{ xs: 2, sm: 1 }}>
                   <ReportTable finalizedServices={finalizedServices} />
                 </Grid>
-                <Grid item sx={{ width: 300 }}>
+                <Grid item order={{ xs: 1, sm: 2 }}>
                   <Paper sx={{ p: 2 }}>
                     <Summary
                       finalizedServices={finalizedServices}
